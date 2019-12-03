@@ -1,14 +1,20 @@
 // map of playerName to Id
-const playerMap = new Map();
+class PlayerIdentifierCache {
+  constructor() {
+    this.playerMap = new Map();
+  }
 
-function storeId(playerName, id) {
-  playerMap.set(playerName, id);
+  storeId(playerName, id) {
+    this.playerMap.set(playerName, id);
+  }
+
+  getId(playerName) {
+    return this.playerMap.get(playerName);
+  }
+
+  hasPlayer(playerName) {
+    return this.playerMap.has(playerName);
+  }
 }
 
-function getId(playerName) {
-  return playerMap.get(playerName);
-}
-
-function hasPlayer(playerName) {
-  return playerMap.has(playerName);
-}
+export default new PlayerIdentifierCache();

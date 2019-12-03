@@ -1,4 +1,4 @@
-import { findPlayer } from '../api-client/pubgClient'
+import { lifetimeStatsFor } from "../api-client/pubgClient";
 
 export default class LifetimeCommand {
   get description() {
@@ -7,6 +7,6 @@ export default class LifetimeCommand {
 
   execute(args) {
     console.log(`lifetime: ${args}`);
-    findPlayer(args[0])
+    lifetimeStatsFor(args[0]);
   }
 }
