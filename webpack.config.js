@@ -7,7 +7,7 @@ module.exports = {
     "spubg.bin": "./bin/spubg.bin.js"
   },
 
-  mode: "production",
+  mode: "development",
 
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -18,6 +18,9 @@ module.exports = {
 
   target: "node",
   
+  // Enable if you want sourcemaps on build
+  devtool: "inline-source-map",
+
   plugins: [
     // Adds shebang to the binary
     new webpack.BannerPlugin({
