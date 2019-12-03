@@ -2,13 +2,28 @@
   "name": "mubg",
   "version": "1.0.0",
   "description": "Personal statistics for PUBG",
-  "main": "index.js",
+  "main": "dist/spubg.js",
+  "bin": "dist/spubg.bin.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "make-exec": "chmod +x ./dist/spubg.bin.js",
+    "build": "webpack && npm run make-exec",
+    "prettier": "./node_modules/.bin/prettier --write src/**/*.js --write bin/**/*.js",
+    "prettier:check": "./node_modules/.bin/prettier --check src/**/*.js --check bin/**/*.js"
   },
   "author": "Jan Monterrubio",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^8.2.0"
+    "chalk": "^3.0.0",
+    "clear": "^0.1.0",
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "figlet": "^1.2.4",
+    "minimist": "^1.2.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.19.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   }
 }
