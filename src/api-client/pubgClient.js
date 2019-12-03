@@ -11,9 +11,10 @@ const instance = axios.create({
   }
 });
 
-export function lifetimeStatsFor(playerName) {
-  const accountId = getPlayerId(playerName);
+export async function lifetimeStatsFor(playerName) {
+  const accountId = await getPlayerId(playerName);
 
+  console.log("accountId: " + accountId);
   instance
     .get(`/players/${accountId}/seasons/lifetime`, {
       headers: {
@@ -21,32 +22,34 @@ export function lifetimeStatsFor(playerName) {
       }
     })
     .then(function(response) {
-      console.log(JSON.stringify(response.data, null, 2));
+      const innerObject = response.data;
+      console.log(JSON.stringify(innerObject, null, 2));
     })
     .catch(function(error) {
       console.log(error);
     });
 }
 
-function getPlayerId(playerName) {
+async function getPlayerId(playerName) {
   if (!PlayerIdentifierCache.hasPlayer(playerName)) {
-    const playerId = findPlayerId(playerName);
+    const playerId = await findPlayerId(playerName);
     PlayerIdentifierCache.storeId(playerName, playerId);
   }
 
   return PlayerIdentifierCache.getId(playerName);
 }
 
-function findPlayerId(playerName) {
-  instance
+async function findPlayerId(playerName) {
+  return instance
     .get(`/players?filter[playerNames]=${playerName}`, {
       headers: {
         Authorization: `Bearer ${process.env.PUBG_TOKEN}`
       }
     })
     .then(function(response) {
-      console.log(response.data.id);
-      return response.data.id;
+      const innerObject = response.data;
+      console.log(JSON.stringify(innerObject.data[0].id, null, 2));
+      return innerObject.data[0].id;
     })
     .catch(function(error) {
       console.log(error);
