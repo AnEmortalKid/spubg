@@ -1,9 +1,10 @@
 const path = require("path");
 const webpack = require('webpack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
-    "spubg": "./index.js",
+    "spubg": "./src/index.js",
     "spubg.bin": "./bin/spubg.bin.js"
   },
 
@@ -22,6 +23,9 @@ module.exports = {
   devtool: "inline-source-map",
 
   plugins: [
+    // clean
+    new CleanWebpackPlugin(),
+
     // Adds shebang to the binary
     new webpack.BannerPlugin({
       banner: '#!/usr/bin/env node',

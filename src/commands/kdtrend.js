@@ -1,8 +1,6 @@
-import { lifetimeStatsFor } from "../api-client/pubgClient";
-
-export default class LifetimeCommand {
+export default class KDTrendCommand {
   get description() {
-    return " the lifetime statistics";
+    return "a mapping of kd by season";
   }
 
   execute(args) {

@@ -2,8 +2,6 @@ import axios from "axios";
 import PlayerIdentifierCache from "../players/identifierCache";
 
 // TODO create client with token and pass that down instead
-// TODO expose methods that find by player name
-// TODO use cache from name -> id (or find id and then cache if not there)
 const instance = axios.create({
   baseURL: "https://api.pubg.com/shards/steam/",
   headers: {
@@ -11,11 +9,51 @@ const instance = axios.create({
   }
 });
 
+/**
+ * Returns the list of available seasons
+ */
+export async function seasons() {
+  return instance
+    .get("/seasons", {
+      headers: {
+        Authorization: `Bearer ${process.env.PUBG_TOKEN}`
+      }
+    })
+    .then(function(response) {
+      return response.data;
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+}
+
+// for testing
+export async function playerSeason(playerId, seasonId) {
+  return instance
+    .get(`/players/${playerId}/seasons/${seasonId}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.PUBG_TOKEN}`
+      }
+    })
+    .then(function(response) {
+      return response.data;
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+}
+
+/**
+ * Returns season info for the player and the season
+ */
+export async function seasonFor(playerName, season) {
+  return null;
+}
+
 export async function lifetimeStatsFor(playerName) {
   const accountId = await getPlayerId(playerName);
 
-  console.log("accountId: " + accountId);
-  instance
+  return instance
     .get(`/players/${accountId}/seasons/lifetime`, {
       headers: {
         Authorization: `Bearer ${process.env.PUBG_TOKEN}`
@@ -23,14 +61,14 @@ export async function lifetimeStatsFor(playerName) {
     })
     .then(function(response) {
       const innerObject = response.data;
-      console.log(JSON.stringify(innerObject, null, 2));
+      return response.data;
     })
     .catch(function(error) {
       console.log(error);
     });
 }
 
-async function getPlayerId(playerName) {
+export async function getPlayerId(playerName) {
   if (!PlayerIdentifierCache.hasPlayer(playerName)) {
     const playerId = await findPlayerId(playerName);
     PlayerIdentifierCache.storeId(playerName, playerId);
