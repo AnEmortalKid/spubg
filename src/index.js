@@ -1,5 +1,7 @@
 import { playerSeason, getPlayerId } from "./api-client/pubgClient";
 
+import PlayerCache from "./cache/playerCache";
+
 require("dotenv").config();
 
 //seasons().then(data => console.log(JSON.stringify(data, null, 2)));
@@ -48,6 +50,20 @@ async function kdFor(playerName) {
   gatherKdPlot(playerId).then(result => console.log(result));
 }
 
-kdFor("KirthGersen");
+// kdFor("AnEmortalKid");
+
+async function findFromCache(playerName) {
+  const knownId = PlayerCache.getId(playerName);
+  if (!knownId) {
+    console.log(`Unknown id for ${playerName}`);
+    let playerId = await getPlayerId(playerName);
+    console.log(`Storing: ${playerId}`);
+    PlayerCache.storeId(playerId, playerName);
+  }
+
+  console.log(`PlayerId: ${PlayerCache.getId(playerName)}`);
+}
+
+findFromCache("AnEmortalKid");
 
 // gatherKdPlot(playerId).then(result => console.log(result));

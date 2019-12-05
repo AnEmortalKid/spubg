@@ -77,7 +77,7 @@ export async function getPlayerId(playerName) {
   return PlayerIdentifierCache.getId(playerName);
 }
 
-async function findPlayerId(playerName) {
+export async function findPlayerId(playerName) {
   return instance
     .get(`/players?filter[playerNames]=${playerName}`, {
       headers: {

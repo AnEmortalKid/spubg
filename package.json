@@ -1,9 +1,10 @@
 {
-  "name": "mubg",
+  "name": "spubg",
   "version": "1.0.0",
   "description": "Personal statistics for PUBG",
   "main": "dist/spubg.js",
   "bin": "dist/spubg.bin.js",
+  "repository": "https://github.com/AnEmortalKid/spubg",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "make-exec": "chmod +x ./dist/spubg.bin.js",
@@ -20,6 +21,7 @@
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "figlet": "^1.2.4",
+    "lowdb": "^1.0.0",
     "minimist": "^1.2.0"
   },
   "devDependencies": {
