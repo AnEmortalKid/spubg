@@ -1,4 +1,4 @@
-import { lifetimeStatsFor } from "../api-client/pubgClient";
+import { lifetimeStats } from "../api-client/pubgClient";
 
 export default class LifetimeCommand {
   get description() {
@@ -7,7 +7,7 @@ export default class LifetimeCommand {
 
   execute(args) {
     console.log(`lifetime: ${args}`);
-    lifetimeStatsFor(args[0]).then(data =>
+    lifetimeStats(args[0]).then(data =>
       console.log(JSON.stringify(data, null, 2))
     );
   }

@@ -1,27 +1,18 @@
 // TODO memcached
 
-import low from "lowdb";
-import FileSync from "lowdb/adapters/FileSync";
+import LocalStorage from "../storage/localStorage";
 
 // TODO backing mechanism between memcache/local storage
-// TODO object specific cache?
 class PlayerCache {
-  constructor() {
-    const adapter = new FileSync("db.json");
-    this.db = low(adapter);
-    this.db.defaults({ players: [] }).write();
-  }
-
-  // todo standardize api or some shiz
   storeId(playerId, playerName) {
-    this.db
+    LocalStorage.instance()
       .get("players")
       .push({ id: playerId, name: playerName })
       .write();
   }
 
   getId(playerName) {
-    const player = this.db
+    const player = LocalStorage.instance()
       .get("players")
       .find({ name: playerName })
       .value();

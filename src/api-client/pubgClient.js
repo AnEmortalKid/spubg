@@ -1,5 +1,4 @@
 import axios from "axios";
-import PlayerIdentifierCache from "../players/identifierCache";
 
 // TODO create client with token and pass that down instead
 const instance = axios.create({
@@ -27,7 +26,6 @@ export async function seasons() {
     });
 }
 
-// for testing
 export async function playerSeason(playerId, seasonId) {
   return instance
     .get(`/players/${playerId}/seasons/${seasonId}`, {
@@ -43,18 +41,14 @@ export async function playerSeason(playerId, seasonId) {
     });
 }
 
-/**
- * Returns season info for the player and the season
- */
-export async function seasonFor(playerName, season) {
-  return null;
+export async function playerSeasons(playerId, seasonIds) {
+  // todo rate limit
+  // todo implement
 }
 
-export async function lifetimeStatsFor(playerName) {
-  const accountId = await getPlayerId(playerName);
-
+export async function lifetimeStats(playerId) {
   return instance
-    .get(`/players/${accountId}/seasons/lifetime`, {
+    .get(`/players/${playerId}/seasons/lifetime`, {
       headers: {
         Authorization: `Bearer ${process.env.PUBG_TOKEN}`
       }
@@ -66,15 +60,6 @@ export async function lifetimeStatsFor(playerName) {
     .catch(function(error) {
       console.log(error);
     });
-}
-
-export async function getPlayerId(playerName) {
-  if (!PlayerIdentifierCache.hasPlayer(playerName)) {
-    const playerId = await findPlayerId(playerName);
-    PlayerIdentifierCache.storeId(playerName, playerId);
-  }
-
-  return PlayerIdentifierCache.getId(playerName);
 }
 
 export async function findPlayerId(playerName) {

@@ -1,0 +1,139 @@
+{
+  "players": [
+    {
+      "id": "account.b1f527bb2223426a8deecb2a8f3a3f11",
+      "name": "AnEmortalKid"
+    },
+    {
+      "id": "account.d383c1d18f094583bf33a495179280c6",
+      "name": "IamDewMan"
+    },
+    {
+      "id": "account.4baa3c9b90f5479db36d6e2f8d193685",
+      "name": "Tropod8"
+    }
+  ],
+  "seasons": [
+    {
+      "id": "division.bro.official.2017-beta",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2017-pre1",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2017-pre2",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2017-pre3",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2017-pre4",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2017-pre5",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2017-pre6",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2017-pre7",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2017-pre8",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2017-pre9",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2018-01",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2018-02",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2018-03",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2018-04",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2018-05",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2018-06",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2018-07",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2018-08",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.2018-09",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.pc-2018-01",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.pc-2018-02",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.pc-2018-03",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.pc-2018-04",
+      "isCurrent": false,
+      "isOffSeason": false
+    },
+    {
+      "id": "division.bro.official.pc-2018-05",
+      "isCurrent": true,
+      "isOffSeason": false
+    }
+  ],
+  "history": []
+}
