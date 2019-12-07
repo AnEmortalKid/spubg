@@ -170,4 +170,4 @@ async function gatherTrend(playerName) {
 
 // getHistory("AnEmortalKid").then(result => console.log(JSON.stringify(result, null, 2)));
 
-gatherTrend("Tropod8");
+gatherTrend("AnEmortalKid");
