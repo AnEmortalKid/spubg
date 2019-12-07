@@ -186,24 +186,32 @@ var yScale = d3
 
 // create svg element:
 var svg = d3
-  .select(document.body)
-  .append("svg")
-  .attr("width", canvasWidth)
-  .attr("height", canvasHeight)
+.select(document.body)
+.append("svg")
+.attr("width", canvasWidth)
+.attr("height", canvasHeight)
+
+// set a background jic things are black on the image?
+svg.append("rect")
+.attr("width", "100%")
+.attr("height", "100%")
+.attr("fill", "white");
+
+var svgCanvas = svg
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // add x axis
-svg
+svgCanvas
   .append("g")
   .attr("transform", "translate(0," + height + ")")
   .call(d3.axisBottom(xScale));
 
 // add y axis
-svg.append("g").call(d3.axisLeft(yScale));
+svgCanvas.append("g").call(d3.axisLeft(yScale));
 
 // Add the line
-svg
+svgCanvas
   .append("path")
   .datum(myData)
   .attr("fill", "none")
@@ -221,7 +229,7 @@ svg
       })
   );
 // Add the points
-svg
+svgCanvas
   .append("g")
   .selectAll("dot")
   .data(myData)
@@ -241,7 +249,7 @@ svg
 // y point is scaled lifetime
 var lifetimeX = [0, width ]
 // Add the lifetime line
-svg
+svgCanvas
   .append("path")
   .datum(lifetimeX)
   .attr("fill", "none")
@@ -279,14 +287,14 @@ svg
 
 // svg.node -> g node
 
-var source = xmlserializer.serializeToString(document.body);
+var source = xmlserializer.serializeToString(svg.node());
 console.log(source);
 fs.writeFileSync("out.svg", source);
 
 // TODO figure out why axis are not loading
 
 // svg.node refers to the g so we need to find the parent (which is of type svg and not g)
-var imgSource = xmlserializer.serializeToString(svg.node().parentElement);
+var imgSource = xmlserializer.serializeToString(svg.node());
 
 svg2img(imgSource, function(error, buffer) {
     //returns a Buffer
