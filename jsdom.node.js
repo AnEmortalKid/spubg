@@ -3,6 +3,7 @@ var d3 = require("d3"),
 var fs = require("fs");
 var xmlserializer = require("xmlserializer");
 var svg2img = require("svg2img");
+var btoa = require("btoa");
 
 var jsdom = require("jsdom");
 const { JSDOM } = jsdom;
@@ -155,148 +156,190 @@ const { document } = new JSDOM("").window;
         "winRate": "6.12"
       }
     }
-
  */
 
-var myData = [
-  { x: 1, y: 6.42 },
-  { x: 2, y: 4.48 },
-  { x: 3, y: 5.88 },
-  { x: 4, y: 7.18 },
-  { x: 5, y: 4.95 }
-];
-const lifetimeKd = 6.12
-const yDomainMax = 8
+// SeasonData
 
-const canvasWidth = 600;
-const canvasHeight = 400;
-var margin = { top: 10, right: 30, bottom: 30, left: 60 },
-  width = canvasWidth - margin.left - margin.right,
-  height = canvasHeight - margin.top - margin.bottom;
+//  "division.bro.official.pc-2018-01": {
+//   "kd": "1.45",
+//   "winRate": "6.42"
+// }
 
-var xScale = d3
-  .scaleLinear()
-  .domain([0, 6])
-  .range([0, width]);
+/**
+ * 
+ * @param {String} title 
+ * @param {Array} seasonData an array of objects with seasonId and statValue, e.g. [ { seasonId: "season1", statValue: 5 }, { seasonId: "season2", statValue: 3 }]
+ * @param {Number} allTimeHighValue 
+ */
+function createPlot(title, seasonData, allTimeHighValue) {
+  const canvasWidth = 600;
+  const canvasHeight = 400;
+  var margin = { top: 10, right: 60, bottom: 30, left: 60 },
+    width = canvasWidth - margin.left - margin.right,
+    height = canvasHeight - margin.top - margin.bottom;
 
-var yScale = d3
-  .scaleLinear()
-  .domain([0, yDomainMax])
-  .range([height, 0]);
+  var dataPointCount = seasonData.length;
+  var xScale = d3
+    .scaleLinear()
+    .domain([1, dataPointCount])
+    .range([0, width]);
 
-// create svg element:
-var svg = d3
-.select(document.body)
-.append("svg")
-.attr("width", canvasWidth)
-.attr("height", canvasHeight)
+  var yPoints = seasonData.map(seasonItem => seasonItem.statValue);
+  console.log(yPoints)
+  var minYPoint = d3.min(yPoints);
+  const maxYPoint = d3.max(yPoints);
+  const yBufferShift = 0.75;
 
-// set a background jic things are black on the image?
-svg.append("rect")
-.attr("width", "100%")
-.attr("height", "100%")
-.attr("fill", "white");
+  var yScale = d3
+    .scaleLinear()
+    .domain([minYPoint - yBufferShift, maxYPoint + yBufferShift])
+    .range([height, 0]);
 
-var svgCanvas = svg
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  // create svg element:
+  var svg = d3
+    .select(document.body)
+    .append("svg")
+    .attr("width", canvasWidth)
+    .attr("height", canvasHeight);
 
-// add x axis
-svgCanvas
-  .append("g")
-  .attr("transform", "translate(0," + height + ")")
-  .call(d3.axisBottom(xScale));
+  // set a background jic things are black on the image?
+  svg
+    .append("rect")
+    .attr("width", "100%")
+    .attr("height", "100%")
+    .attr("stroke", "black")
+    .attr("fill", "white");
 
-// add y axis
-svgCanvas.append("g").call(d3.axisLeft(yScale));
+  var svgCanvas = svg
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// Add the line
-svgCanvas
-  .append("path")
-  .datum(myData)
-  .attr("fill", "none")
-  .attr("stroke", "#69b3a2")
-  .attr("stroke-width", 1.5)
-  .attr(
-    "d",
-    d3
-      .line()
-      .x(function(d) {
-        return xScale(d.x);
-      })
-      .y(function(d) {
-        return yScale(d.y);
-      })
-  );
-// Add the points
-svgCanvas
-  .append("g")
-  .selectAll("dot")
-  .data(myData)
-  .enter()
-  .append("circle")
-  .attr("cx", function(d) {
-    return xScale(d.x);
-  })
-  .attr("cy", function(d) {
-    return yScale(d.y);
-  })
-  .attr("r", 5)
-  .attr("fill", "#69b3a2");
+  // add x axis
+  const seasonNames = seasonData.map(seasonItem => seasonItem.seasonId.replace("division.bro.official.pc-", ""));
+  const xAxis = d3
+    .axisBottom(xScale)
+    .tickFormat(function(d,i) {
+      return seasonNames[i];
+    })
+    .ticks(dataPointCount);
 
-// TODO dynamicize this shit
-// goes from x min -> max
-// y point is scaled lifetime
-var lifetimeX = [0, width ]
-// Add the lifetime line
-svgCanvas
-  .append("path")
-  .datum(lifetimeX)
-  .attr("fill", "none")
-  .attr("stroke", "#ff0000")
-  .attr("stroke-width", 1.5)
-  .attr(
-    "d",
-    d3
-      .line()
-      .x(function(d) {
-        return xScale(d);
-      })
-      .y(yScale(lifetimeKd))
-  );
+  svgCanvas
+    .append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .style("stroke", "#383838")
+    .call(xAxis)
+    .call(g => g.select(".domain").remove()); // hide connection only show values
+
+  // Add the line
+  svgCanvas
+    .append("path")
+    .datum(yPoints)
+    .attr("fill", "none")
+    .attr("stroke", "#69b3a2")
+    .attr("stroke-width", 1.5)
+    .attr(
+      "d",
+      d3
+        .line()
+        .x(function(d,i) {
+          return xScale(i+1);
+        })
+        .y(function(d) {
+          return yScale(d);
+        })
+    );
+
+  // Add the points
+  svgCanvas
+    .append("g")
+    .selectAll("dot")
+    .data(yPoints)
+    .enter()
+    .append("circle")
+    .attr("cx", function(d,i) {
+      return xScale(i+1);
+    })
+    .attr("cy", function(d) {
+      return yScale(d);
+    })
+    .attr("r", 10)
+    .attr("fill", "#69b3a2");
+
+  // goes from x min -> max
+  // y point is scaled lifetime
+  var lifetimeX = [0.75, dataPointCount+.25];
+  // Add the lifetime line
+  svgCanvas
+    .append("path")
+    .datum(lifetimeX)
+    .attr("fill", "none")
+    .attr("stroke", "#e36666")
+    .attr("stroke-width", 2)
+    .attr(
+      "d",
+      d3
+        .line()
+        .x(function(d) {
+          return xScale(d);
+        })
+        .y(yScale(allTimeHighValue))
+    );
 
 
-// prepare a helper function
-// var lineFunc = d3
-//   .line()
-//   .x(function(d) {
-//     return d.x;
-//   })
-//   .y(function(d) {
-//     return d.y;
-//   });
+  // label each node
+  svgCanvas
+    .selectAll("labels")
+    .data(yPoints)
+    .enter()
+    .append("text")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", "14px")
+    .attr("fill", "#0f544b")
+    .attr("x", function(d, i) {
+      return xScale(i + 1) - 19;
+    }) // fontsize + radius
+    .attr("y", function(d) {
+      var base = yScale(d);
+      if (d < allTimeHighValue) {
+        // shift down by 2x fontsize
+        base += 28;
+      } else {
+        // shift up by fontsize
+        base -= 14;
+      }
+      return base;
+    })
+    .text(function(d) {
+      return "(" + d + ")";
+    });
 
-// Add the path using this helper function
-// svg
-//   .append("path")
-//   .attr("d", lineFunc(data))
-//   .attr("stroke", "black")
-//   .attr("fill", "none");
+  // add the lifetime trend text
+  svgCanvas
+    .append("text")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", "18px")
+    .attr("fill", "#e36666")
+    .attr("x", xScale(5))
+    .attr("y", yScale(allTimeHighValue) - 10)
+    .text("(" + allTimeHighValue + ")");
 
-// serialize our SVG XML to a string.
+  var source = xmlserializer.serializeToString(svg.node());
+  fs.writeFileSync(`${title}.svg`, source);
 
-// svg.node -> g node
-
-var source = xmlserializer.serializeToString(svg.node());
-console.log(source);
-fs.writeFileSync("out.svg", source);
-
-// TODO figure out why axis are not loading
-
-// svg.node refers to the g so we need to find the parent (which is of type svg and not g)
-var imgSource = xmlserializer.serializeToString(svg.node());
-
-svg2img(imgSource, function(error, buffer) {
+  svg2img(source, function(error, buffer) {
     //returns a Buffer
-    fs.writeFileSync('out.png', buffer);
-});
+    fs.writeFileSync(`${title}.png`, buffer);
+  });
+}
+
+const winRateData = [{"seasonId":"division.bro.official.pc-2018-01","statValue":6.42},
+{"seasonId":"division.bro.official.pc-2018-02","statValue":4.48},
+{"seasonId":"division.bro.official.pc-2018-03","statValue":5.88},
+{"seasonId":"division.bro.official.pc-2018-04","statValue":7.18},
+{"seasonId":"division.bro.official.pc-2018-05","statValue":4.95}]
+
+const lifeTimeWinRate = 6.12
+
+// TODO add desired title text
+
+createPlot("test", winRateData, lifeTimeWinRate);
