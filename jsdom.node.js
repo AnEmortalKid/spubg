@@ -1,169 +1,12 @@
 var d3 = require("d3"),
-  jsdom = require("jsdom");
+var jsdom = require("jsdom");
 var fs = require("fs");
 var xmlserializer = require("xmlserializer");
 var svg2img = require("svg2img");
-var btoa = require("btoa");
 
-var jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
 const { document } = new JSDOM("").window;
-
-/**
- *   
- * "squad-fpp": [
-    {
-      "division.bro.official.pc-2018-01": {
-        "kd": "0.85",
-        "winRate": "2.53"
-      }
-    },
-    {
-      "division.bro.official.pc-2018-02": {
-        "kd": "0.94",
-        "winRate": "3.88"
-      }
-    },
-    {
-      "division.bro.official.pc-2018-03": {
-        "kd": "0.93",
-        "winRate": "6.76"
-      }
-    },
-    {
-      "division.bro.official.pc-2018-04": {
-        "kd": "1.00",
-        "winRate": "4.84"
-      }
-    },
-    {
-      "division.bro.official.pc-2018-05": {
-        "kd": "1.00",
-        "winRate": "10.14"
-      }
-    },
-    {
-      "lifetime": {
-        "kd": "0.93",
-        "winRate": "4.77"
-      }
-    }
-  ]
- */
-
-// var myData = [
-//   { x: 1, y: 2.53 },
-//   { x: 2, y: 3.88 },
-//   { x: 3, y: 6.76 },
-//   { x: 4, y: 4.84 },
-//   { x: 5, y: 10.14 }
-// ];
-// const lifetimeKd = 4.77
-
-// const yDomainMax = 12;
-
-// TROPODs
-
-/**
- *  "squad-fpp": [
-    {
-      "division.bro.official.pc-2018-01": {
-        "kd": "0.96",
-        "winRate": "10.42"
-      }
-    },
-    {
-      "division.bro.official.pc-2018-02": {
-        "kd": "1.52",
-        "winRate": "18.56"
-      }
-    },
-    {
-      "division.bro.official.pc-2018-03": {
-        "kd": "1.39",
-        "winRate": "16.13"
-      }
-    },
-    {
-      "division.bro.official.pc-2018-04": {
-        "kd": "1.13",
-        "winRate": "2.84"
-      }
-    },
-    {
-      "division.bro.official.pc-2018-05": {
-        "kd": "1.38",
-        "winRate": "12.87"
-      }
-    },
-    {
-      "lifetime": {
-        "kd": "1.30",
-        "winRate": "11.93"
-      }
-    }
-
- */
-
-// var myData = [
-//   { x: 1, y: 10.42 },
-//   { x: 2, y: 18.56 },
-//   { x: 3, y: 16.13 },
-//   { x: 4, y: 2.84 },
-//   { x: 5, y: 12.87 }
-// ];
-// const lifetimeKd = 11.93
-
-// const yDomainMax = 20
-
-/**
- * DIRTYG
- *   "squad-fpp": [
-    {
-      "division.bro.official.pc-2018-01": {
-        "kd": "1.45",
-        "winRate": "6.42"
-      }
-    },
-    {
-      "division.bro.official.pc-2018-02": {
-        "kd": "1.97",
-        "winRate": "4.48"
-      }
-    },
-    {
-      "division.bro.official.pc-2018-03": {
-        "kd": "1.65",
-        "winRate": "5.88"
-      }
-    },
-    {
-      "division.bro.official.pc-2018-04": {
-        "kd": "1.61",
-        "winRate": "7.18"
-      }
-    },
-    {
-      "division.bro.official.pc-2018-05": {
-        "kd": "1.45",
-        "winRate": "4.95"
-      }
-    },
-    {
-      "lifetime": {
-        "kd": "1.59",
-        "winRate": "6.12"
-      }
-    }
- */
-
-// SeasonData
-
-//  "division.bro.official.pc-2018-01": {
-//   "kd": "1.45",
-//   "winRate": "6.42"
-// }
 
 /**
  * 
@@ -332,14 +175,74 @@ function createPlot(title, seasonData, allTimeHighValue) {
   });
 }
 
-const winRateData = [{"seasonId":"division.bro.official.pc-2018-01","statValue":6.42},
-{"seasonId":"division.bro.official.pc-2018-02","statValue":4.48},
-{"seasonId":"division.bro.official.pc-2018-03","statValue":5.88},
-{"seasonId":"division.bro.official.pc-2018-04","statValue":7.18},
-{"seasonId":"division.bro.official.pc-2018-05","statValue":4.95}]
+// const winRateData = [{"seasonId":"division.bro.official.pc-2018-01","statValue":6.42},
+// {"seasonId":"division.bro.official.pc-2018-02","statValue":4.48},
+// {"seasonId":"division.bro.official.pc-2018-03","statValue":5.88},
+// {"seasonId":"division.bro.official.pc-2018-04","statValue":7.18},
+// {"seasonId":"division.bro.official.pc-2018-05","statValue":4.95}]
 
-const lifeTimeWinRate = 6.12
+// const lifeTimeWinRate = 6.12
+
+const winRateData = [{"seasonId":"division.bro.official.pc-2018-01","statValue":3.91},
+{"seasonId":"division.bro.official.pc-2018-02","statValue":1.69},
+{"seasonId":"division.bro.official.pc-2018-03","statValue":3.81},
+{"seasonId":"division.bro.official.pc-2018-04","statValue":2.40},
+{"seasonId":"division.bro.official.pc-2018-05","statValue":4.23}]
+const lifeTimeWinRate = 3.28
+
+const kdData = [{"seasonId":"division.bro.official.pc-2018-01","statValue":2.23},
+{"seasonId":"division.bro.official.pc-2018-02","statValue":1.43},
+{"seasonId":"division.bro.official.pc-2018-03","statValue":1.30},
+{"seasonId":"division.bro.official.pc-2018-04","statValue":1.57},
+{"seasonId":"division.bro.official.pc-2018-05","statValue":1.96}]
+const lifeTimeKd = 1.72
+
+// "duo-fpp": [
+//   {
+//     "division.bro.official.pc-2018-01": {
+//       "kd": "2.23",
+//       "winRate": "3.91"
+//     }
+//   },
+//   {
+//     "division.bro.official.pc-2018-02": {
+//       "kd": "1.43",
+//       "winRate": "1.69"
+//     }
+//   },
+//   {
+//     "division.bro.official.pc-2018-03": {
+//       "kd": "1.30",
+//       "winRate": "3.81"
+//     }
+//   },
+//   {
+//     "division.bro.official.pc-2018-04": {
+//       "kd": "1.57",
+//       "winRate": "2.40"
+//     }
+//   },
+//   {
+//     "division.bro.official.pc-2018-05": {
+//       "kd": "1.96",
+//       "winRate": "4.23"
+//     }
+//   },
+//   {
+//     "lifetime": {
+//       "kd": "1.72",
+//       "winRate": "3.28"
+//     }
+//   }
+
+
 
 // TODO add desired title text
 
-createPlot("test", winRateData, lifeTimeWinRate);
+// add x axis
+const seasonNames = seasonData.map(seasonItem =>
+  seasonItem.seasonId.replace("division.bro.official.pc-", "")
+);
+
+// createPlot("ThaDirtyG-duo-fpp-winrate", winRateData, lifeTimeWinRate);
+// createPlot("ThaDirtyG-duo-fpp-kd", kdData, lifeTimeKd);

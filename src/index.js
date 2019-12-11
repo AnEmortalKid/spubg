@@ -1,6 +1,7 @@
 import { getHistory } from "./history/historyAPI";
 import { lifetimeStats } from "./api-client/pubgClient";
 import PlayerCache from "./players/playerCache";
+import { createTrendChart } from "./chart/chartsAPI";
 
 require("dotenv").config();
 
@@ -170,4 +171,20 @@ async function gatherTrend(playerName) {
 
 // getHistory("AnEmortalKid").then(result => console.log(JSON.stringify(result, null, 2)));
 
-gatherTrend("ThaDirtyG");
+const lifeTimeKd = 1.72;
+
+const data = [
+  { name: "2018-01", value: 2.23 },
+  { name: "2018-02", value: 1.43 },
+  { name: "2018-03", value: 1.3 },
+  { name: "2018-04", value: 1.57 },
+  { name: "2018-05", value: 1.96 }
+];
+
+//gatherTrend("ThaDirtyG");
+
+// createTrendChart("test", "test", data, lifeTimeKd);
+
+getHistory("AnEmortalKid").then(result =>
+  console.log(JSON.stringify(result, null, 2))
+);

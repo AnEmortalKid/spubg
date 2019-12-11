@@ -15,20 +15,20 @@ const { document } = new JSDOM("").window;
  * @param {Array} dataPoints a set of data points in the form: [ { name: "x", value: 5 }]
  * @param {Number} trend the trend point
  */
-function createTrendChart(fileName, title, dataPoints, trend) {
+export function createTrendChart(fileName, title, dataPoints, trend) {
   const canvasWidth = 600;
   const canvasHeight = 400;
   var margin = { top: 10, right: 60, bottom: 30, left: 60 },
     width = canvasWidth - margin.left - margin.right,
     height = canvasHeight - margin.top - margin.bottom;
 
-  var dataPointCount = seasonData.length;
+  var dataPointCount = dataPoints.length;
   var xScale = d3
     .scaleLinear()
     .domain([1, dataPointCount])
     .range([0, width]);
 
-  var yPoints = seasonData.map(seasonItem => seasonItem.statValue);
+  var yPoints = dataPoints.map(dataPoint => dataPoint.value);
   console.log(yPoints);
   var minYPoint = d3.min(yPoints);
   const maxYPoint = d3.max(yPoints);
@@ -58,14 +58,11 @@ function createTrendChart(fileName, title, dataPoints, trend) {
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // add x axis
-  const seasonNames = seasonData.map(seasonItem =>
-    seasonItem.seasonId.replace("division.bro.official.pc-", "")
-  );
   const xAxis = d3
     .axisBottom(xScale)
+    .ticks(dataPoints)
     .tickFormat(function(d, i) {
-      return seasonNames[i];
+      return dataPoints[i].name;
     })
     .ticks(dataPointCount);
 
@@ -114,7 +111,7 @@ function createTrendChart(fileName, title, dataPoints, trend) {
   // goes from x min -> max
   // y point is scaled lifetime
   var lifetimeX = [0.75, dataPointCount + 0.25];
-  // Add the lifetime line
+
   svgCanvas
     .append("path")
     .datum(lifetimeX)
@@ -128,7 +125,7 @@ function createTrendChart(fileName, title, dataPoints, trend) {
         .x(function(d) {
           return xScale(d);
         })
-        .y(yScale(allTimeHighValue))
+        .y(yScale(trend))
     );
 
   // label each node
@@ -145,7 +142,7 @@ function createTrendChart(fileName, title, dataPoints, trend) {
     }) // fontsize + radius
     .attr("y", function(d) {
       var base = yScale(d);
-      if (d < allTimeHighValue) {
+      if (d < trend) {
         // shift down by 2x fontsize
         base += 28;
       } else {
@@ -165,14 +162,17 @@ function createTrendChart(fileName, title, dataPoints, trend) {
     .attr("font-size", "18px")
     .attr("fill", "#e36666")
     .attr("x", xScale(5))
-    .attr("y", yScale(allTimeHighValue) - 10)
-    .text("(" + allTimeHighValue + ")");
+    .attr("y", yScale(trend) - 10)
+    .text("(" + trend + ")");
 
   var source = xmlserializer.serializeToString(svg.node());
-  fs.writeFileSync(`${title}.svg`, source);
+  fs.writeFileSync(`${fileName}.svg`, source);
 
   svg2img(source, function(error, buffer) {
     //returns a Buffer
-    fs.writeFileSync(`${title}.png`, buffer);
+    fs.writeFileSync(`${fileName}.png`, buffer);
+    if (error) {
+      console.log(error);
+    }
   });
 }

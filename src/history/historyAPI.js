@@ -2,43 +2,6 @@ import { findId as findPlayerId } from "../players/playersAPI";
 import { playerSeason } from "../api-client/pubgClient";
 import HistoryCache from "./historyCache";
 
-// season from the api
-async function gatherSeasonStats(playerId, seasonId) {
-  const result = await playerSeason(playerId, seasonId);
-  console.log(`Result: ${JSON.stringify(result, null, 2)}`);
-  const gameModeIds = result.data.attributes.gameModeStats;
-
-  let seasonStat = {};
-  Object.keys(gameModeIds).forEach(gameModeId => {
-    console.log("Processing: " + gameModeId);
-    const statEntry = gameModeIds[gameModeId];
-
-    const roundsPlayed = statEntry.roundsPlayed;
-    if (roundsPlayed == 0) {
-      // no data for this gameMode
-      return;
-    }
-
-    const statsForMode = {};
-
-    const deaths = statEntry.losses;
-    if (deaths != 0) {
-      const kills = statEntry.kills;
-      const kdCalc = kills / deaths;
-      statsForMode.kd = kdCalc.toFixed(2);
-    }
-
-    // compute win rate
-    const wins = statEntry.wins;
-    const winRateCalc = (wins / roundsPlayed) * 100;
-    statsForMode.winRate = winRateCalc.toFixed(2);
-
-    seasonStat[gameModeId] = statsForMode;
-  });
-
-  return seasonStat;
-}
-
 export async function getHistory(playerName) {
   const playerId = await findPlayerId(playerName);
 
@@ -65,7 +28,7 @@ export async function getHistory(playerName) {
 
   let history = {};
   for (const seasonId of seasonIds) {
-    history[seasonId] = await gatherSeasonStats(playerId, seasonId);
+    history[seasonId] = await playerSeason(playerId, seasonId);
     // TODO write it to DB
   }
 
