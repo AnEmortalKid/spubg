@@ -32,5 +32,7 @@ export async function getHistory(playerName) {
     // TODO write it to DB
   }
 
+  HistoryCache.storeHistory(playerId, history);
+
   return history;
 }

@@ -4,24 +4,26 @@ import LocalStorage from "../storage/localStorage";
 
 // TODO backing mechanism between memcache/local storage
 class HistoryCache {
-  // storeId(playerId, playerName) {
-  //   LocalStorage.instance()
-  //     .get("players")
-  //     .push({ id: playerId, name: playerName })
-  //     .write();
-  // }
-  // getId(playerName) {
-  //   const player = LocalStorage.instance()
-  //     .get("players")
-  //     .find({ name: playerName })
-  //     .value();
-  //   if (player) {
-  //     return player.id;
-  //   }
-  //   return player;
-  // }
-  // todo fetch api
-  // todo store api
+  storeHistory(playerId, history) {
+    console.log("Storing:");
+    console.log(history);
+    LocalStorage.instance()
+      .get("history")
+      .push({ id: playerId, seasonData: history })
+      .write();
+  }
+
+  getHistory(playerId) {
+    const history = LocalStorage.instance()
+      .get("history")
+      .find({ id: playerId })
+      .value();
+
+    if (history) {
+      return history.seasonData;
+    }
+    return null;
+  }
 }
 
 export default new HistoryCache();
