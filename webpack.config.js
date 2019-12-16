@@ -1,6 +1,7 @@
 const path = require("path");
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+var nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   entry: {
@@ -32,5 +33,6 @@ module.exports = {
       raw: true,
       include: /^spubg.bin/
     })
-  ]
+  ],
+  externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
 };
