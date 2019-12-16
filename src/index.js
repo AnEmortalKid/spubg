@@ -1,5 +1,10 @@
 import { getHistory } from "./history/historyAPI";
-import { lifetimeStats } from "./api-client/pubgClient";
+import {
+  lifetimeStats,
+  findPlayerId,
+  getPlayerData,
+  getMatch
+} from "./api-client/pubgClient";
 import PlayerCache from "./players/playerCache";
 
 require("dotenv").config();
@@ -170,4 +175,19 @@ async function gatherTrend(playerName) {
 
 // getHistory("AnEmortalKid").then(result => console.log(JSON.stringify(result, null, 2)));
 
-gatherTrend("ThaDirtyG");
+// gatherTrend("ThaDirtyG");
+
+// findPlayerId("AnEmortalKid").then(result => console.log(result));
+
+// getPlayerData("account.b1f527bb2223426a8deecb2a8f3a3f11").then(result => {
+//   console.log(JSON.stringify(result, null, 2))
+
+//   const matches = result.data.relationships.matches.data;
+//   console.log('Matches:' + matches.length);
+// });
+
+// 8c5e9b5f-a688-4c15-97b8-39bd7d54a1e4
+
+getMatch("8c5e9b5f-a688-4c15-97b8-39bd7d54a1e4").then(result =>
+  console.log(JSON.stringify(result, null, 2))
+);

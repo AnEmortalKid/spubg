@@ -7,3 +7,6 @@ node_modules/
 
 # webpack
 /dist
+
+# local db
+spubg-db.json

@@ -78,3 +78,35 @@ export async function findPlayerId(playerName) {
       console.log(error);
     });
 }
+
+export async function getPlayerData(playerId) {
+  return instance
+    .get(`/players/${playerId}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.PUBG_TOKEN}`
+      }
+    })
+    .then(function(response) {
+      const innerObject = response.data;
+      return innerObject;
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+}
+
+export async function getMatch(matchId) {
+  return instance
+    .get(`/matches/${matchId}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.PUBG_TOKEN}`
+      }
+    })
+    .then(function(response) {
+      const innerObject = response.data;
+      return innerObject;
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+}
