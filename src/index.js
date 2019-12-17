@@ -1,92 +1,71 @@
-import { getHistory } from "./history/historyAPI";
-import {
-  lifetimeStats,
-  findPlayerId,
-  getPlayerData,
-  getMatch
-} from "./api-client/pubgClient";
-import PlayerCache from "./players/playerCache";
 import { createTrendChart } from "./chart/chartsAPI";
-import { gatherStats } from "./trends/trendsAPI";
+import { gatherTrend } from "./trends/trendsAPI";
 
 require("dotenv").config();
 
-/**
- * Gathers trend data across seasons and lifetime, returning an object in the form:
- {
-  "seasonal": [
-    {
-      "division.bro.official.pc-2018-01": {
-        "duo-fpp": {
-          "kd": "0.78",
-          "winRate": "3.81"
-        },
-        "solo-fpp": {
-          "kd": "1.12",
-          "winRate": "0.00"
-        },
-        "squad-fpp": {
-          "kd": "0.85",
-          "winRate": "2.53"
-        }
+async function chartKD(playerName) {
+  const trendData = await gatherTrend(playerName);
+  const legitGameModes = ["solo-fpp", "squad-fpp", "duo-fpp"];
+
+  const seasonalEntries = trendData.seasonal;
+  for (const gameMode of legitGameModes) {
+    const gameModeStats = [];
+    for (const seasonEntry of seasonalEntries) {
+      const seasonId = Object.keys(seasonEntry)[0];
+      const seasonData = seasonEntry[seasonId];
+      const gameModeData = seasonData[gameMode];
+      // cleanup name
+      const seasonName = seasonId.replace("division.bro.official.pc-", "");
+
+      // if the entry has no data, place a 0
+      if (gameModeData) {
+        gameModeStats.push({
+          name: seasonName,
+          value: parseFloat(gameModeData.kd)
+        });
+      } else {
+        gameModeStats.push({ name: seasonName, value: 0.0 });
       }
-    }...
-  ],
-  "lifetime": {
-    "duo-fpp": {
-      "kd": "0.91",
-      "winRate": "3.94"
-    },
-    "solo-fpp": {
-      "kd": "1.07",
-      "winRate": "0.00"
-    },
-    "squad": {
-      "kd": "2.00",
-      "winRate": "0.00"
-    },
-    "squad-fpp": {
-      "kd": "0.93",
-      "winRate": "4.97"
+    }
+
+    // sort entries by season id
+    gameModeStats.sort((a, b) => (a.name > b.name ? 1 : -1));
+
+    console.log("stats for " + gameMode);
+    console.log(gameModeStats);
+
+    // if someone hasn't played that mode ever don't even bother??
+    const lifetimeData = trendData.lifetime;
+    if (lifetimeData[gameMode]) {
+      const lifetimeKD = lifetimeData[gameMode].kd;
+      console.log("lifetime");
+      console.log(lifetimeKD);
+
+      const chartName = playerName + "-KD-" + gameMode;
+      const charTitle = playerName;
+      const chartSubTitle = "KD " + gameMode;
+      createTrendChart(
+        chartName,
+        charTitle,
+        chartSubTitle,
+        gameModeStats,
+        lifetimeKD
+      );
     }
   }
 }
- * @param {String} playerName 
- */
-async function gatherTrend(playerName) {
-  const history = await getHistory(playerName);
-  const playerId = PlayerCache.getId(playerName);
-  const lifetime = await lifetimeStats(playerId);
 
-  //extract each season block from history
-  const seasonEntries = Object.keys(history);
-  const seasonalStats = [];
-  for (const seasonId of seasonEntries) {
-    const seasonEntry = history[seasonId];
-    const seasonStats = gatherStats(seasonEntry.data);
-    seasonalStats.push({ [seasonId]: seasonStats });
-  }
+// chartKD("IamDewMan");
+// TODO tom's entry has a case where he doesn't play some season
+chartKD("Tombstone312125");
 
-  const lifetimeInfo = gatherStats(lifetime.data);
-
-  return { seasonal: seasonalStats, lifetime: lifetimeInfo };
-}
-
-gatherTrend("AnEmortalKid").then(result =>
-  console.log(JSON.stringify(result, null, 2))
-);
-
-// findPlayerId("AnEmortalKid").then(result => console.log(result));
-
-// getPlayerData("account.b1f527bb2223426a8deecb2a8f3a3f11").then(result => {
-//   console.log(JSON.stringify(result, null, 2))
-
-//   const matches = result.data.relationships.matches.data;
-//   console.log('Matches:' + matches.length);
-// });
-
-// getHistory("AnEmortalKid").then(result =>
-// console.log(JSON.stringify(result, null, 2)));
-
-// getMatch("8c5e9b5f-a688-4c15-97b8-39bd7d54a1e4").then(result =>
-//   console.log(JSON.stringify(result, null, 2)));
+// FOR just playing with the chart to make it prettier
+// const gameModeStats =
+// [
+//   { name: '2018-01', value: parseFloat('0.78') },
+//   { name: '2018-02', value: parseFloat('0.98') },
+//   { name: '2018-03', value: parseFloat('0.98') },
+//   { name: '2018-04', value: parseFloat('0.84') },
+//   { name: '2018-05', value: parseFloat('0.83') }
+// ]
+// const lifetime = 0.91

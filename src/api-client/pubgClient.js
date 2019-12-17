@@ -62,11 +62,7 @@ export async function playerSeasons(playerId, seasonIds) {
 
 export async function lifetimeStats(playerId) {
   return instance
-    .get(`/players/${playerId}/seasons/lifetime`, {
-      headers: {
-        Authorization: `Bearer ${process.env.PUBG_TOKEN}`
-      }
-    })
+    .get(`/players/${playerId}/seasons/lifetime`)
     .then(function(response) {
       const innerObject = response.data;
       return response.data;

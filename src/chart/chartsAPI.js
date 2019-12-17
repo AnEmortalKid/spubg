@@ -15,12 +15,20 @@ const { document } = new JSDOM("").window;
  * @param {Array} dataPoints a set of data points in the form: [ { name: "x", value: 5 }]
  * @param {Number} trend the trend point
  */
-export function createTrendChart(fileName, title, dataPoints, trend) {
+// TODO turn title into an object
+export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
   const canvasWidth = 600;
   const canvasHeight = 400;
   var margin = { top: 10, right: 60, bottom: 30, left: 60 },
     width = canvasWidth - margin.left - margin.right,
     height = canvasHeight - margin.top - margin.bottom;
+
+  console.log("datapoints:");
+  console.log(dataPoints);
+
+  const pointsColor = "#073a7d";
+  const pointsLineColor = "#6c63a9";
+  const trendsColor = "#de1d1d";
 
   var dataPointCount = dataPoints.length;
   var xScale = d3
@@ -58,27 +66,30 @@ export function createTrendChart(fileName, title, dataPoints, trend) {
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+  const xLabels = dataPoints.map(dataPoint => dataPoint.name);
+  console.log(xLabels);
   const xAxis = d3
     .axisBottom(xScale)
-    .ticks(dataPoints)
+    .ticks(dataPointCount)
     .tickFormat(function(d, i) {
       return dataPoints[i].name;
-    })
-    .ticks(dataPointCount);
+    });
 
   svgCanvas
     .append("g")
     .attr("transform", "translate(0," + height + ")")
     .style("stroke", "#383838")
+    .style("font-size", "14px")
     .call(xAxis)
-    .call(g => g.select(".domain").remove()); // hide connection only show values
+    // hide connection only show values
+    .call(g => g.select(".domain").remove());
 
-  // Add the line
+  // connect the points with a line
   svgCanvas
     .append("path")
     .datum(yPoints)
     .attr("fill", "none")
-    .attr("stroke", "#69b3a2")
+    .attr("stroke", pointsLineColor)
     .attr("stroke-width", 1.5)
     .attr(
       "d",
@@ -106,7 +117,7 @@ export function createTrendChart(fileName, title, dataPoints, trend) {
       return yScale(d);
     })
     .attr("r", 10)
-    .attr("fill", "#69b3a2");
+    .attr("fill", pointsColor);
 
   // goes from x min -> max
   // y point is scaled lifetime
@@ -116,7 +127,7 @@ export function createTrendChart(fileName, title, dataPoints, trend) {
     .append("path")
     .datum(lifetimeX)
     .attr("fill", "none")
-    .attr("stroke", "#e36666")
+    .attr("stroke", trendsColor)
     .attr("stroke-width", 2)
     .attr(
       "d",
@@ -136,7 +147,7 @@ export function createTrendChart(fileName, title, dataPoints, trend) {
     .append("text")
     .attr("font-family", "sans-serif")
     .attr("font-size", "14px")
-    .attr("fill", "#0f544b")
+    .attr("fill", pointsColor)
     .attr("x", function(d, i) {
       return xScale(i + 1) - 19;
     }) // fontsize + radius
@@ -165,12 +176,35 @@ export function createTrendChart(fileName, title, dataPoints, trend) {
     .attr("y", yScale(trend) - 10)
     .text("(" + trend + ")");
 
+  // Add Main Title
+  svgCanvas
+    .append("text")
+    .attr("x", width / 2)
+    .attr("y", margin.top * 1.5)
+    .attr("text-anchor", "middle")
+    .style("font-size", "18px")
+    .text(title);
+
+  svgCanvas
+    .append("text")
+    .attr("x", width / 2)
+    .attr("y", margin.top * 3.5)
+    .attr("text-anchor", "middle")
+    .style("font-size", "14px")
+    .text(subTitle);
+
   var source = xmlserializer.serializeToString(svg.node());
-  fs.writeFileSync(`${fileName}.svg`, source);
+
+  const filePath = "out/charts/" + fileName;
+  fs.mkdir("out/charts", { recursive: true }, err => {
+    if (err) throw err;
+  });
+
+  fs.writeFileSync(`${filePath}.svg`, source);
 
   svg2img(source, function(error, buffer) {
     //returns a Buffer
-    fs.writeFileSync(`${fileName}.png`, buffer);
+    fs.writeFileSync(`${filePath}.png`, buffer);
     if (error) {
       console.log(error);
     }
