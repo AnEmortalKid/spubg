@@ -1,12 +1,19 @@
 import axios from "axios";
+import rateLimit from "axios-rate-limit";
+
+require("dotenv").config();
 
 // TODO create client with token and pass that down instead
-const instance = axios.create({
-  baseURL: "https://api.pubg.com/shards/steam/",
-  headers: {
-    Accept: "application/vnd.api+json"
-  }
-});
+const instance = rateLimit(
+  axios.create({
+    baseURL: "https://api.pubg.com/shards/steam/",
+    headers: {
+      Accept: "application/vnd.api+json",
+      Authorization: `Bearer ${process.env.PUBG_TOKEN}`
+    }
+  }),
+  { maxRequests: 10, perMilliseconds: 60000 }
+);
 
 /**
  * Returns the list of available seasons
@@ -28,11 +35,7 @@ export async function seasons() {
 
 export async function playerSeason(playerId, seasonId) {
   return instance
-    .get(`/players/${playerId}/seasons/${seasonId}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.PUBG_TOKEN}`
-      }
-    })
+    .get(`/players/${playerId}/seasons/${seasonId}`)
     .then(function(response) {
       return response.data;
     })
@@ -41,9 +44,20 @@ export async function playerSeason(playerId, seasonId) {
     });
 }
 
+/**
+ *
+ * @param {*} playerId
+ * @param {*} seasonIds
+ */
 export async function playerSeasons(playerId, seasonIds) {
-  // todo rate limit
-  // todo implement
+  const allSeasonData = [];
+
+  for (const seasonId of seasonIds) {
+    const seasonData = await playerSeason(playerId, seasonId);
+    allSeasonData.push(seasonData);
+  }
+
+  return allSeasonData;
 }
 
 export async function lifetimeStats(playerId) {

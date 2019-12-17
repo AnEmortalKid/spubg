@@ -1,37 +1,48 @@
 import { findId as findPlayerId } from "../players/playersAPI";
-import { playerSeason } from "../api-client/pubgClient";
+import { playerSeason, playerSeasons } from "../api-client/pubgClient";
 import HistoryCache from "./historyCache";
+import {
+  getLatestSeasonId,
+  getAll,
+  getSearchableIds
+} from "../seasons/seasonsAPI";
 
 export async function getHistory(playerName) {
   const playerId = await findPlayerId(playerName);
 
-  // TODO implement from cache
-  // const currentHistory = HistoryCache.getHistory(playerId);
+  // only search for things that will have data
+  const seasonIds = await getSearchableIds();
+  const currentHistory = HistoryCache.getHistory(playerId);
 
-  // // stats are tracked just need to update with the latest season info
-  // if (currentHistory) {
-  //   // TODO Update with latest season
-  //   // todo update db
-  //   return currentHistory;
-  // }
+  if (currentHistory) {
+    // update with the latest season info
+    const latestSeasonId = await getLatestSeasonId();
+    if (currentHistory[latestSeasonId]) {
+      console.log("Updating latest season data");
+      currentHistory[latestSeasonId] = await playerSeason(
+        playerId,
+        latestSeasonId
+      );
+    }
+
+    // find missing data
+    for (const seasonId of seasonIds) {
+      if (!(seasonId in currentHistory)) {
+        console.log(`Finding data for missed season: ${seasonId}`);
+        currentHistory[seasonId] = await playerSeason(playerId, seasonId);
+      }
+    }
+
+    HistoryCache.storeHistory(playerId, currentHistory);
+    return currentHistory;
+  }
 
   console.log(`Determining historic data for ${playerName}`);
-
-  // TODO season data would come from the api and they would adhere to rate limited calls to not fail
-  let seasonIds = [
-    "division.bro.official.pc-2018-01",
-    "division.bro.official.pc-2018-02",
-    "division.bro.official.pc-2018-03",
-    "division.bro.official.pc-2018-04",
-    "division.bro.official.pc-2018-05"
-  ];
-
   let history = {};
   for (const seasonId of seasonIds) {
     history[seasonId] = await playerSeason(playerId, seasonId);
   }
 
   HistoryCache.storeHistory(playerId, history);
-
   return history;
 }
