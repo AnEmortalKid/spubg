@@ -1,9 +1,11 @@
 import LifetimeCommand from "./lifetime";
 import KDTrendCommand from "./kdtrend";
+import WinRateTrendCommand from "./wrtrend";
 
 const commands = {
   lifetime: new LifetimeCommand(),
-  kdtrend: new KDTrendCommand()
+  kdTrend: new KDTrendCommand(),
+  winrateTrend: new WinRateTrendCommand()
 };
 
 export function help() {

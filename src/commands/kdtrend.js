@@ -7,7 +7,7 @@ export default class KDTrendCommand {
   }
 
   execute(args) {
-    console.log(`lifetime: ${args}`);
+    console.log(`kd trend: ${args}`);
 
     if (args[0]) {
       this.chartKD(args[0]);
@@ -42,16 +42,10 @@ export default class KDTrendCommand {
       // sort entries by season id
       gameModeStats.sort((a, b) => (a.name > b.name ? 1 : -1));
 
-      console.log("stats for " + gameMode);
-      console.log(gameModeStats);
-
       // if someone hasn't played that mode ever don't even bother??
       const lifetimeData = trendData.lifetime;
       if (lifetimeData[gameMode]) {
         const lifetimeKD = lifetimeData[gameMode].kd;
-        console.log("lifetime");
-        console.log(lifetimeKD);
-
         const chartName = playerName + "-KD-" + gameMode;
         const charTitle = playerName;
         const chartSubTitle = "KD " + gameMode;

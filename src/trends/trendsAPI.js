@@ -33,6 +33,8 @@ function gatherStats(seasonData) {
     const winRateCalc = (wins / roundsPlayed) * 100;
     statsForMode.winRate = winRateCalc.toFixed(2);
 
+    // TODO compute ADR
+
     seasonStat[gameModeId] = statsForMode;
   });
 
