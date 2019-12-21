@@ -55,9 +55,7 @@ async function chartKD(playerName) {
   }
 }
 
-// chartKD("IamDewMan");
-// TODO tom's entry has a case where he doesn't play some season
-chartKD("Tombstone312125");
+chartKD("AnEmortalKid");
 
 // FOR just playing with the chart to make it prettier
 // const gameModeStats =
