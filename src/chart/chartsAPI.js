@@ -91,7 +91,7 @@ export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
     .datum(yPoints)
     .attr("fill", "none")
     .attr("stroke", pointsLineColor)
-    .attr("stroke-width", 1.5)
+    .attr("stroke-width", 2)
     .attr(
       "d",
       d3
@@ -117,7 +117,7 @@ export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
     .attr("cy", function(d) {
       return yScale(d);
     })
-    .attr("r", 10)
+    .attr("r", 5)
     .attr("fill", pointsColor);
 
   // goes from x min -> max
