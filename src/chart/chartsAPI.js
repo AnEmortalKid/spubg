@@ -44,8 +44,9 @@ export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
 
   var yScale = d3
     .scaleLinear()
-    .domain([minYPoint - yBufferShift, maxYPoint + yBufferShift])
-    .range([height, 0]);
+    // .domain([minYPoint - yBufferShift, maxYPoint + yBufferShift])
+    .domain([minYPoint, maxYPoint])
+    .range([height, margin.top + margin.bottom]);
 
   // create svg element:
   var svg = d3
