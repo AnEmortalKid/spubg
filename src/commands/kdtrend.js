@@ -4,6 +4,6 @@ import TrendCommand from "./trendsCommand";
 
 export default class KDTrendCommand extends TrendCommand {
   constructor() {
-    super("a mapping of K/D by season", "kd", "KD", "Kill/Death Rate");
+    super("charts Kill/Death Rate by season", "kd", "KD", "Kill/Death Rate");
   }
 }

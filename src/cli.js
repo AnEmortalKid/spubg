@@ -16,8 +16,12 @@ export default function cli(args) {
 
   console.log(chalk.yellow("SPUBG"));
 
-  console.log(chalk.green(command));
-  console.log(chalk.grey(commandArgs));
+  if (command == "help") {
+    help();
+  } else {
+    console.log(chalk.green(command));
+    console.log(chalk.grey(commandArgs));
 
-  execute(command, commandArgs);
+    execute(command, commandArgs);
+  }
 }

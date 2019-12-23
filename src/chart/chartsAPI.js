@@ -17,9 +17,9 @@ const { document } = new JSDOM("").window;
  */
 // TODO turn title into an object
 export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
-  const canvasWidth = 600;
-  const canvasHeight = 400;
-  var margin = { top: 10, right: 60, bottom: 30, left: 60 },
+  const canvasWidth = 800;
+  const canvasHeight = 600;
+  var margin = { top: 50, right: 60, bottom: 50, left: 60 },
     width = canvasWidth - margin.left - margin.right,
     height = canvasHeight - margin.top - margin.bottom;
 
@@ -29,6 +29,8 @@ export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
   const pointsColor = "#073a7d";
   const pointsLineColor = "#6c63a9";
   const trendsColor = "#de1d1d";
+  const lineThickness = 2;
+  const pointsRadius = 5;
 
   var dataPointCount = dataPoints.length;
   var xScale = d3
@@ -40,7 +42,6 @@ export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
   console.log(yPoints);
   var minYPoint = d3.min(yPoints);
   const maxYPoint = d3.max(yPoints);
-  const yBufferShift = 0.75;
 
   var yScale = d3
     .scaleLinear()
@@ -49,21 +50,70 @@ export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
     .range([height, margin.top + margin.bottom]);
 
   // create svg element:
-  var svg = d3
+  var svgCanvas = d3
     .select(document.body)
     .append("svg")
     .attr("width", canvasWidth)
     .attr("height", canvasHeight);
 
   // set a background jic things are black on the image?
-  svg
+  svgCanvas
     .append("rect")
     .attr("width", "100%")
     .attr("height", "100%")
     .attr("stroke", "black")
     .attr("fill", "white");
 
-  var svgCanvas = svg
+  // create a border on the area that would be the draw area for debugging
+  // svgCanvas.append("rect")
+  // .attr("x", margin.left)
+  // .attr("y", margin.top)
+  // .attr("width", canvasWidth-(margin.left+margin.right))
+  // .attr("height", canvasHeight - (margin.top+margin.bottom))
+  // .attr("stroke", "black")
+  // .attr("fill", "none");
+
+  // Add Main Title
+  svgCanvas
+    .append("text")
+    .attr("x", canvasWidth / 2)
+    .attr("y", margin.top / 2)
+    .attr("text-anchor", "middle")
+    .style("font-size", "18px")
+    .text(title);
+
+  svgCanvas
+    .append("text")
+    .attr("x", canvasWidth / 2)
+    .attr("y", margin.top)
+    .attr("text-anchor", "middle")
+    .style("font-size", "14px")
+    .text(subTitle);
+
+  // create a key on the left
+  const keyBoxX = margin.left / 2;
+  const keyBoxY = margin.top / 2;
+  const keyBoxSize = 15;
+
+  svgCanvas
+    .append("rect")
+    .attr("x", margin.left / 2)
+    .attr("y", margin.top / 2)
+    .attr("width", keyBoxSize)
+    .attr("height", keyBoxSize)
+    .attr("stroke-widrth", 1)
+    .attr("stroke", "black")
+    .attr("fill", trendsColor);
+
+  svgCanvas
+    .append("text")
+    .attr("x", keyBoxX + keyBoxSize * 1.5)
+    .attr("y", keyBoxY + keyBoxSize * 0.75)
+    .attr("font-size", "12px")
+    .text("Lifetime");
+
+  // canvas for the plot elements
+  var plotCanvas = svgCanvas
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -76,9 +126,11 @@ export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
       return dataPoints[i].name;
     });
 
-  svgCanvas
+  // position axis in the middle of the allowable margin
+  const xAxis_yPositioning = height + margin.bottom / 2;
+  plotCanvas
     .append("g")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + xAxis_yPositioning + ")")
     .style("stroke", "#383838")
     .style("font-size", "14px")
     .call(xAxis)
@@ -86,12 +138,12 @@ export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
     .call(g => g.select(".domain").remove());
 
   // connect the points with a line
-  svgCanvas
+  plotCanvas
     .append("path")
     .datum(yPoints)
     .attr("fill", "none")
     .attr("stroke", pointsLineColor)
-    .attr("stroke-width", 2)
+    .attr("stroke-width", lineThickness)
     .attr(
       "d",
       d3
@@ -105,7 +157,7 @@ export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
     );
 
   // Add the points
-  svgCanvas
+  plotCanvas
     .append("g")
     .selectAll("dot")
     .data(yPoints)
@@ -117,19 +169,19 @@ export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
     .attr("cy", function(d) {
       return yScale(d);
     })
-    .attr("r", 5)
+    .attr("r", pointsRadius)
     .attr("fill", pointsColor);
 
   // goes from x min -> max
   // y point is scaled lifetime
   var lifetimeX = [0.75, dataPointCount + 0.25];
 
-  svgCanvas
+  plotCanvas
     .append("path")
     .datum(lifetimeX)
     .attr("fill", "none")
     .attr("stroke", trendsColor)
-    .attr("stroke-width", 2)
+    .attr("stroke-width", lineThickness)
     .attr(
       "d",
       d3
@@ -141,25 +193,25 @@ export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
     );
 
   // label each node
-  svgCanvas
+  const nodeFontSize = 14;
+  plotCanvas
     .selectAll("labels")
     .data(yPoints)
     .enter()
     .append("text")
+    .attr("text-anchor", "middle")
     .attr("font-family", "sans-serif")
     .attr("font-size", "14px")
     .attr("fill", pointsColor)
     .attr("x", function(d, i) {
-      return xScale(i + 1) - 19;
+      return xScale(i + 1) - pointsRadius;
     }) // fontsize + radius
     .attr("y", function(d) {
       var base = yScale(d);
       if (d < trend) {
-        // shift down by 2x fontsize
-        base += 28;
+        base += nodeFontSize + pointsRadius;
       } else {
-        // shift up by fontsize
-        base -= 14;
+        base -= nodeFontSize - pointsRadius;
       }
       return base;
     })
@@ -168,33 +220,17 @@ export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
     });
 
   // add the lifetime trend text
-  svgCanvas
+  plotCanvas
     .append("text")
     .attr("font-family", "sans-serif")
     .attr("font-size", "18px")
     .attr("fill", "#e36666")
+    .attr("text-anchor", "middle")
     .attr("x", xScale(5))
     .attr("y", yScale(trend) - 10)
     .text("(" + trend + ")");
 
-  // Add Main Title
-  svgCanvas
-    .append("text")
-    .attr("x", width / 2)
-    .attr("y", margin.top * 1.5)
-    .attr("text-anchor", "middle")
-    .style("font-size", "18px")
-    .text(title);
-
-  svgCanvas
-    .append("text")
-    .attr("x", width / 2)
-    .attr("y", margin.top * 3.5)
-    .attr("text-anchor", "middle")
-    .style("font-size", "14px")
-    .text(subTitle);
-
-  var source = xmlserializer.serializeToString(svg.node());
+  var source = xmlserializer.serializeToString(svgCanvas.node());
 
   const filePath = "out/charts/" + fileName;
   fs.mkdir("out/charts", { recursive: true }, err => {

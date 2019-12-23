@@ -1,17 +1,21 @@
-import LifetimeCommand from "./lifetime";
 import KDTrendCommand from "./kdtrend";
 import WinRateTrendCommand from "./wrtrend";
 import ADRTrendCommand from "./adrtrend";
 
 const commands = {
-  lifetime: new LifetimeCommand(),
-  kdTrend: new KDTrendCommand(),
-  winrateTrend: new WinRateTrendCommand(),
-  adrTrend: new ADRTrendCommand()
+  "kd-trend": new KDTrendCommand(),
+  "winRate-trend": new WinRateTrendCommand(),
+  "adr-trend": new ADRTrendCommand()
 };
 
 export function help() {
-  console.log("help!");
+  console.log("Available commands are:\n");
+  const commandKeys = Object.keys(commands);
+
+  for (const commandKey of commandKeys) {
+    const commandEntry = commands[commandKey];
+    console.log(`${commandKey}:\t${commandEntry.description}\n`);
+  }
 }
 
 export async function execute(commandName, commandArgs) {

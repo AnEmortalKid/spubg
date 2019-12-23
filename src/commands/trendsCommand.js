@@ -14,7 +14,7 @@ export default class TrendCommand {
   }
 
   execute(args) {
-    console.log(`kd trend: ${args}`);
+    console.log(`${this._attributeName} trend: ${args}`);
 
     if (args[0]) {
       this.trendChart(args[0]);

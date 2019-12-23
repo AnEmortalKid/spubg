@@ -1,4 +1,4 @@
-var d3 = require("d3"),
+var d3 = require("d3");
 var jsdom = require("jsdom");
 var fs = require("fs");
 var xmlserializer = require("xmlserializer");
@@ -8,84 +8,140 @@ const { JSDOM } = jsdom;
 const { window } = new JSDOM();
 const { document } = new JSDOM("").window;
 
-/**
- * 
- * @param {String} title 
- * @param {Array} seasonData an array of objects with seasonId and statValue, e.g. [ { seasonId: "season1", statValue: 5 }, { seasonId: "season2", statValue: 3 }]
- * @param {Number} allTimeHighValue 
- */
-function createPlot(title, seasonData, allTimeHighValue) {
-  const canvasWidth = 600;
-  const canvasHeight = 400;
-  var margin = { top: 10, right: 60, bottom: 30, left: 60 },
+function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
+  const canvasWidth = 800;
+  const canvasHeight = 600;
+  var margin = { top: 50, right: 60, bottom: 50, left: 60 },
     width = canvasWidth - margin.left - margin.right,
     height = canvasHeight - margin.top - margin.bottom;
 
-  var dataPointCount = seasonData.length;
+  console.log("datapoints:");
+  console.log(dataPoints);
+
+  const pointsColor = "#073a7d";
+  const pointsLineColor = "#6c63a9";
+  const trendsColor = "#de1d1d";
+  const lineThickness = 2;
+  const pointsRadius = 5;
+
+  var dataPointCount = dataPoints.length;
   var xScale = d3
     .scaleLinear()
     .domain([1, dataPointCount])
     .range([0, width]);
 
-  var yPoints = seasonData.map(seasonItem => seasonItem.statValue);
-  console.log(yPoints)
+  var yPoints = dataPoints.map(dataPoint => dataPoint.value);
+  console.log(yPoints);
   var minYPoint = d3.min(yPoints);
   const maxYPoint = d3.max(yPoints);
-  const yBufferShift = 0.75;
 
   var yScale = d3
     .scaleLinear()
-    .domain([minYPoint - yBufferShift, maxYPoint + yBufferShift])
-    .range([height, 0]);
+    // .domain([minYPoint - yBufferShift, maxYPoint + yBufferShift])
+    .domain([minYPoint, maxYPoint])
+    .range([height, margin.top + margin.bottom]);
 
   // create svg element:
-  var svg = d3
+  var svgCanvas = d3
     .select(document.body)
     .append("svg")
     .attr("width", canvasWidth)
     .attr("height", canvasHeight);
 
   // set a background jic things are black on the image?
-  svg
+  svgCanvas
     .append("rect")
     .attr("width", "100%")
     .attr("height", "100%")
     .attr("stroke", "black")
     .attr("fill", "white");
 
-  var svgCanvas = svg
+  // create a border on the area that would be the draw area for debugging
+  // svgCanvas.append("rect")
+  // .attr("x", margin.left)
+  // .attr("y", margin.top)
+  // .attr("width", canvasWidth-(margin.left+margin.right))
+  // .attr("height", canvasHeight - (margin.top+margin.bottom))
+  // .attr("stroke", "black")
+  // .attr("fill", "none");
+
+  // Add Main Title
+  svgCanvas
+  .append("text")
+  .attr("x", canvasWidth / 2)
+  .attr("y", margin.top/2)
+  .attr("text-anchor", "middle")
+  .style("font-size", "18px")
+  .text(title);
+
+  svgCanvas
+  .append("text")
+  .attr("x", canvasWidth / 2)
+  .attr("y", margin.top)
+  .attr("text-anchor", "middle")
+  .style("font-size", "14px")
+  .text(subTitle);
+
+  // create a key on the left
+  const keyBoxX = margin.left / 2;
+  const keyBoxY = margin.top / 2;
+  const keyBoxSize = 15;
+
+  svgCanvas
+  .append("rect")
+  .attr("x", margin.left/2)
+  .attr("y", margin.top / 2)
+  .attr("width", keyBoxSize)
+  .attr("height", keyBoxSize)
+  .attr("stroke-widrth", 1)
+  .attr("stroke", "black")
+  .attr("fill", trendsColor);
+
+  svgCanvas
+  .append("text")
+  .attr("x", keyBoxX + keyBoxSize * 1.5)
+  .attr("y", keyBoxY + keyBoxSize * .75)
+  .attr("font-size", "12px")
+  .text("Lifetime");
+
+  // canvas for the plot elements
+  var plotCanvas = svgCanvas
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // add x axis
-  const seasonNames = seasonData.map(seasonItem => seasonItem.seasonId.replace("division.bro.official.pc-", ""));
+  const xLabels = dataPoints.map(dataPoint => dataPoint.name);
+  console.log(xLabels);
   const xAxis = d3
     .axisBottom(xScale)
-    .tickFormat(function(d,i) {
-      return seasonNames[i];
-    })
-    .ticks(dataPointCount);
+    .ticks(dataPointCount)
+    .tickFormat(function(d, i) {
+      return dataPoints[i].name;
+    });
 
-  svgCanvas
+  // position axis in the middle of the allowable margin
+  const xAxis_yPositioning = height + margin.bottom/2;
+  plotCanvas
     .append("g")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + xAxis_yPositioning + ")")
     .style("stroke", "#383838")
+    .style("font-size", "14px")
     .call(xAxis)
-    .call(g => g.select(".domain").remove()); // hide connection only show values
+    // hide connection only show values
+    .call(g => g.select(".domain").remove());
 
-  // Add the line
-  svgCanvas
+  // connect the points with a line
+  plotCanvas
     .append("path")
     .datum(yPoints)
     .attr("fill", "none")
-    .attr("stroke", "#69b3a2")
-    .attr("stroke-width", 1.5)
+    .attr("stroke", pointsLineColor)
+    .attr("stroke-width", lineThickness)
     .attr(
       "d",
       d3
         .line()
-        .x(function(d,i) {
-          return xScale(i+1);
+        .x(function(d, i) {
+          return xScale(i + 1);
         })
         .y(function(d) {
           return yScale(d);
@@ -93,31 +149,31 @@ function createPlot(title, seasonData, allTimeHighValue) {
     );
 
   // Add the points
-  svgCanvas
+  plotCanvas
     .append("g")
     .selectAll("dot")
     .data(yPoints)
     .enter()
     .append("circle")
-    .attr("cx", function(d,i) {
-      return xScale(i+1);
+    .attr("cx", function(d, i) {
+      return xScale(i + 1);
     })
     .attr("cy", function(d) {
       return yScale(d);
     })
-    .attr("r", 10)
-    .attr("fill", "#69b3a2");
+    .attr("r", pointsRadius)
+    .attr("fill", pointsColor);
 
   // goes from x min -> max
   // y point is scaled lifetime
-  var lifetimeX = [0.75, dataPointCount+.25];
-  // Add the lifetime line
-  svgCanvas
+  var lifetimeX = [0.75, dataPointCount + 0.25];
+
+  plotCanvas
     .append("path")
     .datum(lifetimeX)
     .attr("fill", "none")
-    .attr("stroke", "#e36666")
-    .attr("stroke-width", 2)
+    .attr("stroke", trendsColor)
+    .attr("stroke-width", lineThickness)
     .attr(
       "d",
       d3
@@ -125,30 +181,29 @@ function createPlot(title, seasonData, allTimeHighValue) {
         .x(function(d) {
           return xScale(d);
         })
-        .y(yScale(allTimeHighValue))
+        .y(yScale(trend))
     );
 
-
   // label each node
-  svgCanvas
+  const nodeFontSize = 14;
+  plotCanvas
     .selectAll("labels")
     .data(yPoints)
     .enter()
     .append("text")
+    .attr("text-anchor", "middle")
     .attr("font-family", "sans-serif")
     .attr("font-size", "14px")
-    .attr("fill", "#0f544b")
+    .attr("fill", pointsColor)
     .attr("x", function(d, i) {
-      return xScale(i + 1) - 19;
+      return xScale(i + 1)-pointsRadius;
     }) // fontsize + radius
     .attr("y", function(d) {
       var base = yScale(d);
-      if (d < allTimeHighValue) {
-        // shift down by 2x fontsize
-        base += 28;
+      if (d < trend) {
+        base += nodeFontSize + pointsRadius;
       } else {
-        // shift up by fontsize
-        base -= 14;
+        base -= nodeFontSize - pointsRadius;
       }
       return base;
     })
@@ -157,92 +212,48 @@ function createPlot(title, seasonData, allTimeHighValue) {
     });
 
   // add the lifetime trend text
-  svgCanvas
+  plotCanvas
     .append("text")
     .attr("font-family", "sans-serif")
     .attr("font-size", "18px")
     .attr("fill", "#e36666")
+    .attr("text-anchor", "middle")
     .attr("x", xScale(5))
-    .attr("y", yScale(allTimeHighValue) - 10)
-    .text("(" + allTimeHighValue + ")");
+    .attr("y", yScale(trend) - 10)
+    .text("(" + trend + ")");
 
-  var source = xmlserializer.serializeToString(svg.node());
-  fs.writeFileSync(`${title}.svg`, source);
+
+  var source = xmlserializer.serializeToString(svgCanvas.node());
+
+  const filePath = "out/charts/" + fileName;
+  fs.mkdir("out/charts", { recursive: true }, err => {
+    if (err) throw err;
+  });
+
+  fs.writeFileSync(`${filePath}.svg`, source);
 
   svg2img(source, function(error, buffer) {
     //returns a Buffer
-    fs.writeFileSync(`${title}.png`, buffer);
+    fs.writeFileSync(`${filePath}.png`, buffer);
+    if (error) {
+      console.log(error);
+    }
   });
 }
 
-// const winRateData = [{"seasonId":"division.bro.official.pc-2018-01","statValue":6.42},
-// {"seasonId":"division.bro.official.pc-2018-02","statValue":4.48},
-// {"seasonId":"division.bro.official.pc-2018-03","statValue":5.88},
-// {"seasonId":"division.bro.official.pc-2018-04","statValue":7.18},
-// {"seasonId":"division.bro.official.pc-2018-05","statValue":4.95}]
-
-// const lifeTimeWinRate = 6.12
-
-const winRateData = [{"seasonId":"division.bro.official.pc-2018-01","statValue":3.91},
-{"seasonId":"division.bro.official.pc-2018-02","statValue":1.69},
-{"seasonId":"division.bro.official.pc-2018-03","statValue":3.81},
-{"seasonId":"division.bro.official.pc-2018-04","statValue":2.40},
-{"seasonId":"division.bro.official.pc-2018-05","statValue":4.23}]
-const lifeTimeWinRate = 3.28
-
-const kdData = [{"seasonId":"division.bro.official.pc-2018-01","statValue":2.23},
-{"seasonId":"division.bro.official.pc-2018-02","statValue":1.43},
-{"seasonId":"division.bro.official.pc-2018-03","statValue":1.30},
-{"seasonId":"division.bro.official.pc-2018-04","statValue":1.57},
-{"seasonId":"division.bro.official.pc-2018-05","statValue":1.96}]
-const lifeTimeKd = 1.72
-
-// "duo-fpp": [
-//   {
-//     "division.bro.official.pc-2018-01": {
-//       "kd": "2.23",
-//       "winRate": "3.91"
-//     }
-//   },
-//   {
-//     "division.bro.official.pc-2018-02": {
-//       "kd": "1.43",
-//       "winRate": "1.69"
-//     }
-//   },
-//   {
-//     "division.bro.official.pc-2018-03": {
-//       "kd": "1.30",
-//       "winRate": "3.81"
-//     }
-//   },
-//   {
-//     "division.bro.official.pc-2018-04": {
-//       "kd": "1.57",
-//       "winRate": "2.40"
-//     }
-//   },
-//   {
-//     "division.bro.official.pc-2018-05": {
-//       "kd": "1.96",
-//       "winRate": "4.23"
-//     }
-//   },
-//   {
-//     "lifetime": {
-//       "kd": "1.72",
-//       "winRate": "3.28"
-//     }
-//   }
-
-
-
-// TODO add desired title text
-
-// add x axis
-const seasonNames = seasonData.map(seasonItem =>
-  seasonItem.seasonId.replace("division.bro.official.pc-", "")
-);
 
 // createPlot("ThaDirtyG-duo-fpp-winrate", winRateData, lifeTimeWinRate);
 // createPlot("ThaDirtyG-duo-fpp-kd", kdData, lifeTimeKd);
+
+const dataPoints = [
+  { name: '2018-01', value: 112.53 },
+  { name: '2018-02', value: 129.78 },
+  { name: '2018-03', value: 140.03 },
+  { name: '2018-04', value: 128.01 },
+  { name: '2018-05', value: 122.93 }
+]
+
+const lifetime=130.27
+
+
+createTrendChart("AnEmortalKid-Test", "Test Death Rate", "Test",dataPoints, lifetime)

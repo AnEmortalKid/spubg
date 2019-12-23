@@ -4,6 +4,6 @@ import TrendCommand from "./trendsCommand";
 
 export default class WinRateTrendCommand extends TrendCommand {
   constructor() {
-    super("a mapping of Win Rate by season", "winRate", "WinRate", "Win Rate");
+    super("charts Win Rate by season", "winRate", "WinRate", "Win Rate");
   }
 }
