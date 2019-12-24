@@ -1,32 +1,32 @@
-import { createTrendChart } from "../chart/chartsAPI";
-import { gatherTrend } from "../trends/trendsAPI";
+import { createTrendChart } from "../../chart/chartsAPI";
 
-export default class TrendCommand {
-  constructor(description, attributeName, filePrefix, subtitlePrefix) {
+/**
+ * Basic template for a class that can generate trend data
+ */
+export default class BaseTrendCommand {
+  constructor(description) {
     this._description = description;
-    this._attributeName = attributeName;
-    this._filePrefix = filePrefix;
-    this._subtitlePrefix = subtitlePrefix;
   }
 
   get description() {
     return this._description;
   }
 
-  execute(args) {
-    console.log(`${this._attributeName} trend: ${args}`);
-
-    if (args[0]) {
-      this.trendChart(args[0]);
-    }
-  }
-
-  async trendChart(playerName) {
-    const trendData = await gatherTrend(playerName);
-    const legitGameModes = ["solo-fpp", "squad-fpp", "duo-fpp"];
-
+  /**
+   * Computes and produces charts with the trendOption for each game mode
+   * @param {String} playerName name of the player
+   * @param {Array} trendData data points in the form [seasonalEntries: [], lifetime: [] ]
+   * @param {Array} gameModes Set of game modes to filter trend data
+   * @param {*} trendOption
+   */
+  produceTrendCharts(playerName, trendData, gameModes, trendOption) {
     const seasonalEntries = trendData.seasonal;
-    for (const gameMode of legitGameModes) {
+
+    const attributeName = trendOption.attribute;
+    const filePrefix = trendOption.filePrefix;
+    const subtitlePrefix = trendOption.subtitlePrefix;
+
+    for (const gameMode of gameModes) {
       const gameModeStats = [];
       for (const seasonEntry of seasonalEntries) {
         const seasonId = Object.keys(seasonEntry)[0];
@@ -39,7 +39,7 @@ export default class TrendCommand {
         if (gameModeData) {
           gameModeStats.push({
             name: seasonName,
-            value: parseFloat(gameModeData[this._attributeName])
+            value: parseFloat(gameModeData[attributeName])
           });
         } else {
           gameModeStats.push({ name: seasonName, value: 0.0 });
@@ -52,16 +52,16 @@ export default class TrendCommand {
       // if someone hasn't played that mode ever don't even bother??
       const lifetimeData = trendData.lifetime;
       if (lifetimeData[gameMode]) {
-        const lifetimeKD = lifetimeData[gameMode][this._attributeName];
-        const chartName = playerName + "-" + this._filePrefix + "-" + gameMode;
+        const lifetimeAttribute = lifetimeData[gameMode][attributeName];
+        const chartName = playerName + "-" + filePrefix + "-" + gameMode;
         const charTitle = playerName;
-        const chartSubTitle = this._subtitlePrefix + " " + gameMode;
+        const chartSubTitle = subtitlePrefix + " " + gameMode;
         createTrendChart(
           chartName,
           charTitle,
           chartSubTitle,
           gameModeStats,
-          lifetimeKD
+          lifetimeAttribute
         );
       }
     }

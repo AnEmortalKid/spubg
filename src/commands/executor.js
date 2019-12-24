@@ -1,11 +1,13 @@
-import KDTrendCommand from "./kdtrend";
-import WinRateTrendCommand from "./wrtrend";
-import ADRTrendCommand from "./adrtrend";
+import KDTrendCommand from "./trends/kdtrend";
+import WinRateTrendCommand from "./trends/wrtrend";
+import ADRTrendCommand from "./trends/adrtrend";
+import AllTrendsCommand from "./trends/alltrends";
 
 const commands = {
   "kd-trend": new KDTrendCommand(),
   "winRate-trend": new WinRateTrendCommand(),
-  "adr-trend": new ADRTrendCommand()
+  "adr-trend": new ADRTrendCommand(),
+  "all-trends": new AllTrendsCommand()
 };
 
 export function help() {
