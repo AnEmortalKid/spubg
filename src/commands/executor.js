@@ -11,6 +11,9 @@ const commands = {
 };
 
 export function help() {
+  console.log("Usage:\n");
+  console.log("command <playerName>\n");
+
   console.log("Available commands are:\n");
   const commandKeys = Object.keys(commands);
 
