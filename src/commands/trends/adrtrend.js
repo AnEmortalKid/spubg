@@ -1,6 +1,6 @@
-import TrendCommand from "./trendsCommand";
+import SingleTrendCommand from "./singleTrendCommand";
 
-export default class ADRTrendCommand extends TrendCommand {
+export default class ADRTrendCommand extends SingleTrendCommand {
   constructor() {
     super(
       "charts Average Damage Rate by season",
