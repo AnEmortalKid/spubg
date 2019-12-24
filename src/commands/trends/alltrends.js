@@ -6,17 +6,17 @@ export default class AllTrendsCommand extends BaseTrendCommand {
     super("gathers all trend charts for a player");
     this._trendOptions = [
       {
-        attribute: "kd",
+        attributeName: "kd",
         filePrefix: "KD",
         subtitlePrefix: "KD"
       },
       {
-        attribute: "winRate",
+        attributeName: "winRate",
         filePrefix: "WinRate",
         subtitlePrefix: "Win Rate"
       },
       {
-        attribute: "adr",
+        attributeName: "adr",
         filePrefix: "ADR",
         subtitlePrefix: "Average Damage Rate"
       }

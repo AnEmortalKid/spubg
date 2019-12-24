@@ -17,12 +17,12 @@ export default class BaseTrendCommand {
    * @param {String} playerName name of the player
    * @param {Array} trendData data points in the form [seasonalEntries: [], lifetime: [] ]
    * @param {Array} gameModes Set of game modes to filter trend data
-   * @param {*} trendOption
+   * @param {Object} trendOption object with attributes { attributeName, filePrefix, subtitlePrefix}
    */
   produceTrendCharts(playerName, trendData, gameModes, trendOption) {
     const seasonalEntries = trendData.seasonal;
 
-    const attributeName = trendOption.attribute;
+    const attributeName = trendOption.attributeName;
     const filePrefix = trendOption.filePrefix;
     const subtitlePrefix = trendOption.subtitlePrefix;
 

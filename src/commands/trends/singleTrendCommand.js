@@ -22,6 +22,11 @@ export default class SingleTrendCommand extends BaseTrendCommand {
   async trendChart(playerName) {
     const trendData = await gatherTrend(playerName);
     const legitGameModes = ["solo-fpp", "squad-fpp", "duo-fpp"];
-    this.produceChart(playerName, trendData, legitGameModes, this._trendOption);
+    this.produceTrendCharts(
+      playerName,
+      trendData,
+      legitGameModes,
+      this._trendOption
+    );
   }
 }

@@ -1,4 +1,4 @@
-import TrendCommand from "./trendsCommand";
+import SingleTrendCommand from "./singleTrendCommand";
 
 export default class WinRateTrendCommand extends SingleTrendCommand {
   constructor() {
