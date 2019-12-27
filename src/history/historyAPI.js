@@ -1,5 +1,5 @@
 import { findId as findPlayerId } from "../players/playersAPI";
-import { playerSeason, playerSeasons } from "../api-client/pubgClient";
+import { playerSeason } from "../api-client/pubgClient";
 import HistoryCache from "./historyCache";
 import {
   getLatestSeasonId,

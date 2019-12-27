@@ -3,12 +3,14 @@
  * Singleton entry to consolidate the generation of sources.
  */
 
+import { getLocalDBPath } from "../config/env";
+
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 
 class LocalStorage {
   constructor() {
-    const adapter = new FileSync("spubg-db.json");
+    const adapter = new FileSync(getLocalDBPath());
     this.db = low(adapter);
     this.db.defaults({ players: [], seasons: [], history: [] }).write();
   }

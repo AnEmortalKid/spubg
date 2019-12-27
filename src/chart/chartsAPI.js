@@ -11,12 +11,22 @@ const { document } = new JSDOM("").window;
 /**
  *
  * @param {String} fileName name of the file
- * @param {String} title for the plot
- * @param {Array} dataPoints a set of data points in the form: [ { name: "x", value: 5 }]
- * @param {Number} trend the trend point
+ * @param {Object} plotOptions an object containing:
+ * {
+ *  title: String,
+ *  subTitle: String,
+ *  data: {
+ *    points: [ { name: "x", value: 5 }]
+ *    trend: Number
+ *  }
+ * }
  */
-// TODO turn title into an object
-export function createTrendChart(fileName, title, subTitle, dataPoints, trend) {
+export function createTrendChart(fileName, plotOptions) {
+  const title = plotOptions.title;
+  const subTitle = plotOptions.subTitle;
+  const dataPoints = plotOptions.data.points;
+  const trend = plotOptions.data.trend;
+
   const canvasWidth = 800;
   const canvasHeight = 600;
   var margin = { top: 50, right: 60, bottom: 50, left: 60 },

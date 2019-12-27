@@ -54,15 +54,18 @@ export default class BaseTrendCommand {
       if (lifetimeData[gameMode]) {
         const lifetimeAttribute = lifetimeData[gameMode][attributeName];
         const chartName = playerName + "-" + filePrefix + "-" + gameMode;
-        const charTitle = playerName;
+        const chartTitle = playerName;
         const chartSubTitle = subtitlePrefix + " " + gameMode;
-        createTrendChart(
-          chartName,
-          charTitle,
-          chartSubTitle,
-          gameModeStats,
-          lifetimeAttribute
-        );
+
+        const plotOptions = {
+          title: chartTitle,
+          subTitle: chartSubTitle,
+          data: {
+            points: gameModeStats,
+            trend: lifetimeAttribute
+          }
+        };
+        createTrendChart(chartName, plotOptions);
       }
     }
   }

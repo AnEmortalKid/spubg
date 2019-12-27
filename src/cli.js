@@ -1,10 +1,8 @@
+import _ from "./config/env";
 import chalk from "chalk";
 import clear from "clear";
 import minimist from "minimist";
-
-import { help, execute } from "./commands/executor";
-
-require("dotenv").config();
+import { execute } from "./commands/executor";
 
 // TODO figlet / ascii art
 
@@ -16,12 +14,8 @@ export default function cli(args) {
 
   console.log(chalk.yellow("SPUBG"));
 
-  if (command == "help") {
-    help();
-  } else {
-    console.log(chalk.green(command));
-    console.log(chalk.grey(commandArgs));
+  console.log(chalk.green(command));
+  console.log(chalk.grey(commandArgs));
 
-    execute(command, commandArgs);
-  }
+  execute(command, commandArgs);
 }

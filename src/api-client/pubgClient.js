@@ -1,15 +1,16 @@
+import { getToken } from "../config/env";
+
 import axios from "axios";
 import rateLimit from "axios-rate-limit";
 
 require("dotenv").config();
 
-// TODO create client with token and pass that down instead
 const instance = rateLimit(
   axios.create({
     baseURL: "https://api.pubg.com/shards/steam/",
     headers: {
       Accept: "application/vnd.api+json",
-      Authorization: `Bearer ${process.env.PUBG_TOKEN}`
+      Authorization: `Bearer ${getToken()}`
     }
   }),
   { maxRequests: 10, perMilliseconds: 60000 }
@@ -20,11 +21,7 @@ const instance = rateLimit(
  */
 export async function seasons() {
   return instance
-    .get("/seasons", {
-      headers: {
-        Authorization: `Bearer ${process.env.PUBG_TOKEN}`
-      }
-    })
+    .get("/seasons")
     .then(function(response) {
       return response.data;
     })
@@ -33,6 +30,11 @@ export async function seasons() {
     });
 }
 
+/**
+ * Fetches season information for the given player
+ * @param {String} playerId
+ * @param {String} seasonId
+ */
 export async function playerSeason(playerId, seasonId) {
   return instance
     .get(`/players/${playerId}/seasons/${seasonId}`)
@@ -45,21 +47,9 @@ export async function playerSeason(playerId, seasonId) {
 }
 
 /**
- *
- * @param {*} playerId
- * @param {*} seasonIds
+ * Fetches lifetime information for the given player
+ * @param {String} playerId the identifier for the player
  */
-export async function playerSeasons(playerId, seasonIds) {
-  const allSeasonData = [];
-
-  for (const seasonId of seasonIds) {
-    const seasonData = await playerSeason(playerId, seasonId);
-    allSeasonData.push(seasonData);
-  }
-
-  return allSeasonData;
-}
-
 export async function lifetimeStats(playerId) {
   return instance
     .get(`/players/${playerId}/seasons/lifetime`)
@@ -72,13 +62,13 @@ export async function lifetimeStats(playerId) {
     });
 }
 
+/**
+ * Finds the identifier for a player with the given name
+ * @param {String} playerName the name of the player
+ */
 export async function findPlayerId(playerName) {
   return instance
-    .get(`/players?filter[playerNames]=${playerName}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.PUBG_TOKEN}`
-      }
-    })
+    .get(`/players?filter[playerNames]=${playerName}`)
     .then(function(response) {
       const innerObject = response.data;
       console.log(JSON.stringify(innerObject.data[0].id, null, 2));
@@ -91,11 +81,7 @@ export async function findPlayerId(playerName) {
 
 export async function getPlayerData(playerId) {
   return instance
-    .get(`/players/${playerId}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.PUBG_TOKEN}`
-      }
-    })
+    .get(`/players/${playerId}`)
     .then(function(response) {
       const innerObject = response.data;
       return innerObject;
@@ -105,13 +91,13 @@ export async function getPlayerData(playerId) {
     });
 }
 
+/**
+ * Returns match information for the given match
+ * @param {String} matchId  identifier for the match
+ */
 export async function getMatch(matchId) {
   return instance
-    .get(`/matches/${matchId}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.PUBG_TOKEN}`
-      }
-    })
+    .get(`/matches/${matchId}`)
     .then(function(response) {
       const innerObject = response.data;
       return innerObject;
