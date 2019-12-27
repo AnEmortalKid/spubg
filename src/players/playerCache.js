@@ -1,21 +1,21 @@
-// TODO memcached
+import { create } from "../storage/storage";
 
-import LocalStorage from "../storage/localStorage";
-
-// TODO backing mechanism between memcache/local storage
 class PlayerCache {
+  constructor(storage = create()) {
+    this.storage = storage;
+  }
+
   storeId(playerId, playerName) {
-    LocalStorage.instance()
-      .get("players")
-      .push({ id: playerId, name: playerName })
-      .write();
+    this.storage.store("players", {
+      id: playerId,
+      name: playerName
+    });
   }
 
   getId(playerName) {
-    const player = LocalStorage.instance()
-      .get("players")
-      .find({ name: playerName })
-      .value();
+    const player = this.storage.find("players", {
+      name: playerName
+    });
     if (player) {
       return player.id;
     }
@@ -23,4 +23,10 @@ class PlayerCache {
   }
 }
 
-export default new PlayerCache();
+/**
+ * Returns a PlayerCache built with the given storage
+ * @param {Storage} storage a storage mechanism, defaults if not provided
+ */
+export function getCache(storage) {
+  return new PlayerCache(storage);
+}

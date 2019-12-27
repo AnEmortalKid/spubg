@@ -1,6 +1,8 @@
 import { findPlayerId } from "../api-client/pubgClient";
 
-import PlayerCache from "./playerCache";
+import { getCache as getPlayerCache } from "./playerCache";
+
+const PlayerCache = getPlayerCache();
 
 /**
  * Returns the identifier for the player
