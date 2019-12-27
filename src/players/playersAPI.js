@@ -1,22 +1,32 @@
 import { findPlayerId } from "../api-client/pubgClient";
 
-import { getCache as getPlayerCache } from "./playerCache";
+import { getCache } from "./playerCache";
 
-const PlayerCache = getPlayerCache();
-
-/**
- * Returns the identifier for the player
- * @param {String} playerName name of the player
- */
-export async function findId(playerName) {
-  const stored = PlayerCache.getId(playerName);
-  if (stored) {
-    return stored;
+class Players {
+  constructor(playerCache = getCache()) {
+    if (!Players.instance) {
+      this.playerCache = playerCache;
+      Players.instance = this;
+    }
+    return Players.instance;
   }
 
-  console.log(`retrieving ID for ${playerName}`);
+  async findId(playerName) {
+    const stored = this.playerCache.getId(playerName);
+    if (stored) {
+      return stored;
+    }
 
-  const retrievedId = await findPlayerId(playerName);
-  PlayerCache.storeId(retrievedId, playerName);
-  return retrievedId;
+    const retrievedId = await findPlayerId(playerName);
+    this.playerCache.storeId(retrievedId, playerName);
+    return retrievedId;
+  }
+}
+
+/**
+ * Returns a reference to this API
+ * @param {PlayerCache} cache cache for players
+ */
+export function get(cache) {
+  return new Players(cache);
 }

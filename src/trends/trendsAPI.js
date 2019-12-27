@@ -1,4 +1,4 @@
-import { findId } from "../players/playersAPI";
+import { get as players } from "../players/playersAPI";
 import { getHistory } from "../history/historyAPI";
 import { lifetimeStats } from "../api-client/pubgClient";
 
@@ -90,7 +90,7 @@ function gatherStats(seasonData) {
  */
 export async function gatherTrend(playerName) {
   const history = await getHistory(playerName);
-  const playerId = await findId(playerName);
+  const playerId = await players().findId(playerName);
   const lifetime = await lifetimeStats(playerId);
 
   //extract each season block from history

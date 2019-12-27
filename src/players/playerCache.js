@@ -2,7 +2,12 @@ import { create } from "../storage/storage";
 
 class PlayerCache {
   constructor(storage = create()) {
-    this.storage = storage;
+    if (!PlayerCache.instance) {
+      this.storage = storage;
+      PlayerCache.instance = this;
+    }
+
+    return PlayerCache.instance;
   }
 
   storeId(playerId, playerName) {
