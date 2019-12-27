@@ -6,11 +6,11 @@
   "bin": "dist/spubg.bin.js",
   "repository": "https://github.com/AnEmortalKid/spubg",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/.bin/jest --coverage",
     "make-exec": "chmod +x ./dist/spubg.bin.js",
     "build": "webpack && npm run make-exec",
-    "prettier": "./node_modules/.bin/prettier --write src/**/*.js --write bin/**/*.js",
-    "prettier:check": "./node_modules/.bin/prettier --check src/**/*.js --check bin/**/*.js"
+    "prettier": "./node_modules/.bin/prettier --write src/**/*.js --write bin/**/*.js --write test/**/*.js",
+    "prettier:check": "./node_modules/.bin/prettier --check src/**/*.js --check bin/**/*.js --check test/**/*.js"
   },
   "author": "Jan Monterrubio",
   "license": "ISC",
@@ -36,7 +36,11 @@
     "xmlserializer": "^0.6.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "babel-plugin-add-module-exports": "^1.0.2",
     "clean-webpack-plugin": "^3.0.0",
+    "jest": "^24.9.0",
     "prettier": "^1.19.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",

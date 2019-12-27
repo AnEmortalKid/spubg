@@ -13,3 +13,6 @@ spubg-db.json
 
 # local output
 out/
+
+# jest
+coverage/
