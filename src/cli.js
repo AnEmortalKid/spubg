@@ -1,4 +1,3 @@
-import _ from "./config/env";
 import chalk from "chalk";
 import clear from "clear";
 import minimist from "minimist";
