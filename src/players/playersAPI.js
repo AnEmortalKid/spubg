@@ -17,7 +17,7 @@ class Players {
       return stored;
     }
 
-    const retrievedId = await client.findPlayerId(playerName);
+    const retrievedId = await this.client.findPlayerId(playerName);
     this.playerCache.storeId(retrievedId, playerName);
     return retrievedId;
   }

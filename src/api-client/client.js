@@ -17,7 +17,7 @@ class Client {
    * @param {String} playerName the name of the player
    */
   async findPlayerId(playerName) {
-    return instance
+    return this.axiosClient
       .get(`/players?filter[playerNames]=${playerName}`)
       .then(function(response) {
         const innerObject = response.data;
