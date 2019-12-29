@@ -1,10 +1,10 @@
 import { get } from "../../src/players/playersAPI";
 
-import { findPlayerId } from "../../src/api-client/pubgClient"
+import { findPlayerId } from "../../src/api-client/pubgClient";
 
 jest.mock("../../src/api-client/pubgClient", () => {
-    return { findPlayerId: jest.fn() }
-})
+  return { findPlayerId: jest.fn() };
+});
 
 const mockGetId = jest.fn();
 const mockStoreId = jest.fn();
@@ -27,5 +27,5 @@ describe("findId", () => {
     findPlayerId.mockReturnValue(Promise.resolve("retrievedId"));
     const foundId = players.findId("somePlayer");
     expect(foundId).resolves.toBe("retrievedId");
-  })
+  });
 });

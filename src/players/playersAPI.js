@@ -1,11 +1,11 @@
-import { findPlayerId } from "../api-client/pubgClient";
-
 import { getCache } from "./playerCache";
+import { getClient } from "../api-client/client";
 
 class Players {
-  constructor(playerCache = getCache()) {
+  constructor(playerCache = getCache(), client = getClient()) {
     if (!Players.instance) {
       this.playerCache = playerCache;
+      this.client = client;
       Players.instance = this;
     }
     return Players.instance;
@@ -17,7 +17,7 @@ class Players {
       return stored;
     }
 
-    const retrievedId = await findPlayerId(playerName);
+    const retrievedId = await client.findPlayerId(playerName);
     this.playerCache.storeId(retrievedId, playerName);
     return retrievedId;
   }
@@ -26,7 +26,8 @@ class Players {
 /**
  * Returns a reference to this API
  * @param {PlayerCache} cache cache for players
+ * @param {Client} client an axios backed client to the pubg api
  */
-export function get(cache) {
-  return new Players(cache);
+export function get(cache, client) {
+  return new Players(cache, client);
 }
