@@ -116,29 +116,44 @@ function createBarChart(fileName, plotOptions) {
     // hide connection only show values
     .call(g => g.select(".domain").remove());
 
+  // set the ranges
+  var x = d3
+    .scaleBand()
+    .range([0, width])
+    .padding(0.25);
+  var y = d3.scaleLinear().range([height, 0]);
 
-    // set the ranges
-var x = d3.scaleBand()
-.range([0, width])
-.padding(0.25);
-var y = d3.scaleLinear()
-.range([height, 0]);
+  // Scale the range of the data in the domains
+  x.domain(
+    dataPoints.map(function(d) {
+      return d.name;
+    })
+  );
+  y.domain([
+    0,
+    d3.max(dataPoints, function(d) {
+      return d.value;
+    })
+  ]);
 
-// Scale the range of the data in the domains
-x.domain(dataPoints.map(function(d) { return d.name; }));
-y.domain([0, d3.max(dataPoints, function(d) { return d.value; })]);
-
-// append the rectangles for the bar chart
-plotCanvas.selectAll(".bar")
+  // append the rectangles for the bar chart
+  plotCanvas
+    .selectAll(".bar")
     .data(dataPoints)
-  .enter().append("rect")
+    .enter()
+    .append("rect")
     .attr("class", "bar")
     .attr("fill", "steelblue")
-    .attr("x", function(d) { return x(d.name); })
-    .attr("width", x.bandwidth()/2)
-    .attr("y", function(d) { return y(d.value); })
-    .attr("height", function(d) { return height - y(d.value); });
-
+    .attr("x", function(d) {
+      return x(d.name);
+    })
+    .attr("width", x.bandwidth() / 2)
+    .attr("y", function(d) {
+      return y(d.value);
+    })
+    .attr("height", function(d) {
+      return height - y(d.value);
+    });
 
   var source = xmlserializer.serializeToString(svgCanvas.node());
 
