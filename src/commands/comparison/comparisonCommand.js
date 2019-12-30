@@ -108,12 +108,17 @@ export default class ComparisonCommand extends BaseCommand {
 
     const chart = new ComparisonChart(plotOptions);
     const svgCanvas = chart.create();
+
+    const playerNamesString = playerNames.join("-");
+    console.log(playerNamesString);
+
     // combine player names
     const fileTitle =
       this.comparisonOptions.attributeName +
-      playerNames.join("-") + "-"
+      "-" +
+      playerNamesString +
+      "-" +
       gameMode;
-    // TODO write charts by type
     chart.writeChart(fileTitle, svgCanvas);
   }
 }

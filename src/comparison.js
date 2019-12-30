@@ -23,12 +23,7 @@ function getAllPoints(dataSet) {
 const keyBoxSize = 15;
 const keyEntryPadding = 5;
 
-const colorSet = [
-  "#750d20",
-"#ba6c95",
-   "#0f274c",
-  "#6eadb9"
-]
+const colorSet = ["#750d20", "#ba6c95", "#0f274c", "#6eadb9"];
 
 function plotDataPoints(plotCanvas, dataSet, dataPointOptions) {
   const pointsRadius = dataPointOptions.radius;

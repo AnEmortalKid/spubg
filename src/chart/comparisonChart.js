@@ -48,7 +48,7 @@ function plotDataPoints(plotCanvas, dataSet, dataPointOptions) {
 
     const dataPoints = dataEntry.points;
     const dataValues = dataPoints.map(x => x.value);
-    
+
     // connect the points with a line
     plotCanvas
       .append("path")
