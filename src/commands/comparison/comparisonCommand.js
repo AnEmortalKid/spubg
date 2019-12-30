@@ -110,7 +110,6 @@ export default class ComparisonCommand extends BaseCommand {
     const svgCanvas = chart.create();
 
     const playerNamesString = playerNames.join("-");
-    console.log(playerNamesString);
 
     // combine player names
     const fileTitle =

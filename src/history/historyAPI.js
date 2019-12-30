@@ -14,7 +14,7 @@ export async function getHistory(playerName) {
     // update with the latest season info
     const latestSeasonId = await getLatestSeasonId();
     if (currentHistory[latestSeasonId]) {
-      console.log("Updating latest season data");
+      console.log("Updating latest season data for " + playerName);
       currentHistory[latestSeasonId] = await playerSeason(
         playerId,
         latestSeasonId

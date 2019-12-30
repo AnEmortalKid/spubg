@@ -21,7 +21,6 @@ class Client {
       .get(`/players?filter[playerNames]=${playerName}`)
       .then(function(response) {
         const innerObject = response.data;
-        console.log(JSON.stringify(innerObject.data[0].id, null, 2));
         return innerObject.data[0].id;
       })
       .catch(function(error) {
