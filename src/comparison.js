@@ -11,6 +11,9 @@ const { document } = new JSDOM("").window;
 // turn for debug or not
 const debug = false;
 
+const canvasWidth = 800;
+const canvasHeight = 600;
+
 function getAllPoints(dataSet) {
   const allPoints = [];
   for (const data of dataSet) {
@@ -23,7 +26,16 @@ function getAllPoints(dataSet) {
 const keyBoxSize = 15;
 const keyEntryPadding = 5;
 
-const colorSet = ["#750d20", "#ba6c95", "#0f274c", "#6eadb9"];
+const colorSet = [
+  "#bfb415",
+  "#D1460D",
+  "#2d7397",
+  "#1a7e28",
+  "#750d20",
+  "#ba6c95",
+  "#0f274c",
+  "#a1e0ec"
+];
 
 function plotDataPoints(plotCanvas, dataSet, dataPointOptions) {
   const pointsRadius = dataPointOptions.radius;
@@ -80,6 +92,7 @@ function plotDataPoints(plotCanvas, dataSet, dataPointOptions) {
 
 function addKey(svgCanvas, dataSet, keyOptions) {
   const margin = keyOptions.margin;
+  const canvasWidth = keyOptions.canvasWidth;
 
   // create a key on the left
   const keyBoxX = margin.left / 4;
@@ -87,15 +100,24 @@ function addKey(svgCanvas, dataSet, keyOptions) {
 
   var keyCount = 0;
 
+  // if more than 4, split left and right
+  const keyBoxRightX = (canvasWidth * 3) / 4;
+
   for (const dataEntry of dataSet) {
     const color = colorSet[keyCount];
+
+    const rowNumber = keyCount < 4 ? keyCount : keyCount - 4;
+
     // shift by number of entries
-    const padAmount = keyCount > 0 ? keyEntryPadding : 0;
-    const lineShift = keyCount * (keyBoxSize + padAmount);
+    const padAmount = rowNumber > 0 ? keyEntryPadding : 0;
+    const lineShift = rowNumber * (keyBoxSize + padAmount);
+
+    // if there's more than 4, place the column on the right side of the graph
+    const xShift = keyCount < 4 ? 0 : keyBoxRightX;
 
     svgCanvas
       .append("rect")
-      .attr("x", keyBoxX)
+      .attr("x", keyBoxX + xShift)
       .attr("y", keyBoxY + lineShift)
       .attr("width", keyBoxSize)
       .attr("height", keyBoxSize)
@@ -105,7 +127,7 @@ function addKey(svgCanvas, dataSet, keyOptions) {
 
     svgCanvas
       .append("text")
-      .attr("x", keyBoxX + keyBoxSize * 1.5)
+      .attr("x", keyBoxX + xShift + keyBoxSize * 1.5)
       .attr("y", keyBoxY + keyBoxSize * 0.75 + lineShift)
       .attr("font-size", "12px")
       .text(dataEntry.label);
@@ -144,15 +166,12 @@ function createComparisonChart(fileName, plotOptions) {
   console.log(`dataSet:`);
   console.log(dataSet);
 
-  // TODO limit color set to 4
-
-  const canvasWidth = 800;
-  const canvasHeight = 600;
-
   var margin = { top: 50, right: 60, bottom: 50, left: 60 };
   // reduce graph height based on the legend box
   const keyRowHeight = keyBoxSize + keyEntryPadding;
-  const keyBoxHeight = keyRowHeight * dataSet.length;
+  // shift graph up to 4 legend rows, since rows 5-8 get placed on the right
+  const dataSetCount = dataSet.length < 4 ? dataSet.length : 4;
+  const keyBoxHeight = keyRowHeight * dataSetCount;
   const keyBoxYBound = margin.top / 4 + keyBoxHeight;
   const width = canvasWidth - margin.left - margin.right;
   const height = canvasHeight - keyBoxYBound - margin.bottom;
@@ -228,7 +247,7 @@ function createComparisonChart(fileName, plotOptions) {
     .style("font-size", "14px")
     .text(subTitle);
 
-  addKey(svgCanvas, dataSet, { margin: margin });
+  addKey(svgCanvas, dataSet, { margin: margin, canvasWidth: canvasWidth });
 
   // canvas for the plot elements
   var plotCanvas = svgCanvas
@@ -344,6 +363,46 @@ const dataSet = [
       { name: "2018-05", value: 230.0 }
     ],
     label: "gaz"
+  },
+  {
+    points: [
+      { name: "2018-01", value: 109.23 },
+      { name: "2018-02", value: 20.0 },
+      { name: "2018-03", value: 150.0 },
+      { name: "2018-04", value: 85.0 },
+      { name: "2018-05", value: 215.0 }
+    ],
+    label: "faymind"
+  },
+  {
+    points: [
+      { name: "2018-01", value: 98.23 },
+      { name: "2018-02", value: 35.0 },
+      { name: "2018-03", value: 63.0 },
+      { name: "2018-04", value: 364.0 },
+      { name: "2018-05", value: 85.0 }
+    ],
+    label: "yorblet"
+  },
+  {
+    points: [
+      { name: "2018-01", value: 109.23 },
+      { name: "2018-02", value: 115.0 },
+      { name: "2018-03", value: 120.0 },
+      { name: "2018-04", value: 125.0 },
+      { name: "2018-05", value: 130.0 }
+    ],
+    label: "blab"
+  },
+  {
+    points: [
+      { name: "2018-01", value: 29.23 },
+      { name: "2018-02", value: 56.0 },
+      { name: "2018-03", value: 89.0 },
+      { name: "2018-04", value: 111.0 },
+      { name: "2018-05", value: 140.0 }
+    ],
+    label: "gorb"
   }
 ];
 

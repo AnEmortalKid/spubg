@@ -88,6 +88,7 @@ function plotDataPoints(plotCanvas, dataSet, dataPointOptions) {
 
 function addKey(svgCanvas, dataSet, keyOptions) {
   const margin = keyOptions.margin;
+  const canvasWidth = keyOptions.canvasWidth;
 
   // create a key on the left
   const keyBoxX = margin.left / 4;
@@ -95,15 +96,24 @@ function addKey(svgCanvas, dataSet, keyOptions) {
 
   var keyCount = 0;
 
+  // if more than 4, split left and right
+  const keyBoxRightX = (canvasWidth * 3) / 4;
+
   for (const dataEntry of dataSet) {
     const color = colorSet[keyCount];
+
+    const rowNumber = keyCount < 4 ? keyCount : keyCount - 4;
+
     // shift by number of entries
-    const padAmount = keyCount > 0 ? keyEntryPadding : 0;
-    const lineShift = keyCount * (keyBoxSize + padAmount);
+    const padAmount = rowNumber > 0 ? keyEntryPadding : 0;
+    const lineShift = rowNumber * (keyBoxSize + padAmount);
+
+    // if there's more than 4, place the column on the right side of the graph
+    const xShift = keyCount < 4 ? 0 : keyBoxRightX;
 
     svgCanvas
       .append("rect")
-      .attr("x", keyBoxX)
+      .attr("x", keyBoxX + xShift)
       .attr("y", keyBoxY + lineShift)
       .attr("width", keyBoxSize)
       .attr("height", keyBoxSize)
@@ -113,7 +123,7 @@ function addKey(svgCanvas, dataSet, keyOptions) {
 
     svgCanvas
       .append("text")
-      .attr("x", keyBoxX + keyBoxSize * 1.5)
+      .attr("x", keyBoxX + xShift + keyBoxSize * 1.5)
       .attr("y", keyBoxY + keyBoxSize * 0.75 + lineShift)
       .attr("font-size", "12px")
       .text(dataEntry.label);
@@ -148,7 +158,9 @@ export class ComparisonChart extends BaseChart {
 
     // reduce graph height based on the legend box bounds
     const keyRowHeight = keyBoxSize + keyEntryPadding;
-    const keyBoxHeight = keyRowHeight * dataSet.length;
+    // shift graph up to 4 legend rows, since rows 5-8 get placed on the right
+    const dataSetCount = dataSet.length < 4 ? dataSet.length : 4;
+    const keyBoxHeight = keyRowHeight * dataSetCount;
     const keyBoxYBound = margin.top / 4 + keyBoxHeight;
 
     const width = canvasWidth - margin.left - margin.right;
@@ -222,7 +234,7 @@ export class ComparisonChart extends BaseChart {
       .text(subTitle);
 
     // add the legend box
-    addKey(svgCanvas, dataSet, { margin: margin });
+    addKey(svgCanvas, dataSet, { margin: margin, canvasWidth: canvasWidth });
 
     // canvas for the plot elements
     var plotCanvas = svgCanvas
