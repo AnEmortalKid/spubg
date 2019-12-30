@@ -3,11 +3,18 @@ import WinRateTrendCommand from "./trends/wrtrend";
 import ADRTrendCommand from "./trends/adrtrend";
 import AllTrendsCommand from "./trends/alltrends";
 
+import KDCompareCommand from "./comparison/kdCompare";
+import ADRCompareCommand from "./comparison/adrCompare";
+import WinRateCompareCommand from "./comparison/winRateCompare";
+
 const commands = {
   "kd-trend": new KDTrendCommand(),
   "winRate-trend": new WinRateTrendCommand(),
   "adr-trend": new ADRTrendCommand(),
-  "all-trends": new AllTrendsCommand()
+  "all-trends": new AllTrendsCommand(),
+  "kd-compare": new KDCompareCommand(),
+  "adr-compare": new ADRCompareCommand(),
+  "winRate-compare": new WinRateCompareCommand()
 };
 
 export function help() {

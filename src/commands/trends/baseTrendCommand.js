@@ -1,4 +1,5 @@
 import { createTrendChart } from "../../chart/chartsAPI";
+import { styleSeasonId, styleGameMode } from "../../styling/styler";
 
 /**
  * Basic template for a class that can generate trend data
@@ -33,7 +34,7 @@ export default class BaseTrendCommand {
         const seasonData = seasonEntry[seasonId];
         const gameModeData = seasonData[gameMode];
         // cleanup name
-        const seasonName = seasonId.replace("division.bro.official.pc-", "");
+        const seasonName = styleSeasonId(seasonId);
 
         // if the entry has no data, place a 0
         if (gameModeData) {
@@ -55,7 +56,7 @@ export default class BaseTrendCommand {
         const lifetimeAttribute = lifetimeData[gameMode][attributeName];
         const chartName = playerName + "-" + filePrefix + "-" + gameMode;
         const chartTitle = playerName;
-        const chartSubTitle = subtitlePrefix + " " + gameMode;
+        const chartSubTitle = subtitlePrefix + " - " + styleGameMode(gameMode);
 
         const plotOptions = {
           title: chartTitle,

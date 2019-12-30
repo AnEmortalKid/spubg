@@ -57,6 +57,8 @@ export async function getAll() {
   return SeasonsCache.getAll();
 }
 
+// TODO return good season names instead of ids
+
 /**
  * Returns the set of season identifers that are searchable within the API and would have data
  */

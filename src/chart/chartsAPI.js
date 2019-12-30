@@ -8,6 +8,8 @@ const { JSDOM } = jsdom;
 const { window } = new JSDOM();
 const { document } = new JSDOM("").window;
 
+import { squadPlayerColors } from "../styling/styler";
+
 /**
  *
  * @param {String} fileName name of the file
@@ -36,9 +38,9 @@ export function createTrendChart(fileName, plotOptions) {
   console.log("datapoints:");
   console.log(dataPoints);
 
-  const pointsColor = "#073a7d";
-  const pointsLineColor = "#6c63a9";
-  const trendsColor = "#de1d1d";
+  const pointsColor = squadPlayerColors.blue;
+  const pointsLineColor = squadPlayerColors.blue;
+  const trendsColor = squadPlayerColors.orange;
   const lineThickness = 2;
   const pointsRadius = 5;
 
