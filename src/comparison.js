@@ -24,27 +24,11 @@ const keyBoxSize = 15;
 const keyEntryPadding = 5;
 
 const colorSet = [
-  {
-    // yellow
-    pointsColor: "#bfb415",
-    lineColor: "#bfb415"
-  },
-  {
-    // orange
-    pointsColor: "#D1460D",
-    lineColor: "#D1460D"
-  },
-  {
-    // blue
-    pointsColor: "#2d7397",
-    lineColor: "#2d7397"
-  },
-  {
-    // green
-    pointsColor: "#1a7e28",
-    lineColor: "#1a7e28"
-  }
-];
+  "#750d20",
+"#ba6c95",
+   "#0f274c",
+  "#6eadb9"
+]
 
 function plotDataPoints(plotCanvas, dataSet, dataPointOptions) {
   const pointsRadius = dataPointOptions.radius;
@@ -67,7 +51,7 @@ function plotDataPoints(plotCanvas, dataSet, dataPointOptions) {
       .append("path")
       .datum(dataValues)
       .attr("fill", "none")
-      .attr("stroke", color.lineColor)
+      .attr("stroke", color)
       .attr("stroke-width", lineThickness)
       .attr(
         "d",
@@ -95,7 +79,7 @@ function plotDataPoints(plotCanvas, dataSet, dataPointOptions) {
         return yScale(d);
       })
       .attr("r", pointsRadius)
-      .attr("fill", color.pointsColor);
+      .attr("fill", color);
   }
 }
 
@@ -122,7 +106,7 @@ function addKey(svgCanvas, dataSet, keyOptions) {
       .attr("height", keyBoxSize)
       .attr("stroke-width", 1)
       .attr("stroke", "black")
-      .attr("fill", color.pointsColor);
+      .attr("fill", color);
 
     svgCanvas
       .append("text")

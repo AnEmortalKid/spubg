@@ -111,8 +111,7 @@ export default class ComparisonCommand extends BaseCommand {
     // combine player names
     const fileTitle =
       this.comparisonOptions.attributeName +
-      "-Comparison-" +
-      playerNames.join("-") +
+      playerNames.join("-") + "-"
       gameMode;
     // TODO write charts by type
     chart.writeChart(fileTitle, svgCanvas);

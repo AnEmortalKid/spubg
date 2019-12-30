@@ -6,6 +6,12 @@ var svg2img = require("svg2img");
 const baseOutputPath = "out/charts";
 
 export default class BaseChart {
+
+  constructor(typeDirectory)
+  {
+    this.typeDirectory = typeDirectory;
+  }
+
   /**
    * Writes the chart to the configured output path
    * @param {String} fileName name of the file
@@ -13,8 +19,9 @@ export default class BaseChart {
    */
   writeChart(fileName, svgCanvas) {
     var source = xmlserializer.serializeToString(svgCanvas.node());
-    const filePath = baseOutputPath + "/" + fileName;
-    fs.mkdir(baseOutputPath, { recursive: true }, err => {
+    const typeOutputDir = baseOutputPath + "/" + this.typeDirectory + "/";
+    const filePath = typeOutputDir + fileName;
+    fs.mkdir(typeOutputDir, { recursive: true }, err => {
       if (err) throw err;
     });
 

@@ -5,7 +5,11 @@ export const squadPlayerColors = {
   yellow: "#bfb415",
   orange: "#D1460D",
   blue: "#2d7397",
-  green: "#1a7e28"
+  green: "#1a7e28",
+  darkRed: "#750d20",
+  pink: "#ba6c95",
+  darkBlue: "#0f274c",
+  teal: "#6eadb9"
 };
 
 /**

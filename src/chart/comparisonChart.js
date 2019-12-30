@@ -28,7 +28,11 @@ const colorSet = [
   squadPlayerColors.yellow,
   squadPlayerColors.orange,
   squadPlayerColors.blue,
-  squadPlayerColors.green
+  squadPlayerColors.green,
+  squadPlayerColors.darkRed,
+  squadPlayerColors.pink,
+  squadPlayerColors.darkBlue,
+  squadPlayerColors.teal
 ];
 
 function plotDataPoints(plotCanvas, dataSet, dataPointOptions) {
@@ -44,9 +48,7 @@ function plotDataPoints(plotCanvas, dataSet, dataPointOptions) {
 
     const dataPoints = dataEntry.points;
     const dataValues = dataPoints.map(x => x.value);
-
-    console.log("plotting:" + dataValues);
-
+    
     // connect the points with a line
     plotCanvas
       .append("path")
@@ -122,7 +124,7 @@ function addKey(svgCanvas, dataSet, keyOptions) {
 
 export class ComparisonChart extends BaseChart {
   constructor(chartOptions) {
-    super();
+    super("comparison");
     this.chartOptions = chartOptions;
   }
 
@@ -135,8 +137,8 @@ export class ComparisonChart extends BaseChart {
     const subTitle = this.chartOptions.subTitle;
 
     const dataSet = this.chartOptions.dataSet;
-    if (dataSet.length > 4) {
-      throw new Error("Can only handle 4 comparisons!");
+    if (dataSet.length > colorSet.length) {
+      throw new Error("Can only handle " + colorSet.length + " comparisons!");
     }
 
     const canvasWidth = 800;
