@@ -1,6 +1,9 @@
 import { getCache } from "./playerCache";
 import { getClient } from "../api-client/client";
 
+/**
+ * Information about Players
+ */
 class Players {
   constructor(playerCache = getCache(), client = getClient()) {
     if (!Players.instance) {
@@ -11,6 +14,10 @@ class Players {
     return Players.instance;
   }
 
+  /**
+   * Finds the identifier for a player with the given name
+   * @param {String} playerName name of the player to search for
+   */
   async findId(playerName) {
     const stored = this.playerCache.getId(playerName);
     if (stored) {

@@ -25,6 +25,15 @@ class Storage {
   store(collection, entity) {
     return this.realStorage.store(collection, entity);
   }
+
+  /**
+   * Returns all the values in the desired collection
+   * @param {String} collection the name of the collection
+   * @return objects in the collection, empty if no values are in the collection
+   */
+  get(collection) {
+    return this.realStorage.get(collection);
+  }
 }
 
 /**

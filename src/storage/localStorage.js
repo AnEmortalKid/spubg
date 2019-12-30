@@ -42,6 +42,14 @@ class LocalStorage {
       .push(entity)
       .write();
   }
+
+  /**
+   * Returns all the values in the desired collection
+   * @param {String} collection the name of the collection
+   */
+  get(collection) {
+    return this.db.get(collection).value();
+  }
 }
 
 export default new LocalStorage();

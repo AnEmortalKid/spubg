@@ -30,6 +30,9 @@ class Client {
   }
 }
 
+/**
+ * Creates the default axios instance
+ */
 function createDefault() {
   return rateLimit(
     axios.create({
@@ -45,7 +48,7 @@ function createDefault() {
 
 /**
  * Gets a reference to the PUBG client
- * @param {Object} axiosClient an axios instance
+ * @param {Object} axiosClient an axios instance to initialize the client with
  */
 export function getClient(axiosClient) {
   return new Client(axiosClient);

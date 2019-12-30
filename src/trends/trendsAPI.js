@@ -38,6 +38,9 @@ function gatherStats(seasonData) {
     const adrCalc = damage / roundsPlayed;
     statsForMode.adr = adrCalc.toFixed(2);
 
+    // most kills in a round
+    statsForMode.mostKills = statEntry.roundMostKills;
+
     // TODO next cool stat
 
     seasonStat[gameModeId] = statsForMode;

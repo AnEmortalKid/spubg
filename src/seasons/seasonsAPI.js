@@ -1,9 +1,9 @@
 import { seasons } from "../api-client/pubgClient";
 
-import SeasonsCache from "./seasonsCache";
+import { getCache } from "./seasonsCache";
 
 /**
- * Set of known identifiers for seasons that didn't have data in the api
+ * Set of known identifiers for seasons that didn't have data in the api for the steam shard
  */
 const seasonsWithoutData = [
   "division.bro.official.2017-beta",
@@ -27,6 +27,8 @@ const seasonsWithoutData = [
   "division.bro.official.2018-09"
 ];
 
+const SeasonsCache = getCache();
+
 /**
  * Returns the set of all seasons with their ids
  */
@@ -38,7 +40,7 @@ export async function getAll() {
     return stored;
   }
 
-  console.log("retrieving");
+  console.log("retrieving all");
 
   const retrievedSeasons = await seasons();
   console.log(JSON.stringify(retrievedSeasons));

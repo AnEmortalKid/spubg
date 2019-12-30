@@ -1,25 +1,41 @@
-// TODO memcached
+import { create } from "../storage/storage";
 
-import LocalStorage from "../storage/localStorage";
-
-// TODO backing mechanism between memcache/local storage
 class SeasonsCache {
-  store(seasonId, isCurrentSeason, isOffSeason) {
-    LocalStorage.instance()
-      .get("seasons")
-      .push({
-        id: seasonId,
-        isCurrent: isCurrentSeason,
-        isOffSeason: isOffSeason
-      })
-      .write();
+  constructor(storage = create()) {
+    if (!SeasonsCache.instance) {
+      this.storage = storage;
+      SeasonsCache.instance = this;
+    }
+
+    return SeasonsCache.instance;
   }
 
+  /**
+   * Stores the given season
+   * @param {String} seasonId season identifier
+   * @param {boolean} isCurrentSeason whether the season is the current season or not
+   * @param {boolean} isOffSeason whether the season is an off season
+   */
+  store(seasonId, isCurrentSeason, isOffSeason) {
+    this.storage.store("seasons", {
+      id: seasonId,
+      isCurrent: isCurrentSeason,
+      isOffSeason: isOffSeason
+    });
+  }
+
+  /**
+   * Retruns all available seasons
+   */
   getAll() {
-    return LocalStorage.instance()
-      .get("seasons")
-      .value();
+    return this.storage.get("seasons");
   }
 }
 
-export default new SeasonsCache();
+/**
+ * Returns a SeasonsCache built with the given storage
+ * @param {Storage} storage a storage mechanism, defaults if not provided
+ */
+export function getCache(storage) {
+  return new SeasonsCache(storage);
+}
