@@ -1,14 +1,16 @@
 import { get as players } from "../players/playersAPI";
 import { playerSeason } from "../api-client/pubgClient";
-import HistoryCache from "./historyCache";
+import { getCache } from "./historyCache";
 
 import { get as seasons } from "../seasons/seasonsAPI";
+
+const HistoryCache = getCache();
 
 export async function getHistory(playerName) {
   const playerId = await players().findId(playerName);
 
   // only search for things that will have data
-  const seasonIds = await getSearchableIds();
+  const seasonIds = await seasons().getSearchableIds();
   const currentHistory = HistoryCache.getHistory(playerId);
 
   if (currentHistory) {
