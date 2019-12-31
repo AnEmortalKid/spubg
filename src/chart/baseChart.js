@@ -10,12 +10,11 @@ export default class BaseChart {
     this.typeDirectory = typeDirectory;
   }
 
-    /**
+  /**
    * Creates a canvas with the chart data
    * @return SVG Canvas with the chart
    */
-  create()
-  {
+  create() {
     throw new Error("Unimplemented!");
   }
 

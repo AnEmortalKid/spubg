@@ -23,7 +23,9 @@ export default class AllTrendsCommand extends BaseTrendCommand {
     ];
   }
 
-  execute(args) {
+  execute(commandOptions) {
+    const args = commandOptions.args;
+
     console.log(`all trends: ${args}`);
 
     if (args[0]) {

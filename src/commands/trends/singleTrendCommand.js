@@ -11,7 +11,9 @@ export default class SingleTrendCommand extends BaseTrendCommand {
     };
   }
 
-  execute(args) {
+  execute(commandOptions) {
+    const args = commandOptions.args;
+
     console.log(`${this._trendOption.attributeName} trend: ${args}`);
 
     if (args[0]) {
