@@ -10,11 +10,11 @@ class HistoryCache {
     return HistoryCache.instance;
   }
 
-  storeHistory(playerId, history) {
+  store(playerId, history) {
     this.storage.store("history", { id: playerId, seasonData: history });
   }
 
-  getHistory(playerId) {
+  get(playerId) {
     const history = this.storage.find("history", { id: playerId });
     if (history) {
       return history.seasonData;

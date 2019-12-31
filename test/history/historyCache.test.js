@@ -1,51 +1,48 @@
-// TODO write these
+import { getCache } from "../../src/history/historyCache";
+import { interpolate } from "d3";
 
-// import { getCache } from "../../src/seasons/seasonsCache";
+const mockStorage = {
+  store: jest.fn(),
+  find: jest.fn()
+};
 
-// const mockStorage = {
-//   store: jest.fn(),
-//   get: jest.fn()
-// };
+const historyCache = getCache(mockStorage);
 
-// const seasonsCache = getCache(mockStorage);
+describe("get", () => {
+  it("returns null when nothing is stored", () => {
+    mockStorage.find.mockReturnValue(null);
 
-// describe("getAll", () => {
-//   it("returns empty when seasons not stored", () => {
-//     mockStorage.get.mockReturnValueOnce([]);
+    const history = historyCache.get("somePlayerId");
+    expect(history).toBeNull();
+  });
 
-//     const allSeasons = seasonsCache.getAll();
-//     expect(allSeasons).toHaveLength(0);
-//   });
+  it("returns season data when something is stored", () => {
+    const storedHistory = {
+      id: "somePlayerId",
+      seasonData: {
+        theData: "foo"
+      }
+    };
+    mockStorage.find.mockReturnValue(storedHistory);
 
-//   it("returns seasons when something is stored", () => {
-//     const seasons = [
-//       {
-//         id: "firstSeason",
-//         isCurrent: false,
-//         isOffSeason: false
-//       },
-//       {
-//         id: "secondSeason",
-//         isCurrent: false,
-//         isOffSeason: false
-//       }
-//     ];
+    const history = historyCache.get("somePlayerId");
+    expect(history).toEqual({
+      theData: "foo"
+    });
+  });
+});
 
-//     mockStorage.get.mockReturnValueOnce(seasons);
+describe("store", () => {
+  it("stores the season history on the storage", () => {
+    historyCache.store("somePlayerId", {
+      theData: "foo"
+    });
 
-//     const allSeasons = seasonsCache.getAll();
-//     expect(allSeasons).toBe(seasons);
-//   });
-// });
-
-// describe("store", () => {
-//   it("stores the season on the storage", () => {
-//     seasonsCache.store("current-season", true, false);
-
-//     expect(mockStorage.store).toHaveBeenCalledWith("seasons", {
-//       id: "current-season",
-//       isCurrent: true,
-//       isOffSeason: false
-//     });
-//   });
-// });
+    expect(mockStorage.store).toHaveBeenCalledWith("history", {
+      id: "somePlayerId",
+      seasonData: {
+        theData: "foo"
+      }
+    });
+  });
+});

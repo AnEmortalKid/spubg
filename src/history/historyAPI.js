@@ -4,14 +4,14 @@ import { getCache } from "./historyCache";
 
 import { get as seasons } from "../seasons/seasonsAPI";
 
-const HistoryCache = getCache();
-
 export async function getHistory(playerName) {
+  const HistoryCache = getCache();
+
   const playerId = await players().findId(playerName);
 
   // only search for things that will have data
   const seasonIds = await seasons().getSearchableIds();
-  const currentHistory = HistoryCache.getHistory(playerId);
+  const currentHistory = HistoryCache.get(playerId);
 
   if (currentHistory) {
     // update with the latest season info
@@ -32,7 +32,7 @@ export async function getHistory(playerName) {
       }
     }
 
-    HistoryCache.storeHistory(playerId, currentHistory);
+    HistoryCache.store(playerId, currentHistory);
     return currentHistory;
   }
 
@@ -42,6 +42,6 @@ export async function getHistory(playerName) {
     history[seasonId] = await playerSeason(playerId, seasonId);
   }
 
-  HistoryCache.storeHistory(playerId, history);
+  HistoryCache.store(playerId, history);
   return history;
 }
