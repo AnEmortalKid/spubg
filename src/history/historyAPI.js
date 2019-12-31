@@ -1,7 +1,8 @@
 import { get as players } from "../players/playersAPI";
 import { playerSeason } from "../api-client/pubgClient";
 import HistoryCache from "./historyCache";
-import { getLatestSeasonId, getSearchableIds } from "../seasons/seasonsAPI";
+
+import { get as seasons } from "../seasons/seasonsAPI";
 
 export async function getHistory(playerName) {
   const playerId = await players().findId(playerName);
@@ -12,7 +13,7 @@ export async function getHistory(playerName) {
 
   if (currentHistory) {
     // update with the latest season info
-    const latestSeasonId = await getLatestSeasonId();
+    const latestSeasonId = await seasons().getLatestSeasonId();
     if (currentHistory[latestSeasonId]) {
       console.log("Updating latest season data for " + playerName);
       currentHistory[latestSeasonId] = await playerSeason(

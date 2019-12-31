@@ -1,5 +1,4 @@
-import { seasons } from "../api-client/pubgClient";
-
+import { getClient } from "../api-client/client";
 import { getCache } from "./seasonsCache";
 
 /**
@@ -27,64 +26,74 @@ const seasonsWithoutData = [
   "division.bro.official.2018-09"
 ];
 
-const SeasonsCache = getCache();
-
 /**
- * Returns the set of all seasons with their ids
+ * Information about Seasons
  */
-export async function getAll() {
-  const stored = SeasonsCache.getAll();
-
-  // not empty, return it
-  if (stored && stored.length) {
-    return stored;
-  }
-
-  console.log("retrieving all");
-
-  const retrievedSeasons = await seasons();
-  console.log(JSON.stringify(retrievedSeasons));
-
-  const seasonsArray = retrievedSeasons.data;
-  for (const seasonItem of seasonsArray) {
-    const seasonId = seasonItem.id;
-    const isCurrent = seasonItem.attributes.isCurrentSeason;
-    const isOffSeason = seasonItem.attributes.isOffseason;
-
-    SeasonsCache.store(seasonId, isCurrent, isOffSeason);
-  }
-
-  return SeasonsCache.getAll();
-}
-
-// TODO return good season names instead of ids
-
-/**
- * Returns the set of season identifers that are searchable within the API and would have data
- */
-export async function getSearchableIds() {
-  const allIds = await getAll().then(result => result.map(x => x.id));
-  const searchableIds = allIds.filter(
-    item => !seasonsWithoutData.includes(item)
-  );
-  return searchableIds;
-}
-
-/**
- * Return set of season ids that are known to have data within the API
- */
-
-/**
- * Finds the identifier for the latest season
- * @return the identifier for the latest season
- */
-export async function getLatestSeasonId() {
-  const allSeasons = await getAll();
-
-  for (const seasonEntry of allSeasons) {
-    if (seasonEntry.isCurrent) {
-      return seasonEntry.id;
+class Seasons {
+  constructor(seasonsCache = getCache(), client = getClient()) {
+    if (!Seasons.instance) {
+      this.seasonsCache = seasonsCache;
+      this.client = client;
+      Seasons.instance = this;
     }
+    return Seasons.instance;
   }
-  return null;
+
+  /**
+   * Returns the set of all seasons with their ids
+   */
+  async getAll() {
+    const stored = this.seasonsCache.getAll();
+
+    // not empty, return it
+    if (stored && stored.length) {
+      return stored;
+    }
+
+    const retrievedSeasons = await this.client.seasons();
+    for (const seasonItem of retrievedSeasons) {
+      const seasonId = seasonItem.id;
+      const isCurrent = seasonItem.attributes.isCurrentSeason;
+      const isOffSeason = seasonItem.attributes.isOffseason;
+
+      this.seasonsCache.store(seasonId, isCurrent, isOffSeason);
+    }
+
+    return this.seasonsCache.getAll();
+  }
+
+  /**
+   * Returns the set of season identifers that are searchable within the API and would have data
+   */
+  async getSearchableIds() {
+    const allIds = await this.getAll().then(result => result.map(x => x.id));
+    const searchableIds = allIds.filter(
+      item => !seasonsWithoutData.includes(item)
+    );
+    return searchableIds;
+  }
+
+  /**
+   * Finds the identifier for the latest season
+   * @return the identifier for the latest season
+   */
+  async getLatestSeasonId() {
+    const allSeasons = await this.getAll();
+
+    for (const seasonEntry of allSeasons) {
+      if (seasonEntry.isCurrent) {
+        return seasonEntry.id;
+      }
+    }
+    return null;
+  }
+}
+
+/**
+ * Returns a reference to this API
+ * @param {SeasonsCache} cache cache for seasons
+ * @param {Client} client an axios backed client to the pubg api
+ */
+export function get(cache, client) {
+  return new Seasons(cache, client);
 }

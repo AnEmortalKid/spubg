@@ -17,20 +17,6 @@ const instance = rateLimit(
 );
 
 /**
- * Returns the list of available seasons
- */
-export async function seasons() {
-  return instance
-    .get("/seasons")
-    .then(function(response) {
-      return response.data;
-    })
-    .catch(function(error) {
-      console.log(error);
-    });
-}
-
-/**
  * Fetches season information for the given player
  * @param {String} playerId
  * @param {String} seasonId

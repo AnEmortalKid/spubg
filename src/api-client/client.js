@@ -27,6 +27,23 @@ class Client {
         console.log(error);
       });
   }
+
+  /**
+   * Returns the list of available seasons
+   */
+  async seasons() {
+    return instance
+      .get("/seasons")
+      .then(function(response) {
+        const innerObject = response.data;
+        // https://documentation.pubg.com/en/seasons-endpoint.html#/Seasons/get_seasons
+        // data: holds the array
+        return innerObject.data;
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
 }
 
 /**

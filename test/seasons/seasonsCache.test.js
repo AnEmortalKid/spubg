@@ -35,3 +35,15 @@ describe("getAll", () => {
     expect(allSeasons).toBe(seasons);
   });
 });
+
+describe("store", () => {
+  it("stores the season on the storage", () => {
+    seasonsCache.store("current-season", true, false);
+
+    expect(mockStorage.store).toHaveBeenCalledWith("seasons", {
+      id: "current-season",
+      isCurrent: true,
+      isOffSeason: false
+    });
+  });
+});
