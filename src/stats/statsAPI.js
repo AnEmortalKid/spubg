@@ -1,5 +1,5 @@
 import { get as players } from "../players/playersAPI";
-import { getHistory } from "../history/historyAPI";
+import { get as history } from "../history/historyAPI";
 import { lifetimeStats } from "../api-client/pubgClient";
 import { styleSeasonId } from "../styling/styler";
 
@@ -80,13 +80,13 @@ export function gatherStats(seasonData) {
  * @param {String} playerName 
  */
 export async function getSeasonHistory(playerName) {
-  const history = await getHistory(playerName);
+  const playerHistory = await history().get(playerName);
 
   //extract each season block from history
-  const seasonEntries = Object.keys(history);
+  const seasonEntries = Object.keys(playerHistory);
   const seasonalStats = [];
   for (const seasonId of seasonEntries) {
-    const seasonEntry = history[seasonId];
+    const seasonEntry = playerHistory[seasonId];
     const seasonStats = gatherStats(seasonEntry.data);
     seasonalStats.push({ [seasonId]: seasonStats });
   }

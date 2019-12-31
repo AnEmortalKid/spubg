@@ -32,13 +32,29 @@ class Client {
    * Returns the list of available seasons
    */
   async seasons() {
-    return instance
+    return this.axiosClient
       .get("/seasons")
       .then(function(response) {
         const innerObject = response.data;
         // https://documentation.pubg.com/en/seasons-endpoint.html#/Seasons/get_seasons
         // data: holds the array
         return innerObject.data;
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
+
+  /**
+   * Fetches season information for the given player
+   * @param {String} playerId
+   * @param {String} seasonId
+   */
+  async playerSeason(playerId, seasonId) {
+    return this.axiosClient
+      .get(`/players/${playerId}/seasons/${seasonId}`)
+      .then(function(response) {
+        return response.data;
       })
       .catch(function(error) {
         console.log(error);

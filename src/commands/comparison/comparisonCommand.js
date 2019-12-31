@@ -8,8 +8,6 @@ import {
 } from "../../stats/statsAPI";
 
 import { styleGameMode } from "../../styling/styler";
-import BaseChart from "../../chart/baseChart";
-
 export default class ComparisonCommand extends BaseCommand {
   constructor(description, comparisonOptions) {
     super(description);

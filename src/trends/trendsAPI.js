@@ -1,5 +1,5 @@
 import { get as players } from "../players/playersAPI";
-import { getHistory } from "../history/historyAPI";
+import { get as history } from "../history/historyAPI";
 import { lifetimeStats } from "../api-client/pubgClient";
 import { gatherStats } from "../stats/statsAPI";
 
@@ -46,15 +46,15 @@ import { gatherStats } from "../stats/statsAPI";
  * @param {String} playerName 
  */
 export async function gatherTrend(playerName) {
-  const history = await getHistory(playerName);
+  const playerHistory = await history().get(playerName);
   const playerId = await players().findId(playerName);
   const lifetime = await lifetimeStats(playerId);
 
   //extract each season block from history
-  const seasonEntries = Object.keys(history);
+  const seasonEntries = Object.keys(playerHistory);
   const seasonalStats = [];
   for (const seasonId of seasonEntries) {
-    const seasonEntry = history[seasonId];
+    const seasonEntry = playerHistory[seasonId];
     const seasonStats = gatherStats(seasonEntry.data);
     seasonalStats.push({ [seasonId]: seasonStats });
   }
