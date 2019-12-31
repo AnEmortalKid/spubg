@@ -44,8 +44,12 @@ export function gatherStats(seasonData) {
     // most kills in a round
     statsForMode.mostKills = statEntry.roundMostKills;
 
-    // TODO next cool stat
+    // stats for top 10
+    const top10s = statEntry.top10s;
+    const top10sCalc = (top10s / roundsPlayed) * 100;
+    statsForMode.top10Rate = top10sCalc.toFixed(2);
 
+    // TODO next cool stat
     seasonStat[gameModeId] = statsForMode;
   });
 

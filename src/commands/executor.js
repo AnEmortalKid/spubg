@@ -6,11 +6,13 @@ import AllTrendsCommand from "./trends/alltrends";
 import KDCompareCommand from "./comparison/kdCompare";
 import ADRCompareCommand from "./comparison/adrCompare";
 import WinRateCompareCommand from "./comparison/winRateCompare";
+import Top10TrendCommand from "./trends/top10Trend";
 
 const commands = {
   "kd-trend": new KDTrendCommand(),
   "winRate-trend": new WinRateTrendCommand(),
   "adr-trend": new ADRTrendCommand(),
+  "top10-trend": new Top10TrendCommand(),
   "all-trends": new AllTrendsCommand(),
   "kd-compare": new KDCompareCommand(),
   "adr-compare": new ADRCompareCommand(),

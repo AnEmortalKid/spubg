@@ -19,6 +19,11 @@ export default class AllTrendsCommand extends BaseTrendCommand {
         attributeName: "adr",
         filePrefix: "ADR",
         subtitlePrefix: "Average Damage Rate"
+      },
+      {
+        attributeName: "top10Rate",
+        filePrefix: "Top10",
+        subtitlePrefix: "Top Ten Rate"
       }
     ];
   }
