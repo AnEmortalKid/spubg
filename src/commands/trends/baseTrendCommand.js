@@ -1,5 +1,6 @@
 import { createTrendChart } from "../../chart/chartsAPI";
 import { styleSeasonId, styleGameMode } from "../../styling/styler";
+import { TrendChart } from "../../chart/trendChart";
 
 /**
  * Basic template for a class that can generate trend data
@@ -66,7 +67,9 @@ export default class BaseTrendCommand {
             trend: lifetimeAttribute
           }
         };
-        createTrendChart(chartName, plotOptions);
+
+        const chart = new TrendChart(plotOptions);
+        chart.createAndWrite(chartName);
       }
     }
   }
