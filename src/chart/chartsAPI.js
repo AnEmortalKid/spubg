@@ -59,7 +59,7 @@ export function createTrendChart(fileName, plotOptions) {
     .scaleLinear()
     // .domain([minYPoint - yBufferShift, maxYPoint + yBufferShift])
     .domain([minYPoint, maxYPoint])
-    .range([height, margin.top + margin.bottom]);
+    .range([height, margin.top]);
 
   // create svg element:
   var svgCanvas = d3
