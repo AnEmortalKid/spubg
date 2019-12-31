@@ -136,7 +136,6 @@ export class TrendChart extends BaseChart {
       .range([0, width]);
 
     var yPoints = dataPoints.map(dataPoint => dataPoint.value);
-    console.log(yPoints);
     var minYPoint = d3.min(yPoints);
     const maxYPoint = d3.max(yPoints);
 
@@ -190,7 +189,10 @@ export class TrendChart extends BaseChart {
       .style("font-size", "14px")
       .text(subTitle);
 
-    addKey(svgCanvas, { margin: margin , trendsColor: squadPlayerColors.orange});
+    addKey(svgCanvas, {
+      margin: margin,
+      trendsColor: squadPlayerColors.orange
+    });
 
     // canvas for the plot elements
     var plotCanvas = svgCanvas

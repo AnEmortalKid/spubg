@@ -51,8 +51,6 @@ function plotDataPoints(plotCanvas, dataSet, dataPointOptions) {
     const dataPoints = dataEntry.points;
     const dataValues = dataPoints.map(x => x.value);
 
-    console.log("plotting:" + dataValues);
-
     // connect the points with a line
     plotCanvas
       .append("path")
@@ -161,10 +159,7 @@ function addKey(svgCanvas, dataSet, keyOptions) {
 function createComparisonChart(fileName, plotOptions) {
   const title = plotOptions.title;
   const subTitle = plotOptions.subTitle;
-
   const dataSet = plotOptions.dataSet;
-  console.log(`dataSet:`);
-  console.log(dataSet);
 
   var margin = { top: 50, right: 60, bottom: 50, left: 60 };
   // reduce graph height based on the legend box
@@ -188,9 +183,7 @@ function createComparisonChart(fileName, plotOptions) {
     .range([0, width]);
 
   // y scale is across all of them
-
   var yPoints = getAllPoints(dataSet);
-  console.log(yPoints);
 
   // create min and max with some buffer, if min is 0 then no shift would happen
   var minYPoint = d3.min(yPoints);
