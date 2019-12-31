@@ -16,5 +16,8 @@ export default function cli(args) {
   console.log(chalk.green(command));
   console.log(chalk.grey(commandArgs));
 
-  execute(command, commandArgs);
+  execute(command, {
+    args: commandArgs,
+    mode: "cli"
+  });
 }

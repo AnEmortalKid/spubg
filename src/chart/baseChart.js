@@ -10,12 +10,21 @@ export default class BaseChart {
     this.typeDirectory = typeDirectory;
   }
 
-  /**
-   * Writes the chart to the configured output path
-   * @param {String} fileName name of the file
-   * @param {SVG} svgCanvas a d3 svg element that holds the chart
+    /**
+   * Creates a canvas with the chart data
+   * @return SVG Canvas with the chart
    */
-  writeChart(fileName, svgCanvas) {
+  create()
+  {
+    throw new Error("Unimplemented!");
+  }
+
+  /**
+   * Generates and writes the chart to the configured output path
+   * @param {String} fileName name of the file
+   */
+  createAndWrite(fileName) {
+    const svgCanvas = this.create();
     var source = xmlserializer.serializeToString(svgCanvas.node());
     const typeOutputDir = baseOutputPath + "/" + this.typeDirectory + "/";
     const filePath = typeOutputDir + fileName;

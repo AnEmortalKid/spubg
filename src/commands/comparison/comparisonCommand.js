@@ -1,9 +1,14 @@
 import BaseCommand from "../baseCommand";
 import { ComparisonChart } from "../../chart/comparisonChart";
 
-import { getSeasonHistory } from "../../stats/statsAPI";
+import {
+  getSeasonHistory,
+  dataByGameMode,
+  supportedGameModes
+} from "../../stats/statsAPI";
 
-import { styleGameMode, styleSeasonId } from "../../styling/styler";
+import { styleGameMode } from "../../styling/styler";
+import BaseChart from "../../chart/baseChart";
 
 export default class ComparisonCommand extends BaseCommand {
   constructor(description, comparisonOptions) {
@@ -11,82 +16,83 @@ export default class ComparisonCommand extends BaseCommand {
     this.comparisonOptions = comparisonOptions;
   }
 
-  execute(args) {
+  async execute(options) {
+    const args = options.args;
     console.log(
       `Comparing ${this.comparisonOptions.attributeName} for: ${args}`
     );
 
-    if (args[0]) {
-      // TODO filter player names and game-mode
-      this.createComparisonChart(
-        this.comparisonOptions.title,
-        this.comparisonOptions.attributeName,
-        args
-      );
+    switch (options.mode) {
+      case "cli":
+        return this.cliExecute(args);
+      default:
+        throw new Error(`${options.mode} is not supported`);
     }
   }
 
-  /**
-   * Gathers attribute values by season for each game mode
-   * @param {String} gameModes set of game modes
-   * @param {Array} seasonalEntries array of seasonal stats
-   * @param {String} attributeName name of the attribute to gather
-   */
-  dataByGameMode(gameModes, seasonalEntries, attributeName) {
-    const stats = {};
+  async cliExecute(args) {
+    // TODO support filtered game mode
+    const playerNames = args;
+    const charts = await this.createComparisonCharts(
+      this.comparisonOptions.title,
+      this.comparisonOptions.attributeName,
+      playerNames,
+      supportedGameModes
+    );
 
-    for (const gameMode of gameModes) {
-      const gameModeStats = [];
-      for (const seasonEntry of seasonalEntries) {
-        const seasonId = Object.keys(seasonEntry)[0];
-        const seasonData = seasonEntry[seasonId];
-        const gameModeData = seasonData[gameMode];
-        // cleanup name
-        const seasonName = styleSeasonId(seasonId);
+    for (const gameMode of supportedGameModes) {
+      const playerNamesString = playerNames.join("-");
 
-        // if the entry has no data, place a 0
-        if (gameModeData) {
-          gameModeStats.push({
-            name: seasonName,
-            value: parseFloat(gameModeData[attributeName])
-          });
-        } else {
-          gameModeStats.push({ name: seasonName, value: 0.0 });
-        }
-      }
+      // combine player names
+      const fileTitle =
+        this.comparisonOptions.attributeName +
+        "-" +
+        playerNamesString +
+        "-" +
+        gameMode;
 
-      // sort entries by season id
-      gameModeStats.sort((a, b) => (a.name > b.name ? 1 : -1));
-
-      stats[gameMode] = gameModeStats;
+      charts[gameMode].createAndWrite(fileTitle);
     }
-
-    return stats;
   }
 
-  async createComparisonChart(chartTitle, attributeName, players) {
-    const legitGameModes = ["solo-fpp", "squad-fpp", "duo-fpp"];
-
+  async getHistoryForPlayers(playerNames, attributeName) {
     const historyByPlayer = {};
 
-    for (const playerName of players) {
+    for (const playerName of playerNames) {
       const historyForPlayer = await getSeasonHistory(playerName);
-      const dataForGameMode = this.dataByGameMode(
-        legitGameModes,
+      const dataForGameMode = dataByGameMode(
+        supportedGameModes,
         historyForPlayer,
         attributeName
       );
       historyByPlayer[playerName] = dataForGameMode;
     }
 
-    for (const gameMode of legitGameModes) {
-      this.createAndWrite(chartTitle, gameMode, historyByPlayer);
-    }
+    return historyByPlayer;
   }
 
-  createAndWrite(chartTitle, gameMode, historyByPlayer) {
+  async createComparisonCharts(chartTitle, attributeName, players, gameModes) {
+    const historyByPlayer = await this.getHistoryForPlayers(
+      players,
+      attributeName
+    );
+
+    const charts = {};
+    for (const gameMode of gameModes) {
+      charts[gameMode] = this.createChart(
+        chartTitle,
+        gameMode,
+        historyByPlayer
+      );
+    }
+
+    return charts;
+  }
+
+  createChart(chartTitle, gameMode, historyByPlayer) {
     const dataSet = [];
     const playerNames = Object.keys(historyByPlayer);
+
     for (const playerName of playerNames) {
       const playerEntry = historyByPlayer[playerName];
 
@@ -107,17 +113,6 @@ export default class ComparisonCommand extends BaseCommand {
     };
 
     const chart = new ComparisonChart(plotOptions);
-    const svgCanvas = chart.create();
-
-    const playerNamesString = playerNames.join("-");
-
-    // combine player names
-    const fileTitle =
-      this.comparisonOptions.attributeName +
-      "-" +
-      playerNamesString +
-      "-" +
-      gameMode;
-    chart.writeChart(fileTitle, svgCanvas);
+    return chart;
   }
 }

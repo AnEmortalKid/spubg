@@ -1,6 +1,9 @@
 import { get as players } from "../players/playersAPI";
 import { getHistory } from "../history/historyAPI";
 import { lifetimeStats } from "../api-client/pubgClient";
+import { styleSeasonId } from "../styling/styler";
+
+export const supportedGameModes = ["solo-fpp", "squad-fpp", "duo-fpp"];
 
 /**
  * Gathers statistics for the given season
@@ -137,4 +140,42 @@ export async function getSeasonTrend(playerName) {
 
   const lifetimeInfo = gatherStats(lifetime.data);
   return { seasonal: seasonalStats, lifetime: lifetimeInfo };
+}
+
+/**
+ * Gathers attribute values by season for each game mode
+ * @param {String} gameModes set of game modes
+ * @param {Array} seasonalEntries array of seasonal stats
+ * @param {String} attributeName name of the attribute to gather
+ */
+export function dataByGameMode(gameModes, seasonalEntries, attributeName) {
+  const stats = {};
+
+  for (const gameMode of gameModes) {
+    const gameModeStats = [];
+    for (const seasonEntry of seasonalEntries) {
+      const seasonId = Object.keys(seasonEntry)[0];
+      const seasonData = seasonEntry[seasonId];
+      const gameModeData = seasonData[gameMode];
+      // cleanup name
+      const seasonName = styleSeasonId(seasonId);
+
+      // if the entry has no data, place a 0
+      if (gameModeData) {
+        gameModeStats.push({
+          name: seasonName,
+          value: parseFloat(gameModeData[attributeName])
+        });
+      } else {
+        gameModeStats.push({ name: seasonName, value: 0.0 });
+      }
+    }
+
+    // sort entries by season id
+    gameModeStats.sort((a, b) => (a.name > b.name ? 1 : -1));
+
+    stats[gameMode] = gameModeStats;
+  }
+
+  return stats;
 }

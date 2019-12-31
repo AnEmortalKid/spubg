@@ -30,13 +30,23 @@ export function help() {
   }
 }
 
-export async function execute(commandName, commandArgs) {
+/**
+ * Executes the desired command in a convenient fashion based on the presentation mode
+ * @param {String} commandName the name of the command
+ * @param {Object} commandOptions options to the command in the form:
+ *   {
+ *     args: [String],
+ *     mode: String
+ *   }
+ */
+export async function execute(commandName, commandOptions) {
   if (commandName == "help") {
+    // TODO support modes
     return help();
   }
 
   console.log(`commandName: ${commandName}`);
   const command = commands[commandName];
   console.log(command.description);
-  await commands[commandName].execute(commandArgs);
+  await commands[commandName].execute(commandOptions);
 }
