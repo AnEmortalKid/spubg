@@ -25,17 +25,28 @@ const history = get({
   seasons: mockSeasons
 });
 
-describe("mocking is up", () => {
-  it("should slap", () => {
+describe("get", () => {
+  it("fetches all data if nothing is in the cache", async () => {
+    // setup player id
     mockPlayers.findId.mockReturnValue("someId");
-    mockSeasons.getSearchableIds.mockReturnValue(["seasonId"]);
+    // setup seasons
+    mockSeasons.getSearchableIds.mockReturnValue(["seasonOneId", "seasonTwoId"]);
+    // nothing stored
     mockCache.get.mockReturnValue(null);
-    mockClient.playerSeason.mockReturnValue("seasonData");
+    // setup client to return seasonOneData -> season2Data
+    mockClient.playerSeason.mockReturnValue("seasonTwoData").mockReturnValueOnce("seasonOneData");
 
-    const somePlayerHist = history.get("somePlayer");
+    const somePlayerHist = await history.get("somePlayer");
 
-    expect(somePlayerHist).resolves.toEqual({
-      seasonId: "seasonData"
+    expect(somePlayerHist).toEqual({
+      seasonOneId: "seasonOneData",
+      seasonTwoId: "seasonTwoData"
+    });
+
+    // it should store the data
+    expect(mockCache.store).toHaveBeenCalledWith("someId", {
+      seasonOneId: "seasonOneData",
+      seasonTwoId: "seasonTwoData"
     });
   });
 });
