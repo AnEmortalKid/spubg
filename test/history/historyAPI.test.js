@@ -84,7 +84,10 @@ describe("get", () => {
     // setup player id
     mockPlayers.findId.mockReturnValue("someId");
     // setup seasons
-    mockSeasons.getSearchableIds.mockReturnValue(["latestSeason", "pastSeason"]);
+    mockSeasons.getSearchableIds.mockReturnValue([
+      "latestSeason",
+      "pastSeason"
+    ]);
     mockSeasons.getLatestSeasonId.mockReturnValue("latestSeason");
     // setup cache
     mockCache.get.mockReturnValue({
@@ -92,7 +95,9 @@ describe("get", () => {
     });
     // setup client to return new data for the latest season
     // newSeasonData -> pastSeasonData
-    mockClient.playerSeason.mockReturnValue("pastSeasonData").mockReturnValueOnce("newSeasonData");
+    mockClient.playerSeason
+      .mockReturnValue("pastSeasonData")
+      .mockReturnValueOnce("newSeasonData");
 
     const somePlayerHist = await history.get("somePlayer");
 
