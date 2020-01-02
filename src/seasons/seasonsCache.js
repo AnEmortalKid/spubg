@@ -1,9 +1,9 @@
 import { create } from "../storage/storage";
 
 class SeasonsCache {
-  constructor(storage = create()) {
+  constructor(storage) {
     if (!SeasonsCache.instance) {
-      this.storage = storage;
+      this.storage = storage ? storage : create();
       SeasonsCache.instance = this;
     }
 

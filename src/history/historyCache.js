@@ -1,9 +1,9 @@
 import { create } from "../storage/storage";
 
 class HistoryCache {
-  constructor(storage = create()) {
+  constructor(storage) {
     if (!HistoryCache.instance) {
-      this.storage = storage;
+      this.storage = storage ? storage : create();
       HistoryCache.instance = this;
     }
 

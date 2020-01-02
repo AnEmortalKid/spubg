@@ -30,10 +30,10 @@ const seasonsWithoutData = [
  * Information about Seasons
  */
 class Seasons {
-  constructor(seasonsCache = getCache(), client = getClient()) {
+  constructor(seasonsCache, client) {
     if (!Seasons.instance) {
-      this.seasonsCache = seasonsCache;
-      this.client = client;
+      this.seasonsCache = seasonsCache ? seasonsCache : getCache();
+      this.client = client ? client : getClient();
       Seasons.instance = this;
     }
     return Seasons.instance;

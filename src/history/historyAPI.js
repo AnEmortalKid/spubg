@@ -4,19 +4,14 @@ import { getCache } from "./historyCache";
 import { get as seasons } from "../seasons/seasonsAPI";
 
 class History {
-  constructor(
-    params = {
-      historyCache: getCache(),
-      client: getClient(),
-      players: players(),
-      seasons: seasons()
-    }
-  ) {
+  constructor(params) {
     if (!History.instance) {
-      this.historyCache = params.historyCache;
-      this.client = params.client;
-      this.players = params.players;
-      this.seasons = params.seasons;
+      this.historyCache = params.historyCache
+        ? params.historyCache
+        : getCache();
+      this.client = params.client ? params.client : getClient();
+      this.players = params.players ? params.players : players();
+      this.seasons = params.seasons ? params.seasons : seasons();
 
       History.instance = this;
     }

@@ -1,5 +1,8 @@
 import BaseTrendCommand from "./baseTrendCommand";
-import { getSeasonAndLifetimeTrend } from "../../stats/statsAPI";
+import {
+  getSeasonAndLifetimeTrend,
+  supportedGameModes
+} from "../../stats/statsAPI";
 
 export default class SingleTrendCommand extends BaseTrendCommand {
   constructor(description, attributeName, filePrefix, subtitlePrefix) {
@@ -13,21 +16,27 @@ export default class SingleTrendCommand extends BaseTrendCommand {
 
   execute(commandOptions) {
     const args = commandOptions.args;
-
     console.log(`${this._trendOption.attributeName} trend: ${args}`);
 
-    if (args[0]) {
-      this.trendChart(args[0]);
+    switch (commandOptions.mode) {
+      case "cli":
+        return this.cliExecute(args);
+      default:
+        throw new Error(`${commandOptions.mode} is not supported`);
     }
   }
 
-  async trendChart(playerName) {
+  /**
+   * Generates and writes charts to the file system
+   * @param {String} playerName name of player
+   */
+  async cliExecute(playerName) {
     const trendData = await getSeasonAndLifetimeTrend(playerName);
-    const legitGameModes = ["solo-fpp", "squad-fpp", "duo-fpp"];
+    // TODO support filtering mode
     this.produceTrendCharts(
       playerName,
       trendData,
-      legitGameModes,
+      supportedGameModes,
       this._trendOption
     );
   }

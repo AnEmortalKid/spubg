@@ -1,9 +1,9 @@
 import { create } from "../storage/storage";
 
 class PlayerCache {
-  constructor(storage = create()) {
+  constructor(storage) {
     if (!PlayerCache.instance) {
-      this.storage = storage;
+      this.storage = storage ? storage : create();
       PlayerCache.instance = this;
     }
 

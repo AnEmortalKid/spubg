@@ -15,7 +15,7 @@ export default class BaseTrendCommand {
   }
 
   /**
-   * Computes and produces charts with the trendOption for each game mode
+   * Computes and produces charts with the trendOption for each game mode, writing them to the file system
    * @param {String} playerName name of the player
    * @param {Array} trendData data points in the form [seasonalEntries: [], lifetime: [] ]
    * @param {Array} gameModes Set of game modes to filter trend data

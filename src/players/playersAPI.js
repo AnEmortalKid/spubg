@@ -5,10 +5,10 @@ import { getClient } from "../api-client/client";
  * Information about Players
  */
 class Players {
-  constructor(playerCache = getCache(), client = getClient()) {
+  constructor(playerCache, client) {
     if (!Players.instance) {
-      this.playerCache = playerCache;
-      this.client = client;
+      this.playerCache = playerCache ? playerCache : getCache();
+      this.client = client ? client : getClient();
       Players.instance = this;
     }
     return Players.instance;

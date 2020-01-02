@@ -1,4 +1,7 @@
-import { getSeasonAndLifetimeTrend } from "../../stats/statsAPI";
+import {
+  getSeasonAndLifetimeTrend,
+  supportedGameModes
+} from "../../stats/statsAPI";
 import BaseTrendCommand from "./baseTrendCommand";
 
 export default class AllTrendsCommand extends BaseTrendCommand {
@@ -33,20 +36,21 @@ export default class AllTrendsCommand extends BaseTrendCommand {
 
     console.log(`all trends: ${args}`);
 
-    if (args[0]) {
-      this.trendChart(args[0]);
+    switch (commandOptions.mode) {
+      case "cli":
+        return this.cliExecute(args);
+      default:
+        throw new Error(`${commandOptions.mode} is not supported`);
     }
   }
 
-  async trendChart(playerName) {
+  async cliExecute(playerName) {
     const trendData = await getSeasonAndLifetimeTrend(playerName);
-    const legitGameModes = ["solo-fpp", "squad-fpp", "duo-fpp"];
-
     for (const trendOption of this._trendOptions) {
       this.produceTrendCharts(
         playerName,
         trendData,
-        legitGameModes,
+        supportedGameModes,
         trendOption
       );
     }
