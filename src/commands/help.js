@@ -40,10 +40,21 @@ export default class HelpCommand extends BaseCommand {
   }
 
   cliExplainCommand(commandName) {
-    console.log("Explaining " + commandName);
     const commandEntry = commands[commandName];
-    console.log(commandEntry.description);
-    const str = commandEntry.commandOptions();
-    console.log(str);
+    if (!commandEntry) {
+      console.log(`${commandName} is not a valid command.`);
+      this.cliListCommands();
+      return;
+    }
+
+    console.log(`${commandName}:\t${commandEntry.description}\n`);
+
+    const options = commandEntry.commandOptions();
+    if (options === "") {
+      console.log("This command has no options.");
+    } else {
+      console.log("Options for this command are:\n");
+      console.log(options);
+    }
   }
 }
