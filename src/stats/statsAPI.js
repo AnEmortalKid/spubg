@@ -1,6 +1,6 @@
 import { get as players } from "../players/playersAPI";
 import { get as history } from "../history/historyAPI";
-import { lifetimeStats } from "../api-client/pubgClient";
+import { getClient } from "../api-client/client";
 import { styleSeasonId } from "../styling/styler";
 
 export const supportedGameModes = ["solo-fpp", "squad-fpp", "duo-fpp"];
@@ -136,11 +136,11 @@ export async function getSeasonHistory(playerName) {
 }
  * @param {String} playerName 
  */
-export async function getSeasonTrend(playerName) {
+export async function getSeasonAndLifetimeTrend(playerName) {
   const seasonalStats = await getSeasonHistory(playerName);
 
   const playerId = await players().findId(playerName);
-  const lifetime = await lifetimeStats(playerId);
+  const lifetime = await getClient().lifetimeStats(playerId);
 
   const lifetimeInfo = gatherStats(lifetime);
   return { seasonal: seasonalStats, lifetime: lifetimeInfo };

@@ -1,4 +1,4 @@
-import { gatherTrend } from "../../trends/trendsAPI";
+import { getSeasonAndLifetimeTrend } from "../../stats/statsAPI";
 import BaseTrendCommand from "./baseTrendCommand";
 
 export default class AllTrendsCommand extends BaseTrendCommand {
@@ -39,7 +39,7 @@ export default class AllTrendsCommand extends BaseTrendCommand {
   }
 
   async trendChart(playerName) {
-    const trendData = await gatherTrend(playerName);
+    const trendData = await getSeasonAndLifetimeTrend(playerName);
     const legitGameModes = ["solo-fpp", "squad-fpp", "duo-fpp"];
 
     for (const trendOption of this._trendOptions) {

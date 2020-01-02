@@ -4,9 +4,9 @@ import axios from "axios";
 import rateLimit from "axios-rate-limit";
 
 class Client {
-  constructor(axiosClient = createDefault()) {
+  constructor(axiosClient) {
     if (!Client.instance) {
-      this.axiosClient = axiosClient;
+      this.axiosClient = axiosClient ? axiosClient : createDefault();
       Client.instance = this;
     }
     return Client.instance;
@@ -65,22 +65,22 @@ class Client {
   }
 
   /**
- * Fetches lifetime information for the given player
- * @param {String} playerId the identifier for the player
- */
+   * Fetches lifetime information for the given player
+   * @param {String} playerId the identifier for the player
+   */
   async lifetimeStats(playerId) {
-  return this.axiosClient
-    .get(`/players/${playerId}/seasons/lifetime`)
-    .then(function(response) {
-      const innerObject = response.data;
-      // https://documentation.pubg.com/en/lifetime-stats.html#/Lifetime_Stats/get_players__accountId__seasons_lifetime
-      // data holds the response object
-      return innerObject.data;
-    })
-    .catch(function(error) {
-      console.log(error);
-    });
-}
+    return this.axiosClient
+      .get(`/players/${playerId}/seasons/lifetime`)
+      .then(function(response) {
+        const innerObject = response.data;
+        // https://documentation.pubg.com/en/lifetime-stats.html#/Lifetime_Stats/get_players__accountId__seasons_lifetime
+        // data holds the response object
+        return innerObject.data;
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
 }
 
 /**
