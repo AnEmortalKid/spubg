@@ -6,12 +6,11 @@ import { get as seasons } from "../seasons/seasonsAPI";
 class History {
   constructor(params) {
     if (!History.instance) {
-      this.historyCache = params.historyCache
-        ? params.historyCache
+      this.historyCache = params ? params.historyCache 
         : getCache();
-      this.client = params.client ? params.client : getClient();
-      this.players = params.players ? params.players : players();
-      this.seasons = params.seasons ? params.seasons : seasons();
+      this.client = params ? params.client : getClient();
+      this.players = params ? params.players : players();
+      this.seasons = params ? params.seasons : seasons();
 
       History.instance = this;
     }

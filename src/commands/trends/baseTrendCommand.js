@@ -1,17 +1,24 @@
 import { styleSeasonId, styleGameMode } from "../../styling/styler";
 import { TrendChart } from "../../chart/trendChart";
 import { dataByGameMode, supportedGameModes } from "../../stats/statsAPI";
+import BaseCommand from "../baseCommand";
 
 /**
  * Basic template for a class that can generate trend data
  */
-export default class BaseTrendCommand {
+export default class BaseTrendCommand extends BaseCommand {
   constructor(description) {
-    this._description = description;
+    super(description);
   }
 
-  get description() {
-    return this._description;
+  commandOptions()
+  {
+    const message = `
+    --modes the set of game modes to generate a trend chart for.
+      By default the game modes are "squad-fpp", "solo-fpp", "duo-fpp".
+      ex: --modes=squad-fpp,duo-fpp
+    `
+    return message;
   }
 
   /**

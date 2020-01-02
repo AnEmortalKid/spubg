@@ -7,8 +7,10 @@ import KDCompareCommand from "./comparison/kdCompare";
 import ADRCompareCommand from "./comparison/adrCompare";
 import WinRateCompareCommand from "./comparison/winRateCompare";
 import Top10TrendCommand from "./trends/top10Trend";
+import HelpCommand from "./help";
 
-const commands = {
+export const commands = {
+  "help": new HelpCommand(),
   "kd-trend": new KDTrendCommand(),
   "winRate-trend": new WinRateTrendCommand(),
   "adr-trend": new ADRTrendCommand(),
@@ -18,19 +20,6 @@ const commands = {
   "adr-compare": new ADRCompareCommand(),
   "winRate-compare": new WinRateCompareCommand()
 };
-
-export function help() {
-  console.log("Usage:\n");
-  console.log("command <playerName>\n");
-
-  console.log("Available commands are:\n");
-  const commandKeys = Object.keys(commands);
-
-  for (const commandKey of commandKeys) {
-    const commandEntry = commands[commandKey];
-    console.log(`${commandKey}:\t${commandEntry.description}\n`);
-  }
-}
 
 /**
  * Executes the desired command in a convenient fashion based on the presentation mode
@@ -42,13 +31,7 @@ export function help() {
  *   }
  */
 export async function execute(commandName, commandOptions) {
-  if (commandName == "help") {
-    // TODO support modes
-    return help();
-  }
-
-  console.log(`commandName: ${commandName}`);
+  console.log(`executing: ${commandName}`);
   const command = commands[commandName];
-  console.log(command.description);
   await commands[commandName].execute(commandOptions);
 }

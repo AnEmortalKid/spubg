@@ -6,4 +6,12 @@ export default class BaseCommand {
   get description() {
     return this._description;
   }
+
+  /**
+   * @returns a String explaining the options for this command
+   */
+  commandOptions()
+  {
+    return "";
+  }
 }
