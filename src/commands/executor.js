@@ -10,7 +10,7 @@ import Top10TrendCommand from "./trends/top10Trend";
 import HelpCommand from "./help";
 
 export const commands = {
-  "help": new HelpCommand(),
+  help: new HelpCommand(),
   "kd-trend": new KDTrendCommand(),
   "winRate-trend": new WinRateTrendCommand(),
   "adr-trend": new ADRTrendCommand(),

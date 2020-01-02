@@ -11,13 +11,12 @@ export default class BaseTrendCommand extends BaseCommand {
     super(description);
   }
 
-  commandOptions()
-  {
+  commandOptions() {
     const message = `
     --modes the set of game modes to generate a trend chart for.
       By default the game modes are "squad-fpp", "solo-fpp", "duo-fpp".
       ex: --modes=squad-fpp,duo-fpp
-    `
+    `;
     return message;
   }
 

@@ -6,8 +6,7 @@ import { get as seasons } from "../seasons/seasonsAPI";
 class History {
   constructor(params) {
     if (!History.instance) {
-      this.historyCache = params ? params.historyCache 
-        : getCache();
+      this.historyCache = params ? params.historyCache : getCache();
       this.client = params ? params.client : getClient();
       this.players = params ? params.players : players();
       this.seasons = params ? params.seasons : seasons();
