@@ -32,6 +32,5 @@ export const commands = {
  */
 export async function execute(commandName, commandOptions) {
   console.log(`executing: ${commandName}`);
-  const command = commands[commandName];
   await commands[commandName].execute(commandOptions);
 }

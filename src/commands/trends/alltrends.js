@@ -33,26 +33,28 @@ export default class AllTrendsCommand extends BaseTrendCommand {
 
   execute(commandOptions) {
     const args = commandOptions.args;
+    const options = commandOptions.options;
 
     console.log(`all trends: ${args}`);
 
     switch (commandOptions.mode) {
       case "cli":
-        return this.cliExecute(args);
+        return this.cliExecute(args[0], options);
       default:
         throw new Error(`${commandOptions.mode} is not supported`);
     }
   }
 
-  async cliExecute(playerName) {
+  async cliExecute(playerName, options) {
     const trendData = await getSeasonAndLifetimeTrend(playerName);
+
+    var gameModes = supportedGameModes;
+    if (options.modes) {
+      gameModes = options.modes;
+    }
+
     for (const trendOption of this._trendOptions) {
-      this.produceTrendCharts(
-        playerName,
-        trendData,
-        supportedGameModes,
-        trendOption
-      );
+      this.produceTrendCharts(playerName, trendData, gameModes, trendOption);
     }
   }
 }

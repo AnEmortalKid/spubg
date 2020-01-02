@@ -16,11 +16,13 @@ export default class SingleTrendCommand extends BaseTrendCommand {
 
   execute(commandOptions) {
     const args = commandOptions.args;
+    const options = commandOptions.options;
+
     console.log(`${this._trendOption.attributeName} trend: ${args}`);
 
     switch (commandOptions.mode) {
       case "cli":
-        return this.cliExecute(args);
+        return this.cliExecute(args[0], options);
       default:
         throw new Error(`${commandOptions.mode} is not supported`);
     }
@@ -30,13 +32,18 @@ export default class SingleTrendCommand extends BaseTrendCommand {
    * Generates and writes charts to the file system
    * @param {String} playerName name of player
    */
-  async cliExecute(playerName) {
+  async cliExecute(playerName, options) {
     const trendData = await getSeasonAndLifetimeTrend(playerName);
-    // TODO support filtering mode
+
+    var gameModes = supportedGameModes;
+    if (options.modes) {
+      gameModes = options.modes;
+    }
+
     this.produceTrendCharts(
       playerName,
       trendData,
-      supportedGameModes,
+      gameModes,
       this._trendOption
     );
   }

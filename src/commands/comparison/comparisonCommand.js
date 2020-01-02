@@ -14,31 +14,45 @@ export default class ComparisonCommand extends BaseCommand {
     this.comparisonOptions = comparisonOptions;
   }
 
-  async execute(options) {
-    const args = options.args;
+  commandOptions() {
+    const message = `
+    --modes the set of game modes to generate a trend chart for.
+      By default the game modes are "squad-fpp", "solo-fpp", "duo-fpp".
+      ex: --modes squad-fpp duo-fpp
+    `;
+    return message;
+  }
+
+  async execute(commandOptions) {
+    const args = commandOptions.args;
+    const options = commandOptions.options;
+
     console.log(
       `Comparing ${this.comparisonOptions.attributeName} for: ${args}`
     );
 
-    switch (options.mode) {
+    switch (commandOptions.mode) {
       case "cli":
-        return this.cliExecute(args);
+        return this.cliExecute(args, options);
       default:
-        throw new Error(`${options.mode} is not supported`);
+        throw new Error(`${commandOptions.mode} is not supported`);
     }
   }
 
-  async cliExecute(args) {
-    // TODO support filtered game mode
-    const playerNames = args;
+  async cliExecute(playerNames, options) {
+    var gameModes = supportedGameModes;
+    if (options.modes) {
+      gameModes = options.modes;
+    }
+
     const charts = await this.createComparisonCharts(
       this.comparisonOptions.title,
       this.comparisonOptions.attributeName,
       playerNames,
-      supportedGameModes
+      gameModes
     );
 
-    for (const gameMode of supportedGameModes) {
+    for (const gameMode of gameModes) {
       const playerNamesString = playerNames.join("-");
 
       // combine player names
