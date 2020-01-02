@@ -54,12 +54,33 @@ class Client {
     return this.axiosClient
       .get(`/players/${playerId}/seasons/${seasonId}`)
       .then(function(response) {
-        return response.data;
+        const innerObject = response.data;
+        // https://documentation.pubg.com/en/seasons-endpoint.html#/Season_Stats/get_players__accountId__seasons__seasonId_
+        // data holds the object
+        return innerObject.data;
       })
       .catch(function(error) {
         console.log(error);
       });
   }
+
+  /**
+ * Fetches lifetime information for the given player
+ * @param {String} playerId the identifier for the player
+ */
+  async lifetimeStats(playerId) {
+  return this.axiosClient
+    .get(`/players/${playerId}/seasons/lifetime`)
+    .then(function(response) {
+      const innerObject = response.data;
+      // https://documentation.pubg.com/en/lifetime-stats.html#/Lifetime_Stats/get_players__accountId__seasons_lifetime
+      // data holds the response object
+      return innerObject.data;
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+}
 }
 
 /**

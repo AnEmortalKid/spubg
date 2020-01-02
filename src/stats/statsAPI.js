@@ -87,7 +87,7 @@ export async function getSeasonHistory(playerName) {
   const seasonalStats = [];
   for (const seasonId of seasonEntries) {
     const seasonEntry = playerHistory[seasonId];
-    const seasonStats = gatherStats(seasonEntry.data);
+    const seasonStats = gatherStats(seasonEntry);
     seasonalStats.push({ [seasonId]: seasonStats });
   }
 
@@ -142,7 +142,7 @@ export async function getSeasonTrend(playerName) {
   const playerId = await players().findId(playerName);
   const lifetime = await lifetimeStats(playerId);
 
-  const lifetimeInfo = gatherStats(lifetime.data);
+  const lifetimeInfo = gatherStats(lifetime);
   return { seasonal: seasonalStats, lifetime: lifetimeInfo };
 }
 

@@ -41,7 +41,7 @@ export async function lifetimeStats(playerId) {
     .get(`/players/${playerId}/seasons/lifetime`)
     .then(function(response) {
       const innerObject = response.data;
-      return response.data;
+      return innerObject.data;
     })
     .catch(function(error) {
       console.log(error);
