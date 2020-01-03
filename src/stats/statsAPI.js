@@ -19,7 +19,7 @@ export function gatherStats(seasonData) {
     const roundsPlayed = statEntry.roundsPlayed;
     if (roundsPlayed == 0) {
       // no data for this gameMode
-      return seasonStat;
+      return;
     }
 
     const statsForMode = {};

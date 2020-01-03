@@ -21,8 +21,12 @@ export function styleGameMode(gameMode) {
 
   const modeTeam = modeParts[0];
   const modeTeamPretty = modeTeam.charAt(0).toUpperCase() + modeTeam.slice(1);
-  const modeType = modeParts[1].toUpperCase();
 
+  if (modeParts.length < 2) {
+    return modeTeamPretty;
+  }
+
+  const modeType = modeParts[1].toUpperCase();
   return modeTeamPretty + " " + modeType;
 }
 
@@ -35,9 +39,13 @@ const seasonNames = {
 };
 
 /**
- * Prettifies the season name
+ * Prettifies the season name or returns the identifier if a pretty name was not known
  * @param {String} seasonId the identifier for a season
  */
 export function styleSeasonId(seasonId) {
-  return seasonNames[seasonId];
+  const name = seasonNames[seasonId];
+  if (name) {
+    return name;
+  }
+  return seasonId;
 }
