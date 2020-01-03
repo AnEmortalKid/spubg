@@ -1,4 +1,4 @@
-import { gatherStats } from "../../src/stats/statsAPI";
+import { gatherStats, dataByGameMode } from "../../src/stats/statsAPI";
 
 describe("gatherStats", () => {
   it("returns empty when roundsPlayed is 0 for all game modes", () => {
@@ -44,5 +44,27 @@ describe("gatherStats", () => {
     const statContainer = gathered.gameMode;
 
     expect(statContainer[attribute]).toBe(expected);
+  });
+});
+
+describe("dataByGameMode", () => {
+  it("places a 0 if no data exist for the attribute", () => {
+    const seasonalStats = [
+      {
+        season1: {}
+      }
+    ];
+
+    const data = dataByGameMode(["duo-fpp"], seasonalStats, "kd");
+
+    const expected = {
+      "duo-fpp": [
+        {
+          name: "season1",
+          value: 0
+        }
+      ]
+    };
+    expect(data).toEqual(expected);
   });
 });
