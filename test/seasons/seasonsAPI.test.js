@@ -140,4 +140,11 @@ describe("getLatestSeasonId", () => {
     const latestSeason = seasons.getLatestSeasonId();
     expect(latestSeason).resolves.toBe("currentSeason");
   });
+
+  it("returns null when the api fails", () => {
+    mockCache.getAll.mockReturnValue(null);
+
+    const latestSeason = seasons.getLatestSeasonId();
+    expect(latestSeason).resolves.toBeNull();
+  });
 });

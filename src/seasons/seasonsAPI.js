@@ -80,11 +80,14 @@ class Seasons {
   async getLatestSeasonId() {
     const allSeasons = await this.getAll();
 
-    for (const seasonEntry of allSeasons) {
-      if (seasonEntry.isCurrent) {
-        return seasonEntry.id;
+    if (allSeasons) {
+      for (const seasonEntry of allSeasons) {
+        if (seasonEntry.isCurrent) {
+          return seasonEntry.id;
+        }
       }
     }
+
     return null;
   }
 }
