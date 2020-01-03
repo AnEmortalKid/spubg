@@ -27,16 +27,22 @@ export default class HelpCommand extends BaseCommand {
   }
 
   cliListCommands() {
-    console.log("Usage:\n");
+    console.log("Usage:");
     console.log("<command> playerName... [options]\n");
 
-    console.log("Available commands are:\n");
+    console.log("Available commands are:");
     const commandKeys = Object.keys(commands);
 
     for (const commandKey of commandKeys) {
-      const commandEntry = commands[commandKey];
-      console.log(`${commandKey}:\t${commandEntry.description}\n`);
+    this.cliCommandInfo(commandKey);
     }
+  }
+
+  cliCommandInfo(commandName)
+  {
+    const commandEntry = commands[commandName];
+    console.log(commandName + ":");
+    console.log(`  ${commandEntry.description}\n`);
   }
 
   cliExplainCommand(commandName) {
@@ -47,7 +53,7 @@ export default class HelpCommand extends BaseCommand {
       return;
     }
 
-    console.log(`${commandName}:\t${commandEntry.description}\n`);
+    this.cliCommandInfo(commandName);
 
     const options = commandEntry.commandOptions();
     if (options === "") {

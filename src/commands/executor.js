@@ -27,10 +27,13 @@ export const commands = {
  * @param {Object} commandOptions options to the command in the form:
  *   {
  *     args: [String],
- *     mode: String
+ *     mode: String,
+ *     options: {
+ *       property: [String],
+ *       secondOpt: [String]
+ *     }
  *   }
  */
 export async function execute(commandName, commandOptions) {
-  console.log(`executing: ${commandName}`);
   await commands[commandName].execute(commandOptions);
 }

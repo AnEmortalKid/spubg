@@ -2,8 +2,7 @@ import chalk from "chalk";
 import clear from "clear";
 import { execute } from "./commands/executor";
 import { parseArguments } from "./args/argParser";
-
-// TODO figlet / ascii art
+import figlet  from "figlet";
 
 export default function cli(args) {
   const argsObj = args.slice(2);
@@ -11,7 +10,8 @@ export default function cli(args) {
   const commandArgs = argsObj.slice(1);
   clear();
 
-  console.log(chalk.yellow("SPUBG"));
+  console.log(chalk.yellow(figlet.textSync("SPUBG")));
+  
   const parsed = parseArguments(commandArgs);
 
   execute(command, {
