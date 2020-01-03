@@ -34,12 +34,11 @@ export default class HelpCommand extends BaseCommand {
     const commandKeys = Object.keys(commands);
 
     for (const commandKey of commandKeys) {
-    this.cliCommandInfo(commandKey);
+      this.cliCommandInfo(commandKey);
     }
   }
 
-  cliCommandInfo(commandName)
-  {
+  cliCommandInfo(commandName) {
     const commandEntry = commands[commandName];
     console.log(commandName + ":");
     console.log(`  ${commandEntry.description}\n`);

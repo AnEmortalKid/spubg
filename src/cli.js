@@ -2,7 +2,7 @@ import chalk from "chalk";
 import clear from "clear";
 import { execute } from "./commands/executor";
 import { parseArguments } from "./args/argParser";
-import figlet  from "figlet";
+import figlet from "figlet";
 
 export default function cli(args) {
   const argsObj = args.slice(2);
@@ -11,7 +11,7 @@ export default function cli(args) {
   clear();
 
   console.log(chalk.yellow(figlet.textSync("SPUBG")));
-  
+
   const parsed = parseArguments(commandArgs);
 
   execute(command, {
