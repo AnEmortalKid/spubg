@@ -1,4 +1,4 @@
-import { styleSeasonId, styleGameMode } from "../../styling/styler";
+import { styleGameMode } from "../../styling/styler";
 import { TrendChart } from "../../chart/trendChart";
 import { dataByGameMode, supportedGameModes } from "../../stats/statsAPI";
 import BaseCommand from "../baseCommand";

@@ -24,6 +24,7 @@
     "clear": "^0.1.0",
     "d3": "^5.14.2",
     "d3-node": "^2.2.1",
+    "discord.io": "github:Woor/discord.io#gateway_v6",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "figlet": "^1.2.4",
@@ -33,6 +34,7 @@
     "minimist": "^1.2.0",
     "svg2img": "^0.6.1",
     "utf-8-validate": "^5.0.2",
+    "winston": "^3.2.1",
     "xmlserializer": "^0.6.1"
   },
   "devDependencies": {
