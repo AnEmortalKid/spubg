@@ -185,5 +185,3 @@ export async function getSeasonAndLifetimeTrend(playerName) {
   const lifetimeInfo = gatherStats(lifetime);
   return { seasonal: seasonalStats, lifetime: lifetimeInfo };
 }
-
-
