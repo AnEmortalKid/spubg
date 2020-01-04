@@ -28,11 +28,28 @@ export default class LocalStorage {
   }
 
   /**
-   * Stores the desired entity into the given collection
+   * Stores the desired entity into the given collection, overriding a value by id
    * @param {String} collection the name of the collection
    * @param {Object} entity the entity to store in that collection
    */
   store(collection, entity) {
+    if (entity.id) {
+      // if it exist replace it otherwise store it
+      if (
+        this.db
+          .get(collection)
+          .find({ id: entity.id })
+          .value()
+      ) {
+        this.db
+          .get(collection)
+          .find({ id: entity.id })
+          .assign(entity)
+          .write();
+        return;
+      }
+    }
+    // store it as is
     this.db
       .get(collection)
       .push(entity)

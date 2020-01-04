@@ -4,8 +4,13 @@ import LocalStorage from "./localStorage";
  * Defines a storage interface, technically a proxy to a real storage class
  */
 class Storage {
-  constructor(realStorage) {
-    this.realStorage = realStorage;
+  constructor(storageProvider) {
+    if (!Storage.instance) {
+      this.realStorage = storageProvider();
+      Storage.instance = this;
+    }
+
+    return Storage.instance;
   }
 
   /**
@@ -40,7 +45,6 @@ class Storage {
  * Creates a new storage
  */
 export function create() {
-  // TODO determine storage mechanism local vs remote
-  const realStorage = new LocalStorage();
-  return new Storage(realStorage);
+  // TODO determine storage provider
+  return new Storage(() => new LocalStorage());
 }

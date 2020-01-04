@@ -8,14 +8,19 @@ jest.mock("../../src/config/env", () => ({
   getLocalDBPath: () => "temp/testdb.json"
 }));
 
-var dbInstance;
-beforeAll(() => {});
+function getDB() {
+  const adapter = new FileSync(getLocalDBPath());
+  const dbInstance = low(adapter);
+  return dbInstance;
+}
+
+function resetDB(db) {
+  db.set("players", []).write();
+}
 
 beforeEach(() => {
-  // reset state
-  const adapter = new FileSync(getLocalDBPath());
-  dbInstance = low(adapter);
-  dbInstance.set("players", []).write();
+  // reset the state
+  resetDB(getDB());
 });
 
 describe("get", () => {
@@ -26,6 +31,8 @@ describe("get", () => {
         name: "playerOne"
       }
     ];
+
+    const dbInstance = getDB();
     dbInstance.set("players", players).write();
 
     const storage = new LocalStorage(getLocalDBPath());
@@ -48,7 +55,34 @@ describe("store", () => {
       name: "playerTwo"
     });
 
+    const dbInstance = getDB();
     const stored = dbInstance.get("players").value();
-    console.log(stored);
+    expect(stored).toEqual([
+      {
+        id: "account.playerTwo",
+        name: "playerTwo"
+      }
+    ]);
+  });
+
+  it("replaces values if they have an id", () => {
+    const storage = new LocalStorage(getLocalDBPath());
+    storage.store("players", {
+      id: "account.playerTwo",
+      name: "playerTwo"
+    });
+    storage.store("players", {
+      id: "account.playerTwo",
+      name: "playerTwoAgain"
+    });
+
+    const dbInstance = getDB();
+    const stored = dbInstance.get("players").value();
+    expect(stored).toEqual([
+      {
+        id: "account.playerTwo",
+        name: "playerTwoAgain"
+      }
+    ]);
   });
 });
