@@ -15,10 +15,6 @@ class LocalStorage {
     this.db.defaults({ players: [], seasons: [], history: [] }).write();
   }
 
-  instance() {
-    return this.db;
-  }
-
   /**
    * Finds the values from the desired collection which match the search options
    * @param {String} collection the name of the collection

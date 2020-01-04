@@ -28,7 +28,7 @@ export default class BaseChart {
     const typeOutputDir = baseOutputPath + "/" + this.typeDirectory + "/";
     const filePath = typeOutputDir + fileName;
 
-    fs.mkdir(typeOutputDir, { recursive: true }, err => {
+    fs.mkdirSync(typeOutputDir, { recursive: true }, err => {
       if (err) throw err;
     });
 

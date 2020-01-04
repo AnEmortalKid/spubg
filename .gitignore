@@ -14,5 +14,8 @@ spubg-db.json
 # local output
 out/
 
+# testing temps
+temp/
+
 # jest
 coverage/
