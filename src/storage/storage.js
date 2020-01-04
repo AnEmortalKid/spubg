@@ -40,6 +40,7 @@ class Storage {
  * Creates a new storage
  */
 export function create() {
-  // TODO wire mechanism for remote storage
-  return new Storage(LocalStorage);
+  // TODO determine storage mechanism local vs remote
+  const realStorage = new LocalStorage();
+  return new Storage(realStorage);
 }

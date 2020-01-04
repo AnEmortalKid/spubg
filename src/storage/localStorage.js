@@ -8,7 +8,7 @@ import { getLocalDBPath } from "../config/env";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 
-class LocalStorage {
+export default class LocalStorage {
   constructor() {
     const adapter = new FileSync(getLocalDBPath());
     this.db = low(adapter);
@@ -40,12 +40,14 @@ class LocalStorage {
   }
 
   /**
-   * Returns all the values in the desired collection
+   * Returns all the values in the desired collection, or empty if the collection does not exist
    * @param {String} collection the name of the collection
    */
   get(collection) {
-    return this.db.get(collection).value();
+    if (this.db.has(collection).value()) {
+      return this.db.get(collection).value();
+    }
+
+    return [];
   }
 }
-
-export default new LocalStorage();
