@@ -13,6 +13,8 @@ export default class HelpCommand extends BaseCommand {
     switch (commandOptions.mode) {
       case "cli":
         return this.cliExecute(args);
+      case "discord":
+        return this.discordExecute(args);
       default:
         throw new Error(`${commandOptions.mode} is not supported`);
     }
@@ -61,5 +63,33 @@ export default class HelpCommand extends BaseCommand {
       console.log("Options for this command are:\n");
       console.log(options);
     }
+  }
+
+  describeCommand(commandName) {
+    const commandEntry = commands[commandName];
+    const formatted = commandName + ":\n  " + commandEntry.description;
+    return formatted;
+  }
+
+  discordExecute(args) {
+    // TODO use args
+
+    // todo standardize header and reuse in cli
+    var commandDescriptions = "";
+
+    const commandKeys = Object.keys(commands);
+    for (const commandKey of commandKeys) {
+      commandDescriptions += this.describeCommand(commandKey);
+      commandDescriptions += "\n";
+    }
+
+    var header = "```Usage:\n";
+    header += "<command> playerName... [options]\n\n";
+    header += "Available commands are:";
+
+    var helpMessage = header + "\n" + commandDescriptions + "```";
+    return {
+      message: helpMessage
+    };
   }
 }

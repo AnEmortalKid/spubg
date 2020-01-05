@@ -6,7 +6,8 @@ var nodeExternals = require('webpack-node-externals');
 module.exports = {
   entry: {
     "spubg": "./src/index.js",
-    "spubg.bin": "./bin/spubg.bin.js"
+    "spubg.bin": "./bin/spubg.bin.js",
+    "bot": "./src/bot/discordBot.js"
   },
 
   mode: "development",

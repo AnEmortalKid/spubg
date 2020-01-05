@@ -33,7 +33,9 @@ export const commands = {
  *       secondOpt: [String]
  *     }
  *   }
+ * @returns a result if the command's execution produces something
  */
 export async function execute(commandName, commandOptions) {
-  await commands[commandName].execute(commandOptions);
+  const result = await commands[commandName].execute(commandOptions);
+  return result;
 }

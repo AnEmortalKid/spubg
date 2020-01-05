@@ -1,6 +1,8 @@
 var Discord = require("discord.io");
 var logger = require("winston");
 
+import { execute } from "../commands/executor";
+
 require("dotenv").config();
 
 // Configure logger settings
@@ -23,22 +25,36 @@ bot.on("ready", function(evt) {
 });
 
 bot.on("message", function(user, userID, channelID, message, evt) {
-  // Our bot needs to know if it will execute a command
-  // It will listen for messages that will start with `!`
-  if (message.substring(0, 1) == "!") {
-    var args = message.substring(1).split(" ");
-    var cmd = args[0];
+  // listen on $pubg
 
-    args = args.splice(1);
+  if (message.substring(0, 5) == "$pubg") {
+    // $pubg command args
+    var messageParts = message.split(" ");
+    var cmd = messageParts[1];
+    const cmdArgs = messageParts.splice(2);
+
+    // TODO argparse
+
     switch (cmd) {
       // !ping
       case "ping":
         bot.sendMessage({
           to: channelID,
-          message: "Pong!"
+          message: "hello!"
         });
         break;
-      // Just add any case commands if you want to..
+      default:
+        execute(cmd, {
+          mode: "discord",
+          args: cmdArgs
+        }).then(response => {
+          console.log(response);
+
+          response.to = channelID;
+          bot.sendMessage(response);
+        });
+
+      // TODO deal with embeds
     }
   }
 });
