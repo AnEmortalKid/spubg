@@ -30,6 +30,8 @@ class SeasonsCache {
   getAll() {
     return this.storage.get("seasons");
   }
+
+  // TODO add check for last season update to find the latest season
 }
 
 /**

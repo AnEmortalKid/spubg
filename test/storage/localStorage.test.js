@@ -86,3 +86,34 @@ describe("store", () => {
     ]);
   });
 });
+
+describe("find", () => {
+  it("returns null if the collection is empty", () => {
+    const storage = new LocalStorage(getLocalDBPath());
+    const stored = storage.find("players", {});
+
+    expect(stored).toBeNull();
+  });
+
+  it("searches the collection based on search options", () => {
+    const players = [
+      {
+        id: "account.playerOne",
+        name: "playerOne"
+      },
+      {
+        id: "account.playerTwo",
+        name: "playerTwo"
+      }
+    ];
+
+    const dbInstance = getDB();
+    dbInstance.set("players", players).write();
+
+    const storage = new LocalStorage(getLocalDBPath());
+
+    const stored = storage.find("players", { id: "account.playerOne" });
+
+    expect(stored).toEqual({ id: "account.playerOne", name: "playerOne" });
+  });
+});

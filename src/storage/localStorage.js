@@ -16,15 +16,20 @@ export default class LocalStorage {
   }
 
   /**
-   * Finds the values from the desired collection which match the search options
+   * Finds the first value from the desired collection which matches the search options
    * @param {String} collection the name of the collection
    * @param {Object} searchOptions find filter with attributes and values to search for
+   * @returns null if nothing matched the search options, otherwise the first element found
    */
   find(collection, searchOptions) {
-    return this.db
+    const found = this.db
       .get(collection)
       .find(searchOptions)
       .value();
+    if (found === undefined) {
+      return null;
+    }
+    return found;
   }
 
   /**
@@ -59,6 +64,7 @@ export default class LocalStorage {
   /**
    * Returns all the values in the desired collection, or empty if the collection does not exist
    * @param {String} collection the name of the collection
+   * @returns the collection values, otherwise empty
    */
   get(collection) {
     if (this.db.has(collection).value()) {
