@@ -9,18 +9,6 @@ import WinRateCompareCommand from "./comparison/winRateCompare";
 import Top10TrendCommand from "./trends/top10Trend";
 import HelpCommand from "./help";
 
-export const commands = {
-  help: new HelpCommand(),
-  "kd-trend": new KDTrendCommand(),
-  "winRate-trend": new WinRateTrendCommand(),
-  "adr-trend": new ADRTrendCommand(),
-  "top10-trend": new Top10TrendCommand(),
-  "all-trends": new AllTrendsCommand(),
-  "kd-compare": new KDCompareCommand(),
-  "adr-compare": new ADRCompareCommand(),
-  "winRate-compare": new WinRateCompareCommand()
-};
-
 /**
  * Executes the desired command in a convenient fashion based on the presentation mode
  * @param {String} commandName the name of the command
@@ -36,6 +24,22 @@ export const commands = {
  * @returns a result if the command's execution produces something
  */
 export async function execute(commandName, commandOptions) {
+  const commands = this.getCommands();
   const result = await commands[commandName].execute(commandOptions);
   return result;
+}
+
+export function getCommands() {
+  // use this instead of a const so HelpCommand isn't circularly referential when testing
+  return {
+    help: new HelpCommand(),
+    "kd-trend": new KDTrendCommand(),
+    "winRate-trend": new WinRateTrendCommand(),
+    "adr-trend": new ADRTrendCommand(),
+    "top10-trend": new Top10TrendCommand(),
+    "all-trends": new AllTrendsCommand(),
+    "kd-compare": new KDCompareCommand(),
+    "adr-compare": new ADRCompareCommand(),
+    "winRate-compare": new WinRateCompareCommand()
+  };
 }

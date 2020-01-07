@@ -1,8 +1,8 @@
 import BaseCommand from "./baseCommand";
-import { commands } from "./executor";
+import { getCommands } from "./executor";
 
 export default class HelpCommand extends BaseCommand {
-  constructor(description) {
+  constructor() {
     super(
       "displays this message. Get additional help by doing help <command>."
     );
@@ -31,7 +31,7 @@ export default class HelpCommand extends BaseCommand {
   getMainHelpDisplay() {
     var commandDescriptions = "";
 
-    const commandKeys = Object.keys(commands);
+    const commandKeys = Object.keys(getCommands());
     for (const commandKey of commandKeys) {
       commandDescriptions += this.describeCommand(commandKey);
       commandDescriptions += "\n";
@@ -46,7 +46,7 @@ export default class HelpCommand extends BaseCommand {
   }
 
   getCommandHelpDisplay(commandName) {
-    const commandEntry = commands[commandName];
+    const commandEntry = getCommands()[commandName];
     if (!commandEntry) {
       return (
         `${commandName} is not a valid command.\n` + this.getMainHelpDisplay()
@@ -63,7 +63,7 @@ export default class HelpCommand extends BaseCommand {
   }
 
   describeCommand(commandName) {
-    const commandEntry = commands[commandName];
+    const commandEntry = getCommands()[commandName];
     const formatted = commandName + ":\n  " + commandEntry.description;
     return formatted;
   }
