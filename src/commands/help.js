@@ -22,46 +22,43 @@ export default class HelpCommand extends BaseCommand {
 
   cliExecute(args) {
     if (args[0]) {
-      this.cliExplainCommand(args[0]);
+      console.log(this.getCommandHelpDisplay(args[0]));
     } else {
-      this.cliListCommands();
+      console.log(this.getMainHelpDisplay());
     }
   }
 
-  cliListCommands() {
-    console.log("Usage:");
-    console.log("<command> playerName... [options]\n");
+  getMainHelpDisplay() {
+    var commandDescriptions = "";
 
-    console.log("Available commands are:");
     const commandKeys = Object.keys(commands);
-
     for (const commandKey of commandKeys) {
-      this.cliCommandInfo(commandKey);
+      commandDescriptions += this.describeCommand(commandKey);
+      commandDescriptions += "\n";
     }
+
+    var header = "Usage:\n";
+    header += "<command> playerName... [options]\n\n";
+    header += "Available commands are:";
+
+    var helpMessage = header + "\n" + commandDescriptions;
+    return helpMessage;
   }
 
-  cliCommandInfo(commandName) {
-    const commandEntry = commands[commandName];
-    console.log(commandName + ":");
-    console.log(`  ${commandEntry.description}\n`);
-  }
-
-  cliExplainCommand(commandName) {
+  getCommandHelpDisplay(commandName) {
     const commandEntry = commands[commandName];
     if (!commandEntry) {
-      console.log(`${commandName} is not a valid command.`);
-      this.cliListCommands();
-      return;
+      return (
+        `${commandName} is not a valid command.\n` + this.getMainHelpDisplay()
+      );
     }
 
-    this.cliCommandInfo(commandName);
-
+    const commandInfo = this.describeCommand(commandName);
     const options = commandEntry.commandOptions();
     if (options === "") {
-      console.log("This command has no options.");
+      return commandInfo + "\n\nThis command has no options.";
     } else {
-      console.log("Options for this command are:\n");
-      console.log(options);
+      return commandInfo + "\n\nOptions for this command are:\n" + options;
     }
   }
 
@@ -72,24 +69,13 @@ export default class HelpCommand extends BaseCommand {
   }
 
   discordExecute(args) {
-    // TODO use args
-
-    // todo standardize header and reuse in cli
-    var commandDescriptions = "";
-
-    const commandKeys = Object.keys(commands);
-    for (const commandKey of commandKeys) {
-      commandDescriptions += this.describeCommand(commandKey);
-      commandDescriptions += "\n";
+    var messageContent;
+    if (args[0]) {
+      messageContent = this.getCommandHelpDisplay(args[0]);
+    } else {
+      messageContent = this.getMainHelpDisplay();
     }
 
-    var header = "```Usage:\n";
-    header += "<command> playerName... [options]\n\n";
-    header += "Available commands are:";
-
-    var helpMessage = header + "\n" + commandDescriptions + "```";
-    return {
-      message: helpMessage
-    };
+    return { message: "```" + messageContent + "```" };
   }
 }
