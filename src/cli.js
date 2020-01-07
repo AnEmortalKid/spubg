@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import clear from "clear";
-import { execute } from "./commands/executor";
+import { execute, InteractionMode } from "./commands/executor";
 import { parseArguments } from "./args/argParser";
 import figlet from "figlet";
 
@@ -17,6 +17,6 @@ export default function cli(args) {
   execute(command, {
     args: parsed.args,
     options: parsed.options,
-    mode: "cli"
+    mode: InteractionMode.CLI
   });
 }

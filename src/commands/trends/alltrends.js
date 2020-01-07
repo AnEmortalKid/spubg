@@ -3,6 +3,7 @@ import {
   supportedGameModes
 } from "../../stats/statsAPI";
 import BaseTrendCommand from "./baseTrendCommand";
+import { InteractionMode } from "../executor";
 
 export default class AllTrendsCommand extends BaseTrendCommand {
   constructor() {
@@ -38,7 +39,7 @@ export default class AllTrendsCommand extends BaseTrendCommand {
     console.log(`all trends: ${args}`);
 
     switch (commandOptions.mode) {
-      case "cli":
+      case InteractionMode.CLI:
         return this.cliExecute(args[0], options);
       default:
         throw new Error(`${commandOptions.mode} is not supported`);

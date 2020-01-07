@@ -1,5 +1,5 @@
 import BaseCommand from "./baseCommand";
-import { getCommands } from "./executor";
+import { getCommands, InteractionMode } from "./executor";
 
 export default class HelpCommand extends BaseCommand {
   constructor() {
@@ -11,9 +11,9 @@ export default class HelpCommand extends BaseCommand {
   execute(commandOptions) {
     const args = commandOptions.args;
     switch (commandOptions.mode) {
-      case "cli":
+      case InteractionMode.CLI:
         return this.cliExecute(args);
-      case "discord":
+      case InteractionMode.DISCORD:
         return this.discordExecute(args);
       default:
         throw new Error(`${commandOptions.mode} is not supported`);

@@ -3,6 +3,7 @@ import {
   getSeasonAndLifetimeTrend,
   supportedGameModes
 } from "../../stats/statsAPI";
+import { InteractionMode } from "../executor";
 
 export default class SingleTrendCommand extends BaseTrendCommand {
   constructor(description, attributeName, filePrefix, subtitlePrefix) {
@@ -21,7 +22,7 @@ export default class SingleTrendCommand extends BaseTrendCommand {
     console.log(`${this._trendOption.attributeName} trend: ${args}`);
 
     switch (commandOptions.mode) {
-      case "cli":
+      case InteractionMode.CLI:
         return this.cliExecute(args[0], options);
       default:
         throw new Error(`${commandOptions.mode} is not supported`);

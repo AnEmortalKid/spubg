@@ -1,5 +1,5 @@
 import HelpCommand from "../../src/commands/help";
-import { getCommands } from "../../src/commands/executor";
+import { getCommands, InteractionMode } from "../../src/commands/executor";
 
 const command = new HelpCommand();
 
@@ -15,7 +15,9 @@ jest.mock("../../src/commands/executor", () => {
     }
   };
 
+  const original = require.requireActual("../../src/commands/executor");
   return {
+    ...original, //Pass down all the exported objects
     getCommands: jest.fn(() => fakeCommands)
   };
 });
@@ -35,25 +37,25 @@ afterEach(() => {
  * Validates that the help message captured contains all the expected parts
  */
 function validateHelpMessage(helpMesage) {
-    // should display a consistent header
-    const expectedHeaderParts = [
-      "Usage:\n",
-      "<command> playerName... [options]\n\n",
-      "Available commands are:"
-    ];
-  
-    for (const headerPart of expectedHeaderParts) {
-      expect(helpMesage).toEqual(expect.stringContaining(headerPart));
-    }
-  
-    // assert commands are listed with their description
-    expect(helpMesage).toEqual(expect.stringContaining("bar:"));
-    expect(helpMesage).toEqual(
-      expect.stringContaining("the description for the bar command")
-    );
-    expect(helpMesage).toEqual(expect.stringContaining("optiony:"));
-    expect(helpMesage).toEqual(expect.stringContaining("a command with options"));
+  // should display a consistent header
+  const expectedHeaderParts = [
+    "Usage:\n",
+    "<command> playerName... [options]\n\n",
+    "Available commands are:"
+  ];
+
+  for (const headerPart of expectedHeaderParts) {
+    expect(helpMesage).toEqual(expect.stringContaining(headerPart));
   }
+
+  // assert commands are listed with their description
+  expect(helpMesage).toEqual(expect.stringContaining("bar:"));
+  expect(helpMesage).toEqual(
+    expect.stringContaining("the description for the bar command")
+  );
+  expect(helpMesage).toEqual(expect.stringContaining("optiony:"));
+  expect(helpMesage).toEqual(expect.stringContaining("a command with options"));
+}
 
 describe("unsupported mode", () => {
   it("throws an error when a mode is not supported", () => {
@@ -69,19 +71,21 @@ describe("unsupported mode", () => {
 });
 
 describe("command properties", () => {
-    it("returns the expected description", () => {
-        expect(command.description).toBe("displays this message. Get additional help by doing help <command>.");
-    });
+  it("returns the expected description", () => {
+    expect(command.description).toBe(
+      "displays this message. Get additional help by doing help <command>."
+    );
+  });
 
-    it("has no options", () => {
-        expect(command.commandOptions()).toBeNull();
-    });
+  it("has no options", () => {
+    expect(command.commandOptions()).toBeNull();
+  });
 });
 
 describe("cliMode", () => {
   it("lists commands when no args are given", () => {
     const cmdOptions = {
-      mode: "cli",
+      mode: InteractionMode.CLI,
       args: []
     };
 
@@ -92,7 +96,7 @@ describe("cliMode", () => {
 
   it("indicates that the command is invalid when help for an unkown command is requested", () => {
     const cmdOptions = {
-      mode: "cli",
+      mode: InteractionMode.CLI,
       args: ["foo"]
     };
 
@@ -107,7 +111,7 @@ describe("cliMode", () => {
 
   it("indicates that a command has no options when help is requested for the command", () => {
     const cmdOptions = {
-      mode: "cli",
+      mode: InteractionMode.CLI,
       args: ["bar"]
     };
 
@@ -120,7 +124,7 @@ describe("cliMode", () => {
 
   it("indicates options when help is requested for a command with options", () => {
     const cmdOptions = {
-      mode: "cli",
+      mode: InteractionMode.CLI,
       args: ["optiony"]
     };
 

@@ -9,6 +9,11 @@ import WinRateCompareCommand from "./comparison/winRateCompare";
 import Top10TrendCommand from "./trends/top10Trend";
 import HelpCommand from "./help";
 
+export const InteractionMode = {
+  CLI: "cli",
+  DISCORD: "discord"
+};
+
 /**
  * Executes the desired command in a convenient fashion based on the presentation mode
  * @param {String} commandName the name of the command

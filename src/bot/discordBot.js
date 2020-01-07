@@ -1,7 +1,7 @@
 var Discord = require("discord.io");
 var logger = require("winston");
 
-import { execute } from "../commands/executor";
+import { execute, InteractionMode } from "../commands/executor";
 
 require("dotenv").config();
 
@@ -45,7 +45,7 @@ bot.on("message", function(user, userID, channelID, message, evt) {
         break;
       default:
         execute(cmd, {
-          mode: "discord",
+          mode: InteractionMode.DISCORD,
           args: cmdArgs
         }).then(response => {
           console.log(response);
