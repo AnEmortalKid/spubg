@@ -31,6 +31,30 @@ afterEach(() => {
   console["log"].mockRestore();
 });
 
+/**
+ * Validates that the help message captured contains all the expected parts
+ */
+function validateHelpMessage(helpMesage) {
+    // should display a consistent header
+    const expectedHeaderParts = [
+      "Usage:\n",
+      "<command> playerName... [options]\n\n",
+      "Available commands are:"
+    ];
+  
+    for (const headerPart of expectedHeaderParts) {
+      expect(helpMesage).toEqual(expect.stringContaining(headerPart));
+    }
+  
+    // assert commands are listed with their description
+    expect(helpMesage).toEqual(expect.stringContaining("bar:"));
+    expect(helpMesage).toEqual(
+      expect.stringContaining("the description for the bar command")
+    );
+    expect(helpMesage).toEqual(expect.stringContaining("optiony:"));
+    expect(helpMesage).toEqual(expect.stringContaining("a command with options"));
+  }
+
 describe("unsupported mode", () => {
   it("throws an error when a mode is not supported", () => {
     const cmdOptions = {
@@ -44,29 +68,15 @@ describe("unsupported mode", () => {
   });
 });
 
-/**
- * Validates that the help message captured contains all the expected parts
- */
-function validateHelpMessage(helpMesage) {
-  // should display a consistent header
-  const expectedHeaderParts = [
-    "Usage:\n",
-    "<command> playerName... [options]\n\n",
-    "Available commands are:"
-  ];
+describe("command properties", () => {
+    it("returns the expected description", () => {
+        expect(command.description).toBe("displays this message. Get additional help by doing help <command>.");
+    });
 
-  for (const headerPart of expectedHeaderParts) {
-    expect(helpMesage).toEqual(expect.stringContaining(headerPart));
-  }
-
-  // assert commands are listed with their description
-  expect(helpMesage).toEqual(expect.stringContaining("bar:"));
-  expect(helpMesage).toEqual(
-    expect.stringContaining("the description for the bar command")
-  );
-  expect(helpMesage).toEqual(expect.stringContaining("optiony:"));
-  expect(helpMesage).toEqual(expect.stringContaining("a command with options"));
-}
+    it("has no options", () => {
+        expect(command.commandOptions()).toBeNull();
+    });
+});
 
 describe("cliMode", () => {
   it("lists commands when no args are given", () => {

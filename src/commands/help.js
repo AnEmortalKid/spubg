@@ -55,7 +55,7 @@ export default class HelpCommand extends BaseCommand {
 
     const commandInfo = this.describeCommand(commandName);
     const options = commandEntry.commandOptions();
-    if (options === "") {
+    if (!options) {
       return commandInfo + "\n\nThis command has no options.";
     } else {
       return commandInfo + "\n\nOptions for this command are:\n" + options;

@@ -24,7 +24,7 @@ import HelpCommand from "./help";
  * @returns a result if the command's execution produces something
  */
 export async function execute(commandName, commandOptions) {
-  const commands = this.getCommands();
+  const commands = getCommands();
   const result = await commands[commandName].execute(commandOptions);
   return result;
 }
