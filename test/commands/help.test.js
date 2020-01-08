@@ -136,3 +136,18 @@ describe("cliMode", () => {
     expect(outputData).toEqual(expect.stringContaining("-a the all option"));
   });
 });
+
+
+describe("discord mode", () => {
+  it("lists commands when no args are given", () => {
+    const cmdOptions = {
+      mode: InteractionMode.DISCORD,
+      args: []
+    };
+
+    const response = command.execute(cmdOptions);
+
+    validateHelpMessage(response.message);
+  });
+
+});
