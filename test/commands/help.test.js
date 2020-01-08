@@ -57,6 +57,15 @@ function validateHelpMessage(helpMesage) {
   expect(helpMesage).toEqual(expect.stringContaining("a command with options"));
 }
 
+function validateIsInACodeBlock(message) {
+  // should also surround the message in backticks
+  const startTicks = message.substring(0, 3);
+  const endTicks = message.substring(message.length - 3);
+
+  expect(startTicks).toEqual("```");
+  expect(endTicks).toEqual("```");
+}
+
 describe("unsupported mode", () => {
   it("throws an error when a mode is not supported", () => {
     const cmdOptions = {
@@ -137,7 +146,6 @@ describe("cliMode", () => {
   });
 });
 
-
 describe("discord mode", () => {
   it("lists commands when no args are given", () => {
     const cmdOptions = {
@@ -148,6 +156,56 @@ describe("discord mode", () => {
     const response = command.execute(cmdOptions);
 
     validateHelpMessage(response.message);
+    validateIsInACodeBlock(response.message);
   });
 
+  it("indicates that the command is invalid when help for an unkown command is requested", () => {
+    const cmdOptions = {
+      mode: InteractionMode.DISCORD,
+      args: ["foo"]
+    };
+
+    const response = command.execute(cmdOptions);
+
+    expect(response.message).toEqual(
+      expect.stringContaining("foo is not a valid command.\n")
+    );
+    // should list the generic help message as well
+    validateHelpMessage(response.message);
+
+    validateIsInACodeBlock(response.message);
+  });
+
+  it("indicates that a command has no options when help is requested for the command", () => {
+    const cmdOptions = {
+      mode: InteractionMode.DISCORD,
+      args: ["bar"]
+    };
+
+    const response = command.execute(cmdOptions);
+
+    expect(response.message).toEqual(
+      expect.stringContaining("This command has no options.")
+    );
+
+    validateIsInACodeBlock(response.message);
+  });
+
+  it("indicates options when help is requested for a command with options", () => {
+    const cmdOptions = {
+      mode: InteractionMode.DISCORD,
+      args: ["optiony"]
+    };
+
+    const response = command.execute(cmdOptions);
+
+    expect(response.message).toEqual(
+      expect.stringContaining("Options for this command are:\n")
+    );
+    expect(response.message).toEqual(
+      expect.stringContaining("-a the all option")
+    );
+
+    validateIsInACodeBlock(response.message);
+  });
 });
