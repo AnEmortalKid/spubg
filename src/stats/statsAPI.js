@@ -29,6 +29,8 @@ export function gatherStats(seasonData) {
       const kills = statEntry.kills;
       const kdCalc = kills / deaths;
       statsForMode.kd = kdCalc.toFixed(2);
+    } else {
+      statsForMode.kd = statEntry.kills.toFixed(2);
     }
 
     // compute win rate
@@ -93,8 +95,6 @@ export function dataByGameMode(gameModes, seasonalEntries, attributeName) {
 
   return stats;
 }
-
-// TODO setup DI/Class for this
 
 /**
  * Gathers data across seasons returning an array in the form:
