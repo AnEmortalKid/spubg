@@ -33,7 +33,7 @@ export async function execute(commandName, commandOptions) {
 export function getCommands() {
   // use this instead of a const so HelpCommand isn't circularly referential when testing
   return {
-    // todo refactor to make help not inherit?
+    // todo refactor to make help not inherit/circular
     help: new HelpCommand(),
     "kd-trend": new KDTrendCommand(),
     "winRate-trend": new WinRateTrendCommand(),
