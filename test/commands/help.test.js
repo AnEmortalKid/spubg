@@ -1,5 +1,7 @@
 import HelpCommand from "../../src/commands/help";
-import { getCommands, InteractionMode } from "../../src/commands/executor";
+import { getCommands } from "../../src/commands/executor";
+
+import { InteractionMode } from "../../src/commands/interactionModes";
 
 const command = new HelpCommand();
 

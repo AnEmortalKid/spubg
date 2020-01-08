@@ -1,7 +1,9 @@
 import BaseCommand from "./baseCommand";
-import { getCommands, InteractionMode } from "./executor";
+import { getCommands } from "./executor";
+import { InteractionMode } from "./interactionModes";
 
 export default class HelpCommand extends BaseCommand {
+  // todo refactor to take a commands promise?
   constructor() {
     super(
       "displays this message. Get additional help by doing help <command>."

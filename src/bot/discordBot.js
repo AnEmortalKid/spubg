@@ -1,7 +1,8 @@
 var Discord = require("discord.io");
 var logger = require("winston");
 
-import { execute, InteractionMode } from "../commands/executor";
+import { execute } from "../commands/executor";
+import { InteractionMode } from "../commands/interactionModes";
 
 require("dotenv").config();
 

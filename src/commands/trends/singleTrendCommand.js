@@ -3,7 +3,7 @@ import {
   getSeasonAndLifetimeTrend,
   supportedGameModes
 } from "../../stats/statsAPI";
-import { InteractionMode } from "../executor";
+import { InteractionMode } from "../interactionModes";
 
 export default class SingleTrendCommand extends BaseTrendCommand {
   constructor(description, attributeName, filePrefix, subtitlePrefix) {

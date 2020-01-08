@@ -1,8 +1,10 @@
 import chalk from "chalk";
 import clear from "clear";
-import { execute, InteractionMode } from "./commands/executor";
+import { execute } from "./commands/executor";
 import { parseArguments } from "./args/argParser";
 import figlet from "figlet";
+
+import { InteractionMode } from "./commands/interactionModes";
 
 export default function cli(args) {
   const argsObj = args.slice(2);

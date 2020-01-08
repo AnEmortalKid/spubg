@@ -1,18 +1,14 @@
+import AllTrendsCommand from "./trends/alltrends";
+import ADRTrendCommand from "./trends/adrtrend";
 import KDTrendCommand from "./trends/kdtrend";
 import WinRateTrendCommand from "./trends/wrtrend";
-import ADRTrendCommand from "./trends/adrtrend";
-import AllTrendsCommand from "./trends/alltrends";
 
-import KDCompareCommand from "./comparison/kdCompare";
 import ADRCompareCommand from "./comparison/adrCompare";
+import KDCompareCommand from "./comparison/kdCompare";
 import WinRateCompareCommand from "./comparison/winRateCompare";
 import Top10TrendCommand from "./trends/top10Trend";
-import HelpCommand from "./help";
 
-export const InteractionMode = {
-  CLI: "cli",
-  DISCORD: "discord"
-};
+import HelpCommand from "./help";
 
 /**
  * Executes the desired command in a convenient fashion based on the presentation mode
@@ -37,6 +33,7 @@ export async function execute(commandName, commandOptions) {
 export function getCommands() {
   // use this instead of a const so HelpCommand isn't circularly referential when testing
   return {
+    // todo refactor to make help not inherit?
     help: new HelpCommand(),
     "kd-trend": new KDTrendCommand(),
     "winRate-trend": new WinRateTrendCommand(),

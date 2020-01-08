@@ -3,7 +3,7 @@ import {
   supportedGameModes
 } from "../../stats/statsAPI";
 import BaseTrendCommand from "./baseTrendCommand";
-import { InteractionMode } from "../executor";
+import { InteractionMode } from "../interactionModes";
 
 export default class AllTrendsCommand extends BaseTrendCommand {
   constructor() {

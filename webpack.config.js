@@ -1,6 +1,7 @@
 const path = require("path");
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CircularDependencyPlugin = require('circular-dependency-plugin')
 var nodeExternals = require('webpack-node-externals');
 
 module.exports = {
@@ -33,6 +34,15 @@ module.exports = {
       banner: '#!/usr/bin/env node',
       raw: true,
       include: /^spubg.bin/
+    }),
+
+    new CircularDependencyPlugin({
+      // exclude detection of files based on a RegExp
+      exclude: /a\.js|node_modules/,
+      // add errors to webpack instead of warnings
+      failOnError: false,
+      // set the current working directory for displaying module paths
+      cwd: process.cwd(),
     })
   ],
   externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
