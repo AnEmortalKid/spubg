@@ -1,9 +1,10 @@
+import { getLocalOutputDirectory } from "../config/env";
+
 var fs = require("fs");
 var xmlserializer = require("xmlserializer");
 var svg2img = require("svg2img");
 
-// TODO pull from env
-const baseOutputPath = "out/charts";
+const baseOutputPath = getLocalOutputDirectory() + "charts";
 
 export default class BaseChart {
   constructor(typeDirectory) {
@@ -28,6 +29,7 @@ export default class BaseChart {
     const typeOutputDir = baseOutputPath + "/" + this.typeDirectory + "/";
     const filePath = typeOutputDir + fileName;
 
+    console.log(filePath);
     fs.mkdirSync(typeOutputDir, { recursive: true }, err => {
       if (err) throw err;
     });

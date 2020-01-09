@@ -9,3 +9,7 @@ export function getLocalDBPath() {
     ? process.env.LOCAL_DB_PATH
     : "spubg-db.json";
 }
+
+export function getLocalOutputDirectory() {
+  return process.env.LOCAL_OUTPUT_PATH ? process.env.LOCAL_OUTPUT_PATH : "out/";
+}

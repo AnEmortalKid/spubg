@@ -4,7 +4,7 @@ import { InteractionMode } from "./interactionModes";
 export default class HelpCommand extends BaseCommand {
   constructor(commands) {
     super(
-      "displays this message. Get additional help by doing help <command>."
+      "Displays this message. Get additional help by doing help <command>."
     );
     this.commands = {
       // add self on top

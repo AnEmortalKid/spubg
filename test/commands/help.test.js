@@ -82,7 +82,7 @@ describe("unsupported mode", () => {
 describe("command properties", () => {
   it("returns the expected description", () => {
     expect(command.description).toBe(
-      "displays this message. Get additional help by doing help <command>."
+      "Displays this message. Get additional help by doing help <command>."
     );
   });
 
