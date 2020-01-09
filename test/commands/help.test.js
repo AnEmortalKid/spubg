@@ -44,7 +44,7 @@ function validateHelpMessage(helpMesage) {
   // should include the help message
   expect(helpMesage).toEqual(
     expect.stringContaining(
-      "help:\n  displays this message. Get additional help by doing help <command>."
+      "help:\n  Displays this message. Get additional help by doing help <command>."
     )
   );
 

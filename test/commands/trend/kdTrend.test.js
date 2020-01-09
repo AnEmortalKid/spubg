@@ -1,5 +1,7 @@
 import KDTrendCommand from "../../../src/commands/trends/kdtrend";
 import { InteractionMode } from "../../../src/commands/interactionModes";
+import fs from "fs";
+import path from "path";
 
 import {
   getSeasonAndLifetimeTrend,
@@ -18,6 +20,14 @@ jest.mock("../../../src/stats/statsAPI", () => {
 });
 
 const command = new KDTrendCommand();
+
+function checkFileExists(filepath) {
+  return new Promise((resolve, reject) => {
+    fs.access(filepath, fs.F_OK, error => {
+      resolve(!error);
+    });
+  });
+}
 
 describe("unsupported mode", () => {
   it("throws an error when a mode is not supported", () => {
@@ -56,6 +66,7 @@ describe("command properties", () => {
   });
 });
 
+// TODO add filtering option
 describe("cliMode", () => {
   it("executes for all modes", async () => {
     const seasonAndLifetimeData = {
@@ -101,12 +112,52 @@ describe("cliMode", () => {
 
     const cmdOptions = {
       mode: InteractionMode.CLI,
-      args: ["playerOne"],
+      args: ["kd_playerOne"],
       options: {}
     };
 
-    await command.execute(cmdOptions);
+    await new Promise(r => {
+      command.execute(cmdOptions);
+      // wait a little bit to ensure files are done writing
+      setTimeout(r, 50);
+    });
 
-    // assert some stuff on files? at least created?
+    // pattern playerName-attribute-mode
+
+    checkFileExists(
+      path.resolve(
+        "temp/",
+        "charts/",
+        "trend/",
+        "kd_playerOne-KD-game-mode-one.png"
+      )
+    ).then(value => expect(value).toBe(true));
+
+    checkFileExists(
+      path.resolve(
+        "temp/",
+        "charts/",
+        "trend/",
+        "kd_playerOne-KD-game-mode-one.svg"
+      )
+    ).then(value => expect(value).toBe(true));
+
+    checkFileExists(
+      path.resolve(
+        "temp/",
+        "charts/",
+        "trend/",
+        "kd_playerOne-KD-game-mode-two.png"
+      )
+    ).then(value => expect(value).toBe(true));
+
+    checkFileExists(
+      path.resolve(
+        "temp/",
+        "charts/",
+        "trend/",
+        "kd_playerOne-KD-game-mode-two.png"
+      )
+    ).then(value => expect(value).toBe(true));
   });
 });

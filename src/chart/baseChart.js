@@ -29,7 +29,6 @@ export default class BaseChart {
     const typeOutputDir = baseOutputPath + "/" + this.typeDirectory + "/";
     const filePath = typeOutputDir + fileName;
 
-    console.log(filePath);
     fs.mkdirSync(typeOutputDir, { recursive: true }, err => {
       if (err) throw err;
     });
@@ -43,5 +42,7 @@ export default class BaseChart {
         console.log(error);
       }
     });
+
+    console.log(`Wrote to ${filePath}`);
   }
 }
