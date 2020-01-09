@@ -1,28 +1,19 @@
 import HelpCommand from "../../src/commands/help";
-import { getCommands } from "../../src/commands/executor";
 
 import { InteractionMode } from "../../src/commands/interactionModes";
 
-const command = new HelpCommand();
+const fakeCommands = {
+  bar: {
+    description: "the description for the bar command",
+    commandOptions: () => ""
+  },
+  optiony: {
+    description: "a command with options",
+    commandOptions: () => "-a the all option"
+  }
+};
 
-jest.mock("../../src/commands/executor", () => {
-  const fakeCommands = {
-    bar: {
-      description: "the description for the bar command",
-      commandOptions: () => ""
-    },
-    optiony: {
-      description: "a command with options",
-      commandOptions: () => "-a the all option"
-    }
-  };
-
-  const original = require.requireActual("../../src/commands/executor");
-  return {
-    ...original, //Pass down all the exported objects
-    getCommands: jest.fn(() => fakeCommands)
-  };
-});
+const command = new HelpCommand(fakeCommands);
 
 var outputData = "";
 
@@ -49,6 +40,13 @@ function validateHelpMessage(helpMesage) {
   for (const headerPart of expectedHeaderParts) {
     expect(helpMesage).toEqual(expect.stringContaining(headerPart));
   }
+
+  // should include the help message
+  expect(helpMesage).toEqual(
+    expect.stringContaining(
+      "help:\n  displays this message. Get additional help by doing help <command>."
+    )
+  );
 
   // assert commands are listed with their description
   expect(helpMesage).toEqual(expect.stringContaining("bar:"));

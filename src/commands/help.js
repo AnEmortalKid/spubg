@@ -1,13 +1,16 @@
 import BaseCommand from "./baseCommand";
-import { getCommands } from "./executor";
 import { InteractionMode } from "./interactionModes";
 
 export default class HelpCommand extends BaseCommand {
-  // todo refactor to take a commands promise?
-  constructor() {
+  constructor(commands) {
     super(
       "displays this message. Get additional help by doing help <command>."
     );
+    this.commands = {
+      // add self on top
+      help: this,
+      ...commands
+    };
   }
 
   execute(commandOptions) {
@@ -33,7 +36,7 @@ export default class HelpCommand extends BaseCommand {
   getMainHelpDisplay() {
     var commandDescriptions = "";
 
-    const commandKeys = Object.keys(getCommands());
+    const commandKeys = Object.keys(this.commands);
     for (const commandKey of commandKeys) {
       commandDescriptions += this.describeCommand(commandKey);
       commandDescriptions += "\n";
@@ -48,7 +51,7 @@ export default class HelpCommand extends BaseCommand {
   }
 
   getCommandHelpDisplay(commandName) {
-    const commandEntry = getCommands()[commandName];
+    const commandEntry = this.commands[commandName];
     if (!commandEntry) {
       return (
         `${commandName} is not a valid command.\n` + this.getMainHelpDisplay()
@@ -65,7 +68,7 @@ export default class HelpCommand extends BaseCommand {
   }
 
   describeCommand(commandName) {
-    const commandEntry = getCommands()[commandName];
+    const commandEntry = this.commands[commandName];
     const formatted = commandName + ":\n  " + commandEntry.description;
     return formatted;
   }

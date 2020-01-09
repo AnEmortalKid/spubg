@@ -10,6 +10,17 @@ import Top10TrendCommand from "./trends/top10Trend";
 
 import HelpCommand from "./help";
 
+const commands = {
+  "kd-trend": new KDTrendCommand(),
+  "winRate-trend": new WinRateTrendCommand(),
+  "adr-trend": new ADRTrendCommand(),
+  "top10-trend": new Top10TrendCommand(),
+  "all-trends": new AllTrendsCommand(),
+  "kd-compare": new KDCompareCommand(),
+  "adr-compare": new ADRCompareCommand(),
+  "winRate-compare": new WinRateCompareCommand()
+};
+
 /**
  * Executes the desired command in a convenient fashion based on the presentation mode
  * @param {String} commandName the name of the command
@@ -25,23 +36,10 @@ import HelpCommand from "./help";
  * @returns a result if the command's execution produces something
  */
 export async function execute(commandName, commandOptions) {
-  const commands = getCommands();
+  if (commandName === "help") {
+    return new HelpCommand(commands).execute(commandOptions);
+  }
+
   const result = await commands[commandName].execute(commandOptions);
   return result;
-}
-
-export function getCommands() {
-  // use this instead of a const so HelpCommand isn't circularly referential when testing
-  return {
-    // todo refactor to make help not inherit/circular
-    help: new HelpCommand(),
-    "kd-trend": new KDTrendCommand(),
-    "winRate-trend": new WinRateTrendCommand(),
-    "adr-trend": new ADRTrendCommand(),
-    "top10-trend": new Top10TrendCommand(),
-    "all-trends": new AllTrendsCommand(),
-    "kd-compare": new KDCompareCommand(),
-    "adr-compare": new ADRCompareCommand(),
-    "winRate-compare": new WinRateCompareCommand()
-  };
 }
