@@ -32,28 +32,7 @@ When comparing against others, only plot lines display the difference.
 
 ## Interact
 
-### CLI
+There are multiple ways to interact with the underlying software, visit each document for more details:
 
-```bash
-Usage:
-
-command <playerName>
-
-Available commands are:
-
-kd-trend:       charts Kill/Death Rate by season
-
-winRate-trend:  charts Win Rate by season
-
-adr-trend:      charts Average Damage Rate by season
-
-all-trends:     gathers all trend charts for a player
-
-```
-
-_E.G_
-```bash
-./dist/spubg.bin.js kd-trend Kaymind
-```
-
-### Discord Bot
+* [cli](./docs/cli.md)
+* [discord bot](./docs/discord.md)
