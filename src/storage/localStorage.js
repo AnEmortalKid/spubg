@@ -12,7 +12,9 @@ export default class LocalStorage {
   constructor() {
     const adapter = new FileSync(getLocalDBPath());
     this.db = low(adapter);
-    this.db.defaults({ players: [], seasons: [], history: [] }).write();
+    this.db
+      .defaults({ players: [], seasons: [], history: [], seasonsUpdatedAt: {} })
+      .write();
   }
 
   /**
@@ -72,5 +74,36 @@ export default class LocalStorage {
     }
 
     return [];
+  }
+
+  /**
+   * Stores the value and associates it with the given name. Replacing it if something already existed for that name.
+   * @param {String} name the name of the entry
+   * @param {Object} value the value to associate with that name
+   */
+  storeValue(name, value) {
+    if (this.db.has(name).value()) {
+      this.db
+        .get(name)
+        .assign(value)
+        .write();
+    } else {
+      this.db
+        .get(name)
+        .push(value)
+        .write();
+    }
+  }
+
+  /**
+   * Retrieves the value associated with the given name, returning null if no value was associated
+   * @param {String} name the name of the entry
+   */
+  getValue(name) {
+    if (this.db.has(name).value()) {
+      return this.db.get(name).value();
+    }
+
+    return null;
   }
 }

@@ -16,6 +16,7 @@ function getDB() {
 
 function resetDB(db) {
   db.set("players", []).write();
+  db.set("seasonsUpdatedAt", {}).write();
 }
 
 beforeEach(() => {
@@ -115,5 +116,69 @@ describe("find", () => {
     const stored = storage.find("players", { id: "account.playerOne" });
 
     expect(stored).toEqual({ id: "account.playerOne", name: "playerOne" });
+  });
+});
+
+describe("getValue", () => {
+  it("returns null when nothing is associated", () => {
+    const storage = new LocalStorage(getLocalDBPath());
+    const stored = storage.getValue("someKey");
+
+    expect(stored).toBeNull();
+  });
+
+  it("returns the stored value if something matches", () => {
+    const dateEntry = {
+      year: 2019,
+      month: 10,
+      day: 18
+    };
+    const dbInstance = getDB();
+    dbInstance.set("seasonsUpdatedAt", dateEntry).write();
+
+    const storage = new LocalStorage(getLocalDBPath());
+    const storedEntry = storage.getValue("seasonsUpdatedAt");
+
+    expect(storedEntry).toStrictEqual(dateEntry);
+  });
+});
+
+describe("storeValue", () => {
+  it("inserts the value when nothing was associated", () => {
+    const dateEntry = {
+      year: 2019,
+      month: 10,
+      day: 18
+    };
+
+    const storage = new LocalStorage(getLocalDBPath());
+    storage.storeValue("seasonsUpdatedAt", dateEntry);
+
+    const dbInstance = getDB();
+    const stored = dbInstance.get("seasonsUpdatedAt").value();
+    expect(stored).toStrictEqual(dateEntry);
+  });
+
+  it("replaces a value when something was previously associated", () => {
+    const storage = new LocalStorage(getLocalDBPath());
+    storage.storeValue("seasonsUpdatedAt", {
+      year: 2019,
+      month: 10,
+      day: 18
+    });
+
+    storage.storeValue("seasonsUpdatedAt", {
+      year: 2019,
+      month: 11,
+      day: 20
+    });
+
+    const dbInstance = getDB();
+    const stored = dbInstance.get("seasonsUpdatedAt").value();
+    expect(stored).toStrictEqual({
+      year: 2019,
+      month: 11,
+      day: 20
+    });
   });
 });
