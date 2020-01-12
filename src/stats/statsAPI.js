@@ -52,7 +52,7 @@ export function gatherStats(seasonData) {
     statsForMode.top10Rate = top10sCalc.toFixed(2);
 
     // longest kill
-    statsForMode.longestKill = statEntry.longestKill
+    statsForMode.longestKill = statEntry.longestKill;
 
     // TODO next cool stat
     seasonStat[gameModeId] = statsForMode;

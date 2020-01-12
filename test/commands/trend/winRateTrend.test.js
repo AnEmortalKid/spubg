@@ -1,4 +1,4 @@
-import KDTrendCommand from "../../../src/commands/trends/kdtrend";
+import WinRateTrendCommand from "../../../src/commands/trends/wrtrend";
 import { InteractionMode } from "../../../src/commands/interactionModes";
 import { expectFileExists, expectFileMissing } from "../../util/fileExpect";
 
@@ -58,7 +58,7 @@ const seasonAndLifetimeData = {
   }
 };
 
-const command = new KDTrendCommand();
+const command = new WinRateTrendCommand();
 
 describe("unsupported mode", () => {
   it("throws an error when a mode is not supported", () => {
@@ -75,7 +75,7 @@ describe("unsupported mode", () => {
 
 describe("command properties", () => {
   it("returns the expected description", () => {
-    expect(command.description).toBe("Charts Kill/Death Rate by season.");
+    expect(command.description).toBe("Charts Win Rate by season.");
   });
 
   it("has a modes option", () => {
@@ -103,7 +103,7 @@ describe("cliMode", () => {
 
     const cmdOptions = {
       mode: InteractionMode.CLI,
-      args: ["kd_playerOne"],
+      args: ["wr_playerOne"],
       options: {}
     };
 
@@ -118,28 +118,28 @@ describe("cliMode", () => {
       "temp/",
       "charts/",
       "trend/",
-      "kd_playerOne-KD-game-mode-one.png"
+      "wr_playerOne-KD-game-mode-one.png"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "kd_playerOne-KD-game-mode-one.svg"
+      "wr_playerOne-KD-game-mode-one.svg"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "kd_playerOne-KD-game-mode-two.png"
+      "wr_playerOne-KD-game-mode-two.png"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "kd_playerOne-KD-game-mode-two.png"
+      "wr_playerOne-KD-game-mode-two.png"
     );
   });
 
@@ -148,7 +148,7 @@ describe("cliMode", () => {
 
     const cmdOptions = {
       mode: InteractionMode.CLI,
-      args: ["kd_playerTwo"],
+      args: ["wr_playerTwo"],
       options: {
         modes: ["game-mode-two"]
       }
@@ -165,27 +165,27 @@ describe("cliMode", () => {
       "temp/",
       "charts/",
       "trend/",
-      "kd_playerTwo-KD-game-mode-one.png"
+      "wr_playerTwo-KD-game-mode-one.png"
     );
     expectFileMissing(
       "temp/",
       "charts/",
       "trend/",
-      "kd_playerTwo-KD-game-mode-one.svg"
+      "wr_playerTwo-KD-game-mode-one.svg"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "kd_playerTwo-KD-game-mode-two.png"
+      "wr_playerTwo-KD-game-mode-two.png"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "kd_playerTwo-KD-game-mode-two.png"
+      "wr_playerTwo-KD-game-mode-two.png"
     );
   });
 });
