@@ -51,6 +51,9 @@ export function gatherStats(seasonData) {
     const top10sCalc = (top10s / roundsPlayed) * 100;
     statsForMode.top10Rate = top10sCalc.toFixed(2);
 
+    // longest kill
+    statsForMode.longestKill = statEntry.longestKill
+
     // TODO next cool stat
     seasonStat[gameModeId] = statsForMode;
   });
