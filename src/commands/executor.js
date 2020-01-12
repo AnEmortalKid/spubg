@@ -1,7 +1,7 @@
-import AllTrendsCommand from "./trends/alltrends";
-import ADRTrendCommand from "./trends/adrtrend";
-import KDTrendCommand from "./trends/kdtrend";
-import WinRateTrendCommand from "./trends/wrtrend";
+import AllTrendsCommand from "./trends/allTrends";
+import ADRTrendCommand from "./trends/adrTrend";
+import KDTrendCommand from "./trends/kdTrend";
+import WinRateTrendCommand from "./trends/winRateTrend";
 
 import ADRCompareCommand from "./comparison/adrCompare";
 import KDCompareCommand from "./comparison/kdCompare";

@@ -1,4 +1,4 @@
-import ADRTrendCommand from "../../../src/commands/trends/adrtrend";
+import ADRTrendCommand from "../../../src/commands/trends/adrTrend";
 import { InteractionMode } from "../../../src/commands/interactionModes";
 import { expectFileExists, expectFileMissing } from "../../util/fileExpect";
 

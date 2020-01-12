@@ -1,4 +1,4 @@
-import WinRateTrendCommand from "../../../src/commands/trends/wrtrend";
+import WinRateTrendCommand from "../../../src/commands/trends/winRateTrend";
 import { InteractionMode } from "../../../src/commands/interactionModes";
 import { expectFileExists, expectFileMissing } from "../../util/fileExpect";
 

@@ -1,4 +1,4 @@
-import KDTrendCommand from "../../../src/commands/trends/kdtrend";
+import KDTrendCommand from "../../../src/commands/trends/kdTrend";
 import { InteractionMode } from "../../../src/commands/interactionModes";
 import { expectFileExists, expectFileMissing } from "../../util/fileExpect";
 
