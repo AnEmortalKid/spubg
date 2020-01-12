@@ -31,7 +31,16 @@ class SeasonsCache {
     return this.storage.get("seasons");
   }
 
-  // TODO add check for last season update to find the latest season
+  /**
+   * Retrieves a date entry that represents when we last checked for a seasonal update
+   */
+  getSeasonsUpdatedAt() {
+    return this.storage.getValue("seasonsUpdatedAt");
+  }
+
+  storeSeasonsUpdatedAt(dateEntry) {
+    this.storage.storeValue("seasonsUpdatedAt", dateEntry);
+  }
 }
 
 /**

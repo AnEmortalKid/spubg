@@ -54,7 +54,7 @@ class Storage {
    * @param {String} name the name of the entry
    */
   getValue(name) {
-    return this.realStorage.getValue(name, value);
+    return this.realStorage.getValue(name);
   }
 }
 

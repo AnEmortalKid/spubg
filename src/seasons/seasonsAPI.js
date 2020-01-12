@@ -47,7 +47,11 @@ class Seasons {
 
     // not empty, return it
     if (stored && stored.length) {
-      return stored;
+      // if our data is stale, fall through
+      if (!this.shouldFetchSeasons()) {
+        return stored;
+      }
+      console.log("checking for season updates");
     }
 
     const retrievedSeasons = await this.client.seasons();
@@ -60,6 +64,53 @@ class Seasons {
     }
 
     return this.seasonsCache.getAll();
+  }
+
+  shouldFetchSeasons() {
+    const lastCheckEntry = this.seasonsCache.getSeasonsUpdatedAt();
+
+    const today = new Date();
+    const dayEntry = {
+      year: today.getFullYear(),
+      month: today.getMonth(),
+      day: today.getDate()
+    };
+
+    // this should only happen on a fresh db
+    if (!lastCheckEntry) {
+      this.seasonsCache.storeSeasonsUpdatedAt(dayEntry);
+      return true;
+    }
+
+    // if our time is different, store it and return true
+    if (
+      lastCheckEntry.year != dayEntry.year ||
+      lastCheckEntry.month != dayEntry.month ||
+      lastCheckEntry.day != dayEntry.day
+    ) {
+      this.seasonsCache.storeSeasonsUpdatedAt(dayEntry);
+      return true;
+    }
+
+    return false;
+  }
+
+  seasonsLastUpdatedAt() {
+    const lastCheckEntry = this.seasonsCache.getSeasonsUpdatedAt();
+
+    if (!lastCheckEntry) {
+      const today = new Date();
+
+      const dayEntry = {
+        year: today.getFullYear(),
+        month: today.getMonth(),
+        day: today.getDate()
+      };
+      this.seasonsCache.store("seasonsUpdatedAt", dayEntry);
+      return dayEntry;
+    }
+
+    return lastCheckEntry;
   }
 
   /**

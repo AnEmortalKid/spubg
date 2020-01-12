@@ -2,7 +2,9 @@ import { getCache } from "../../src/seasons/seasonsCache";
 
 const mockStorage = {
   store: jest.fn(),
-  get: jest.fn()
+  get: jest.fn(),
+  getValue: jest.fn(),
+  storeValue: jest.fn()
 };
 
 const seasonsCache = getCache(mockStorage);
@@ -44,6 +46,46 @@ describe("store", () => {
       id: "current-season",
       isCurrent: true,
       isOffSeason: false
+    });
+  });
+});
+
+describe("getSeasonsUpdatedAt", () => {
+  it("returns null when it does not exist", () => {
+    mockStorage.getValue.mockReturnValue(null);
+    const updatedAt = seasonsCache.getSeasonsUpdatedAt();
+
+    expect(updatedAt).toBeNull();
+  });
+
+  it("returns an entry when it exists", () => {
+    const expectedEntry = {
+      year: 2019,
+      month: 10,
+      day: 18
+    };
+    mockStorage.getValue.mockReturnValueOnce(expectedEntry);
+
+    const updatedAt = seasonsCache.getSeasonsUpdatedAt();
+
+    expect(updatedAt).toBe(expectedEntry);
+  });
+});
+
+describe("storeSeasonsUpdatedAt", () => {
+  it("writes through to the real storage", () => {
+    const expectedEntry = {
+      year: 2019,
+      month: 10,
+      day: 18
+    };
+
+    seasonsCache.storeSeasonsUpdatedAt(expectedEntry);
+
+    expect(mockStorage.storeValue).toHaveBeenCalledWith("seasonsUpdatedAt", {
+      year: 2019,
+      month: 10,
+      day: 18
     });
   });
 });
