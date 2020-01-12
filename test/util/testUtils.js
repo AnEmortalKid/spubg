@@ -8,3 +8,7 @@ export function checkFileExists(filepath) {
     });
   });
 }
+
+export function removeDirectory(...pathSegments) {
+  fs.rmdirSync(path.resolve(...pathSegments), { recursive: true });
+}

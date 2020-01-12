@@ -1,6 +1,7 @@
 import KDTrendCommand from "../../../src/commands/trends/kdTrend";
 import { InteractionMode } from "../../../src/commands/interactionModes";
 import { expectFileExists, expectFileMissing } from "../../util/fileExpect";
+import { removeDirectory } from "../../util/testUtils";
 
 import {
   getSeasonAndLifetimeTrend,
@@ -57,6 +58,10 @@ const seasonAndLifetimeData = {
     }
   }
 };
+
+beforeAll(() => {
+  removeDirectory("temp/", "charts/", "trend/");
+});
 
 const command = new KDTrendCommand();
 

@@ -1,6 +1,7 @@
 import WinRateTrendCommand from "../../../src/commands/trends/winRateTrend";
 import { InteractionMode } from "../../../src/commands/interactionModes";
 import { expectFileExists, expectFileMissing } from "../../util/fileExpect";
+import { removeDirectory } from "../../util/testUtils";
 
 import {
   getSeasonAndLifetimeTrend,
@@ -57,6 +58,10 @@ const seasonAndLifetimeData = {
     }
   }
 };
+
+beforeAll(() => {
+  removeDirectory("temp/", "charts/", "trend/");
+});
 
 const command = new WinRateTrendCommand();
 
@@ -118,28 +123,28 @@ describe("cliMode", () => {
       "temp/",
       "charts/",
       "trend/",
-      "wr_playerOne-KD-game-mode-one.png"
+      "wr_playerOne-WinRate-game-mode-one.png"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "wr_playerOne-KD-game-mode-one.svg"
+      "wr_playerOne-WinRate-game-mode-one.svg"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "wr_playerOne-KD-game-mode-two.png"
+      "wr_playerOne-WinRate-game-mode-two.png"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "wr_playerOne-KD-game-mode-two.png"
+      "wr_playerOne-WinRate-game-mode-two.png"
     );
   });
 
@@ -165,27 +170,27 @@ describe("cliMode", () => {
       "temp/",
       "charts/",
       "trend/",
-      "wr_playerTwo-KD-game-mode-one.png"
+      "wr_playerTwo-WinRate-game-mode-one.png"
     );
     expectFileMissing(
       "temp/",
       "charts/",
       "trend/",
-      "wr_playerTwo-KD-game-mode-one.svg"
+      "wr_playerTwo-WinRate-game-mode-one.svg"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "wr_playerTwo-KD-game-mode-two.png"
+      "wr_playerTwo-WinRate-game-mode-two.png"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "wr_playerTwo-KD-game-mode-two.png"
+      "wr_playerTwo-WinRate-game-mode-two.png"
     );
   });
 });

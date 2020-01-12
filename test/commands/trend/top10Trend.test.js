@@ -1,4 +1,4 @@
-import ADRTrendCommand from "../../../src/commands/trends/adrTrend";
+import Top10TrendCommand from "../../../src/commands/trends/top10Trend";
 import { InteractionMode } from "../../../src/commands/interactionModes";
 import { expectFileExists, expectFileMissing } from "../../util/fileExpect";
 import { removeDirectory } from "../../util/testUtils";
@@ -63,7 +63,7 @@ beforeAll(() => {
   removeDirectory("temp/", "charts/", "trend/");
 });
 
-const command = new ADRTrendCommand();
+const command = new Top10TrendCommand();
 
 describe("unsupported mode", () => {
   it("throws an error when a mode is not supported", () => {
@@ -80,7 +80,7 @@ describe("unsupported mode", () => {
 
 describe("command properties", () => {
   it("returns the expected description", () => {
-    expect(command.description).toBe("Charts Average Damage Rate by season.");
+    expect(command.description).toBe("Charts Top 10 Rate by season.");
   });
 
   it("has a modes option", () => {
@@ -108,7 +108,7 @@ describe("cliMode", () => {
 
     const cmdOptions = {
       mode: InteractionMode.CLI,
-      args: ["adr_playerOne"],
+      args: ["topTen_playerOne"],
       options: {}
     };
 
@@ -123,28 +123,28 @@ describe("cliMode", () => {
       "temp/",
       "charts/",
       "trend/",
-      "adr_playerOne-ADR-game-mode-one.png"
+      "topTen_playerOne-TopTen-game-mode-one.png"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "adr_playerOne-ADR-game-mode-one.svg"
+      "topTen_playerOne-TopTen-game-mode-one.svg"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "adr_playerOne-ADR-game-mode-two.png"
+      "topTen_playerOne-TopTen-game-mode-two.png"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "adr_playerOne-ADR-game-mode-two.png"
+      "topTen_playerOne-TopTen-game-mode-two.png"
     );
   });
 
@@ -153,7 +153,7 @@ describe("cliMode", () => {
 
     const cmdOptions = {
       mode: InteractionMode.CLI,
-      args: ["adr_playerTwo"],
+      args: ["topTen_playerTwo"],
       options: {
         modes: ["game-mode-two"]
       }
@@ -170,27 +170,27 @@ describe("cliMode", () => {
       "temp/",
       "charts/",
       "trend/",
-      "adr_playerTwo-ADR-game-mode-one.png"
+      "topTen_playerTwo-TopTen-game-mode-one.png"
     );
     expectFileMissing(
       "temp/",
       "charts/",
       "trend/",
-      "adr_playerTwo-ADR-game-mode-one.svg"
+      "topTen_playerTwo-TopTen-game-mode-one.svg"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "adr_playerTwo-ADR-game-mode-two.png"
+      "topTen_playerTwo-TopTen-game-mode-two.png"
     );
 
     expectFileExists(
       "temp/",
       "charts/",
       "trend/",
-      "adr_playerTwo-ADR-game-mode-two.png"
+      "topTen_playerTwo-TopTen-game-mode-two.png"
     );
   });
 });
