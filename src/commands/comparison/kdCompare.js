@@ -2,7 +2,7 @@ import ComparisonCommand from "./comparisonCommand";
 
 export default class KDCompareCommand extends ComparisonCommand {
   constructor() {
-    super("KD Comparison between players", {
+    super("Kill/Death Rate Comparison between players.", {
       title: "KD Comparison",
       attributeName: "kd"
     });

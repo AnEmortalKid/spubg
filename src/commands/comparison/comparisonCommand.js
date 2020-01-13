@@ -8,6 +8,7 @@ import {
 } from "../../stats/statsAPI";
 
 import { styleGameMode } from "../../styling/styler";
+import { InteractionMode } from "../interactionModes";
 export default class ComparisonCommand extends BaseCommand {
   constructor(description, comparisonOptions) {
     super(description);
@@ -32,7 +33,7 @@ export default class ComparisonCommand extends BaseCommand {
     );
 
     switch (commandOptions.mode) {
-      case "cli":
+      case InteractionMode.CLI:
         return this.cliExecute(args, options);
       default:
         throw new Error(`${commandOptions.mode} is not supported`);
