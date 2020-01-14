@@ -119,33 +119,16 @@ describe("cliMode", () => {
     });
 
     // pattern playerName-attribute-mode
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "wr_playerOne-WinRate-game-mode-one.png"
-    );
+    const expectedNames = [
+      "wr_playerOne-WinRate-game-mode-one.png",
+      "wr_playerOne-WinRate-game-mode-one.svg",
+      "wr_playerOne-WinRate-game-mode-two.png",
+      "wr_playerOne-WinRate-game-mode-two.svg"
+    ];
 
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "wr_playerOne-WinRate-game-mode-one.svg"
-    );
-
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "wr_playerOne-WinRate-game-mode-two.png"
-    );
-
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "wr_playerOne-WinRate-game-mode-two.png"
-    );
+    for (const expectedName of expectedNames) {
+      expectFileExists("temp/", "charts/", "trend/", expectedName);
+    }
   });
 
   it("executes only for the filtered mode", async () => {
@@ -166,31 +149,22 @@ describe("cliMode", () => {
     });
 
     // pattern playerName-attribute-mode
-    expectFileMissing(
-      "temp/",
-      "charts/",
-      "trend/",
-      "wr_playerTwo-WinRate-game-mode-one.png"
-    );
-    expectFileMissing(
-      "temp/",
-      "charts/",
-      "trend/",
+    const expectedExist = [
+      "wr_playerTwo-WinRate-game-mode-two.png",
+      "wr_playerTwo-WinRate-game-mode-two.svg"
+    ];
+
+    for (const expectedName of expectedExist) {
+      expectFileExists("temp/", "charts/", "trend/", expectedName);
+    }
+
+    const expectedMissing = [
+      "wr_playerTwo-WinRate-game-mode-one.png",
       "wr_playerTwo-WinRate-game-mode-one.svg"
-    );
+    ];
 
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "wr_playerTwo-WinRate-game-mode-two.png"
-    );
-
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "wr_playerTwo-WinRate-game-mode-two.png"
-    );
+    for (const expectedName of expectedMissing) {
+      expectFileMissing("temp/", "charts/", "trend/", expectedName);
+    }
   });
 });

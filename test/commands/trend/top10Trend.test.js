@@ -119,33 +119,16 @@ describe("cliMode", () => {
     });
 
     // pattern playerName-attribute-mode
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "topTen_playerOne-TopTen-game-mode-one.png"
-    );
+    const expectedNames = [
+      "topTen_playerOne-TopTen-game-mode-one.png",
+      "topTen_playerOne-TopTen-game-mode-one.svg",
+      "topTen_playerOne-TopTen-game-mode-two.png",
+      "topTen_playerOne-TopTen-game-mode-two.svg"
+    ];
 
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "topTen_playerOne-TopTen-game-mode-one.svg"
-    );
-
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "topTen_playerOne-TopTen-game-mode-two.png"
-    );
-
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "topTen_playerOne-TopTen-game-mode-two.png"
-    );
+    for (const expectedName of expectedNames) {
+      expectFileExists("temp/", "charts/", "trend/", expectedName);
+    }
   });
 
   it("executes only for the filtered mode", async () => {
@@ -166,31 +149,22 @@ describe("cliMode", () => {
     });
 
     // pattern playerName-attribute-mode
-    expectFileMissing(
-      "temp/",
-      "charts/",
-      "trend/",
-      "topTen_playerTwo-TopTen-game-mode-one.png"
-    );
-    expectFileMissing(
-      "temp/",
-      "charts/",
-      "trend/",
+    const expectedExist = [
+      "topTen_playerTwo-TopTen-game-mode-two.png",
+      "topTen_playerTwo-TopTen-game-mode-two.svg"
+    ];
+
+    for (const expectedName of expectedExist) {
+      expectFileExists("temp/", "charts/", "trend/", expectedName);
+    }
+
+    const expectedMissing = [
+      "topTen_playerTwo-TopTen-game-mode-one.png",
       "topTen_playerTwo-TopTen-game-mode-one.svg"
-    );
+    ];
 
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "topTen_playerTwo-TopTen-game-mode-two.png"
-    );
-
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "topTen_playerTwo-TopTen-game-mode-two.png"
-    );
+    for (const expectedName of expectedMissing) {
+      expectFileMissing("temp/", "charts/", "trend/", expectedName);
+    }
   });
 });

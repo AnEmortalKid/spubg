@@ -119,33 +119,16 @@ describe("cliMode", () => {
     });
 
     // pattern playerName-attribute-mode
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "kd_playerOne-KD-game-mode-one.png"
-    );
+    const expectedNames = [
+      "kd_playerOne-KD-game-mode-one.png",
+      "kd_playerOne-KD-game-mode-one.svg",
+      "kd_playerOne-KD-game-mode-two.png",
+      "kd_playerOne-KD-game-mode-two.svg"
+    ];
 
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "kd_playerOne-KD-game-mode-one.svg"
-    );
-
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "kd_playerOne-KD-game-mode-two.png"
-    );
-
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "kd_playerOne-KD-game-mode-two.png"
-    );
+    for (const expectedName of expectedNames) {
+      expectFileExists("temp/", "charts/", "trend/", expectedName);
+    }
   });
 
   it("executes only for the filtered mode", async () => {
@@ -166,31 +149,22 @@ describe("cliMode", () => {
     });
 
     // pattern playerName-attribute-mode
-    expectFileMissing(
-      "temp/",
-      "charts/",
-      "trend/",
-      "kd_playerTwo-KD-game-mode-one.png"
-    );
-    expectFileMissing(
-      "temp/",
-      "charts/",
-      "trend/",
+    const expectedExist = [
+      "kd_playerTwo-KD-game-mode-two.png",
+      "kd_playerTwo-KD-game-mode-two.svg"
+    ];
+
+    for (const expectedName of expectedExist) {
+      expectFileExists("temp/", "charts/", "trend/", expectedName);
+    }
+
+    const expectedMissing = [
+      "kd_playerTwo-KD-game-mode-one.png",
       "kd_playerTwo-KD-game-mode-one.svg"
-    );
+    ];
 
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "kd_playerTwo-KD-game-mode-two.png"
-    );
-
-    expectFileExists(
-      "temp/",
-      "charts/",
-      "trend/",
-      "kd_playerTwo-KD-game-mode-two.png"
-    );
+    for (const expectedName of expectedMissing) {
+      expectFileMissing("temp/", "charts/", "trend/", expectedName);
+    }
   });
 });

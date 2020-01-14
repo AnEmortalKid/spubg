@@ -7,7 +7,7 @@ import { InteractionMode } from "../interactionModes";
 
 export default class AllTrendsCommand extends BaseTrendCommand {
   constructor() {
-    super("gathers all trend charts for a player");
+    super("Gathers all trend charts for a player.");
     this._trendOptions = [
       {
         attributeName: "kd",
@@ -26,7 +26,7 @@ export default class AllTrendsCommand extends BaseTrendCommand {
       },
       {
         attributeName: "top10Rate",
-        filePrefix: "Top10",
+        filePrefix: "TopTen",
         subtitlePrefix: "Top Ten Rate"
       }
     ];
