@@ -9,6 +9,10 @@ export function checkFileExists(filepath) {
   });
 }
 
+export function checkFileExistsSync(filepath) {
+  return fs.existsSync(filepath);
+}
+
 export function removeDirectory(...pathSegments) {
   fs.rmdirSync(path.resolve(...pathSegments), { recursive: true });
 }

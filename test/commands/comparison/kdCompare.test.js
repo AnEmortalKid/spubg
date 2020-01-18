@@ -1,6 +1,11 @@
 import KDCompareCommand from "../../../src/commands/comparison/kdCompare";
 import { InteractionMode } from "../../../src/commands/interactionModes";
-import { expectFileExists, expectFileMissing } from "../../util/fileExpect";
+import {
+  expectFileExists,
+  expectFileMissing,
+  expectFileExistsSync,
+  expectFileMissingSync
+} from "../../util/fileExpect";
 import { removeDirectory } from "../../util/testUtils";
 
 import {
@@ -133,7 +138,7 @@ describe("cliMode", () => {
     ];
 
     for (const expectedName of expectedFiles) {
-      expectFileExists("temp/", "charts/", "comparison/", expectedName);
+      expectFileExistsSync("temp/", "charts/", "comparison/", expectedName);
     }
   });
 
@@ -162,7 +167,7 @@ describe("cliMode", () => {
     ];
 
     for (const expectedName of expectedFiles) {
-      expectFileExists("temp/", "charts/", "comparison/", expectedName);
+      expectFileExistsSync("temp/", "charts/", "comparison/", expectedName);
     }
 
     const missingFiles = [
@@ -170,7 +175,7 @@ describe("cliMode", () => {
       "kd-playerOne-playerTwo-game-mode-one.svg"
     ];
     for (const expectedName of missingFiles) {
-      expectFileMissing("temp/", "charts/", "comparison/", expectedName);
+      expectFileMissingSync("temp/", "charts/", "comparison/", expectedName);
     }
   });
 });
