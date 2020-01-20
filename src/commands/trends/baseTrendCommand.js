@@ -63,4 +63,46 @@ export default class BaseTrendCommand extends BaseCommand {
       }
     }
   }
+
+  /**
+   * Computes and prduces a chart with the trendOption for each game mode
+   * @param {String} playerName name of the player
+   * @param {Array} trendData data points in the form [seasonalEntries: [], lifetime: [] ]
+   * @param {String} gameMode to filter data on
+   * @param {Object} trendOption object with attributes { attributeName, filePrefix, subtitlePrefix}
+   */
+  createTrendChart(playerName, trendData, gameMode, trendOption) {
+    const seasonalEntries = trendData.seasonal;
+
+    const attributeName = trendOption.attributeName;
+    const filePrefix = trendOption.filePrefix;
+    const subtitlePrefix = trendOption.subtitlePrefix;
+
+    const statsByGameMode = dataByGameMode(
+      supportedGameModes,
+      seasonalEntries,
+      attributeName
+    );
+
+    // if someone hasn't played that mode ever don't even bother??
+    const lifetimeData = trendData.lifetime;
+    if (lifetimeData[gameMode]) {
+      const lifetimeAttribute = lifetimeData[gameMode][attributeName];
+      const chartTitle = playerName;
+      const chartSubTitle = subtitlePrefix + " - " + styleGameMode(gameMode);
+
+      const plotOptions = {
+        title: chartTitle,
+        subTitle: chartSubTitle,
+        data: {
+          points: statsByGameMode[gameMode],
+          trend: lifetimeAttribute
+        }
+      };
+
+      return new TrendChart(plotOptions);
+    }
+
+    return null;
+  }
 }

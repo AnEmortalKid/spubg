@@ -81,6 +81,6 @@ export default class HelpCommand extends BaseCommand {
       messageContent = this.getMainHelpDisplay();
     }
 
-    return { message: "```" + messageContent + "```" };
+    return "```" + messageContent + "```";
   }
 }

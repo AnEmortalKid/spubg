@@ -1,4 +1,4 @@
-var Discord = require("discord.io");
+const Discord = require("discord.js");
 var logger = require("winston");
 
 import { execute } from "../commands/executor";
@@ -14,23 +14,20 @@ logger.add(new logger.transports.Console(), {
 logger.level = "debug";
 
 // Initialize Discord Bot
-var bot = new Discord.Client({
-  token: process.env.DISCORD_TOKEN,
-  autorun: true
-});
-
-bot.on("ready", function(evt) {
+const client = new Discord.Client();
+client.once("ready", () => {
   logger.info("Connected");
-  logger.info("Logged in as: ");
-  logger.info(bot.username + " - (" + bot.id + ")");
+  logger.info("Logged in as: " + client.user);
 });
 
-bot.on("message", function(user, userID, channelID, message, evt) {
-  // listen on $pubg
+client.login(process.env.DISCORD_TOKEN);
 
-  if (message.substring(0, 5) == "$pubg") {
+client.on("message", message => {
+  const content = message.content;
+
+  if (content.substring(0, 5) == "$pubg") {
     // $pubg command args
-    var messageParts = message.split(" ");
+    var messageParts = content.split(" ");
     var cmd = messageParts[1];
     const cmdArgs = messageParts.splice(2);
 
@@ -39,23 +36,27 @@ bot.on("message", function(user, userID, channelID, message, evt) {
     switch (cmd) {
       // !ping
       case "ping":
-        bot.sendMessage({
-          to: channelID,
-          message: "hello!"
-        });
+        message.channel.send("pong");
+        break;
+      case "pretty":
+        const file = new Discord.MessageAttachment("./out.png");
+
+        const exampleEmbed = {
+          title: "Some title",
+          image: {
+            url: "attachment://out.png"
+          }
+        };
+
+        message.channel.send({ files: [file], embed: exampleEmbed });
         break;
       default:
         execute(cmd, {
           mode: InteractionMode.DISCORD,
           args: cmdArgs
         }).then(response => {
-          console.log(response);
-
-          response.to = channelID;
-          bot.sendMessage(response);
+          message.channel.send(response);
         });
-
-      // TODO deal with embeds
     }
   }
 });

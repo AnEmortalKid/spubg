@@ -155,8 +155,8 @@ describe("discord mode", () => {
 
     const response = command.execute(cmdOptions);
 
-    validateHelpMessage(response.message);
-    validateIsInACodeBlock(response.message);
+    validateHelpMessage(response);
+    validateIsInACodeBlock(response);
   });
 
   it("indicates that the command is invalid when help for an unkown command is requested", () => {
@@ -167,13 +167,13 @@ describe("discord mode", () => {
 
     const response = command.execute(cmdOptions);
 
-    expect(response.message).toEqual(
+    expect(response).toEqual(
       expect.stringContaining("foo is not a valid command.\n")
     );
     // should list the generic help message as well
-    validateHelpMessage(response.message);
+    validateHelpMessage(response);
 
-    validateIsInACodeBlock(response.message);
+    validateIsInACodeBlock(response);
   });
 
   it("indicates that a command has no options when help is requested for the command", () => {
@@ -184,11 +184,11 @@ describe("discord mode", () => {
 
     const response = command.execute(cmdOptions);
 
-    expect(response.message).toEqual(
+    expect(response).toEqual(
       expect.stringContaining("This command has no options.")
     );
 
-    validateIsInACodeBlock(response.message);
+    validateIsInACodeBlock(response);
   });
 
   it("indicates options when help is requested for a command with options", () => {
@@ -199,13 +199,13 @@ describe("discord mode", () => {
 
     const response = command.execute(cmdOptions);
 
-    expect(response.message).toEqual(
+    expect(response).toEqual(
       expect.stringContaining("Options for this command are:\n")
     );
-    expect(response.message).toEqual(
+    expect(response).toEqual(
       expect.stringContaining("-a the all option")
     );
 
-    validateIsInACodeBlock(response.message);
+    validateIsInACodeBlock(response);
   });
 });

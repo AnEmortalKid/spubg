@@ -8,6 +8,8 @@ import KDCompareCommand from "./comparison/kdCompare";
 import WinRateCompareCommand from "./comparison/winRateCompare";
 import Top10TrendCommand from "./trends/top10Trend";
 
+import LongestKillCommand from "./plots/longestKillPlot";
+
 import HelpCommand from "./help";
 
 const commands = {
@@ -18,7 +20,8 @@ const commands = {
   "all-trends": new AllTrendsCommand(),
   "kd-compare": new KDCompareCommand(),
   "adr-compare": new ADRCompareCommand(),
-  "winRate-compare": new WinRateCompareCommand()
+  "winRate-compare": new WinRateCompareCommand(),
+  longestKill: new LongestKillCommand()
 };
 
 /**
