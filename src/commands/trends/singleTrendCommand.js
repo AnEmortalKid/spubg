@@ -1,3 +1,4 @@
+const Discord = require("discord.js");
 import BaseTrendCommand from "./baseTrendCommand";
 import {
   getSeasonAndLifetimeTrend,
@@ -24,6 +25,8 @@ export default class SingleTrendCommand extends BaseTrendCommand {
     switch (commandOptions.mode) {
       case InteractionMode.CLI:
         return this.cliExecute(args[0], options);
+      case InteractionMode.DISCORD:
+        return this.discordExecute(args[0], options);
       default:
         throw new Error(`${commandOptions.mode} is not supported`);
     }
@@ -65,38 +68,24 @@ export default class SingleTrendCommand extends BaseTrendCommand {
       this._trendOption
     );
 
-    // TODO turn this into a function with 'writeToFile' expecting the creation if it
-    // const svgCanvas = chart.create();
-    // var source = xmlserializer.serializeToString(svgCanvas.node());
-    // const typeOutputDir = baseOutputPath + "/" + this.typeDirectory + "/";
-    // const filePath = typeOutputDir + fileName;
+    // todo add game mode
+    const chartName =
+      playerName + "-" + this._trendOption.filePrefix + "-squad-fpp";
 
-    // fs.mkdirSync(typeOutputDir, { recursive: true }, err => {
-    //   if (err) throw err;
-    // });
+    chart.createAndWriteTo(chartName, "out/discord/");
 
-    // fs.writeFileSync(`${filePath}.svg`, source);
+    // TODO poll every sec for 5 secs
+    // poll every second for up to 5 seconds then return a womp womp
 
-    // svg2img(source, function(error, buffer) {
-    //   //returns a Buffer
-    //   fs.writeFileSync(`${filePath}.png`, buffer);
-    //   if (error) {
-    //     console.log(error);
-    //   }
-    // });
+      const filePath = "out/discord/" + chartName;
 
-    // console.log(`Wrote to ${filePath}`);
+      const file = new Discord.MessageAttachment(filePath + ".png");
+      const exampleEmbed = {
+        image: {
+          url: "attachment://" + filePath + ".png"
+        }
+      };
 
-    // TODO build attachment
-    /**
-     * const file = new Discord.MessageAttachment('./out.png');
-
-        const exampleEmbed = {
-          title: 'Some title',
-          image: {
-            url: 'attachment://out.png',
-          },
-        };
-     */
+      return { files: [file], embed: exampleEmbed };
   }
 }

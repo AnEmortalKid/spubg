@@ -1,4 +1,5 @@
 import { getLocalOutputDirectory } from "../config/env";
+import { path } from "path";
 
 var fs = require("fs");
 var xmlserializer = require("xmlserializer");
@@ -30,6 +31,28 @@ export default class BaseChart {
     const filePath = typeOutputDir + fileName;
 
     fs.mkdirSync(typeOutputDir, { recursive: true }, err => {
+      if (err) throw err;
+    });
+
+    fs.writeFileSync(`${filePath}.svg`, source);
+
+    svg2img(source, function(error, buffer) {
+      //returns a Buffer
+      fs.writeFileSync(`${filePath}.png`, buffer);
+      if (error) {
+        console.log(error);
+      }
+    });
+
+    console.log(`Wrote to ${filePath}`);
+  }
+
+  createAndWriteTo(fileName, directory) {
+    const filePath = directory + fileName;
+
+    const svgCanvas = this.create();
+    var source = xmlserializer.serializeToString(svgCanvas.node());
+    fs.mkdirSync(directory, { recursive: true }, err => {
       if (err) throw err;
     });
 

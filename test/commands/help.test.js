@@ -202,9 +202,7 @@ describe("discord mode", () => {
     expect(response).toEqual(
       expect.stringContaining("Options for this command are:\n")
     );
-    expect(response).toEqual(
-      expect.stringContaining("-a the all option")
-    );
+    expect(response).toEqual(expect.stringContaining("-a the all option"));
 
     validateIsInACodeBlock(response);
   });
