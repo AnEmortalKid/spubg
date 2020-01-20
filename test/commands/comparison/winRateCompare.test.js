@@ -1,6 +1,9 @@
 import WinRateCompareCommand from "../../../src/commands/comparison/winRateCompare";
 import { InteractionMode } from "../../../src/commands/interactionModes";
-import { expectFileExists, expectFileMissing } from "../../util/fileExpect";
+import {
+  expectFileExistsSync,
+  expectFileMissingSync
+} from "../../util/fileExpect";
 import { removeDirectory } from "../../util/testUtils";
 
 import {
@@ -131,7 +134,7 @@ describe("cliMode", () => {
     ];
 
     for (const expectedName of expectedFiles) {
-      expectFileExists("temp/", "charts/", "comparison/", expectedName);
+      expectFileExistsSync("temp/", "charts/", "comparison/", expectedName);
     }
   });
 
@@ -160,7 +163,7 @@ describe("cliMode", () => {
     ];
 
     for (const expectedName of expectedFiles) {
-      expectFileExists("temp/", "charts/", "comparison/", expectedName);
+      expectFileExistsSync("temp/", "charts/", "comparison/", expectedName);
     }
 
     const missingFiles = [
@@ -168,7 +171,7 @@ describe("cliMode", () => {
       "winRate-playerOne-playerTwo-game-mode-one.svg"
     ];
     for (const expectedName of missingFiles) {
-      expectFileMissing("temp/", "charts/", "comparison/", expectedName);
+      expectFileMissingSync("temp/", "charts/", "comparison/", expectedName);
     }
   });
 });
