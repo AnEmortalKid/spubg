@@ -77,15 +77,15 @@ export default class SingleTrendCommand extends BaseTrendCommand {
     // TODO poll every sec for 5 secs
     // poll every second for up to 5 seconds then return a womp womp
 
-      const filePath = "out/discord/" + chartName;
+    const filePath = "out/discord/" + chartName;
 
-      const file = new Discord.MessageAttachment(filePath + ".png");
-      const exampleEmbed = {
-        image: {
-          url: "attachment://" + filePath + ".png"
-        }
-      };
+    const file = new Discord.MessageAttachment(filePath + ".png");
+    const exampleEmbed = {
+      image: {
+        url: "attachment://" + filePath + ".png"
+      }
+    };
 
-      return { files: [file], embed: exampleEmbed };
+    return { files: [file], embed: exampleEmbed };
   }
 }
