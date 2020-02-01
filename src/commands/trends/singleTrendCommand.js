@@ -5,6 +5,7 @@ import {
   supportedGameModes
 } from "../../stats/statsAPI";
 import { InteractionMode } from "../interactionModes";
+import fs from "fs";
 
 export default class SingleTrendCommand extends BaseTrendCommand {
   constructor(description, attributeName, filePrefix, subtitlePrefix) {
@@ -74,18 +75,47 @@ export default class SingleTrendCommand extends BaseTrendCommand {
 
     chart.createAndWriteTo(chartName, "out/discord/");
 
-    // TODO poll every sec for 5 secs
-    // poll every second for up to 5 seconds then return a womp womp
-
+    // use the png file path
     const filePath = "out/discord/" + chartName;
+    const chartFile = filePath + ".png";
 
-    const file = new Discord.MessageAttachment(filePath + ".png");
-    const exampleEmbed = {
-      image: {
-        url: "attachment://" + filePath + ".png"
+    return new Promise((resolve, reject) => {
+      this.onFileExistence(chartFile, resolve);
+    }).then(result => {
+      if (result) {
+        const file = new Discord.MessageAttachment(chartFile);
+        const exampleEmbed = {
+          image: {
+            url: "attachment://" + chartFile
+          }
+        };
+
+        // TODO if
+        // TODO add comment around only supporting mode
+
+        // TODO use embed vs not?
+        return { files: [file] };
       }
-    };
+      return "uh oh boss";
+    });
+  }
 
-    return { files: [file], embed: exampleEmbed };
+  onFileExistence(filePath, callback) {
+    var count = 0;
+    const limit = 5;
+    var exists = false;
+    function intervalExists() {
+      count++;
+      exists = fs.existsSync(filePath);
+      if (exists) {
+        clearInterval(this);
+        callback(exists);
+      }
+      if (count == limit) {
+        clearInterval(this);
+        callback(exists);
+      }
+    }
+    setInterval(intervalExists, 1000);
   }
 }
