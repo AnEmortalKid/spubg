@@ -92,7 +92,7 @@ describe("command properties", () => {
   });
 
   it("has a modes option", () => {
-    const commandOptions = command.commandOptions();
+    const commandOptions = command.commandOptions(InteractionMode.CLI);
 
     expect(commandOptions).toEqual(
       expect.stringContaining(
@@ -106,6 +106,20 @@ describe("command properties", () => {
     );
     expect(commandOptions).toEqual(
       expect.stringContaining("ex: --modes squad-fpp duo-fpp")
+    );
+  });
+  it("defaults to squad-fpp for discord mode and supports a single mode", () => {
+    const commandOptions = command.commandOptions(InteractionMode.DISCORD);
+    expect(commandOptions).toEqual(
+      expect.stringContaining(
+        "--modes the set of game modes to generate a trend chart for, only supports a single mode."
+      )
+    );
+    expect(commandOptions).toEqual(
+      expect.stringContaining('By default the game mode is "squad-fpp".')
+    );
+    expect(commandOptions).toEqual(
+      expect.stringContaining("ex: --modes duo-fpp")
     );
   });
 });

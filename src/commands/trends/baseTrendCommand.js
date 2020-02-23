@@ -2,6 +2,7 @@ import { styleGameMode } from "../../styling/styler";
 import { TrendChart } from "../../chart/trendChart";
 import { dataByGameMode, supportedGameModes } from "../../stats/statsAPI";
 import BaseCommand from "../baseCommand";
+import { InteractionMode } from "../interactionModes";
 
 /**
  * Basic template for a class that can generate trend data
@@ -11,11 +12,31 @@ export default class BaseTrendCommand extends BaseCommand {
     super(description);
   }
 
-  commandOptions() {
+  commandOptions(interactionMode) {
+    switch (interactionMode) {
+      case InteractionMode.CLI:
+        return this.cliCommandOptions();
+      case InteractionMode.DISCORD:
+        return this.discordCommandOptions();
+      default:
+        throw new Error(`${commandOptions.mode} is not supported`);
+    }
+  }
+
+  cliCommandOptions() {
     const message = `
     --modes the set of game modes to generate a trend chart for.
       By default the game modes are "squad-fpp", "solo-fpp", "duo-fpp".
       ex: --modes squad-fpp duo-fpp
+    `;
+    return message;
+  }
+
+  discordCommandOptions() {
+    const message = `
+    --modes the set of game modes to generate a trend chart for, only supports a single mode.
+      By default the game mode is "squad-fpp".
+      ex: --modes duo-fpp
     `;
     return message;
   }

@@ -27,13 +27,13 @@ export default class HelpCommand extends BaseCommand {
 
   cliExecute(args) {
     if (args[0]) {
-      console.log(this.getCommandHelpDisplay(args[0]));
+      console.log(this.getCommandHelpDisplay(args[0], InteractionMode.CLI));
     } else {
-      console.log(this.getMainHelpDisplay());
+      console.log(this.getMainHelpDisplay(InteractionMode.CLI));
     }
   }
 
-  getMainHelpDisplay() {
+  getMainHelpDisplay(interactionMode) {
     var commandDescriptions = "";
 
     const commandKeys = Object.keys(this.commands);
@@ -50,7 +50,7 @@ export default class HelpCommand extends BaseCommand {
     return helpMessage;
   }
 
-  getCommandHelpDisplay(commandName) {
+  getCommandHelpDisplay(commandName, interactionMode) {
     const commandEntry = this.commands[commandName];
     if (!commandEntry) {
       return (
@@ -59,7 +59,7 @@ export default class HelpCommand extends BaseCommand {
     }
 
     const commandInfo = this.describeCommand(commandName);
-    const options = commandEntry.commandOptions();
+    const options = commandEntry.commandOptions(interactionMode);
     if (!options) {
       return commandInfo + "\n\nThis command has no options.";
     } else {
@@ -76,9 +76,12 @@ export default class HelpCommand extends BaseCommand {
   discordExecute(args) {
     var messageContent;
     if (args[0]) {
-      messageContent = this.getCommandHelpDisplay(args[0]);
+      messageContent = this.getCommandHelpDisplay(
+        args[0],
+        InteractionMode.DISCORD
+      );
     } else {
-      messageContent = this.getMainHelpDisplay();
+      messageContent = this.getMainHelpDisplay(InteractionMode.DISCORD);
     }
 
     return "```" + messageContent + "```";

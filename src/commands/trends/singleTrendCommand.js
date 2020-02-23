@@ -5,7 +5,7 @@ import {
   supportedGameModes
 } from "../../stats/statsAPI";
 import { InteractionMode } from "../interactionModes";
-import fs from "fs";
+import { onFileExistence } from "../../util/fileUtils";
 
 export default class SingleTrendCommand extends BaseTrendCommand {
   constructor(description, attributeName, filePrefix, subtitlePrefix) {
@@ -58,20 +58,19 @@ export default class SingleTrendCommand extends BaseTrendCommand {
 
     const trendData = await getSeasonAndLifetimeTrend(playerName);
 
-    // TODO only handle 1 mode
+    // TODO only handle 1 mode if options provides 2 many
+    var gameMode = "squad-fpp";
 
-    // 1. clean out/discord
-    // 2. write to out/discord
     const chart = this.createTrendChart(
       playerName,
       trendData,
-      "squad-fpp",
+      gameMode,
       this._trendOption
     );
 
-    // todo add game mode
+    // TODO add game mode
     const chartName =
-      playerName + "-" + this._trendOption.filePrefix + "-squad-fpp";
+      playerName + "-" + this._trendOption.filePrefix + "-" + gameMode;
 
     chart.createAndWriteTo(chartName, "out/discord/");
 
@@ -80,7 +79,7 @@ export default class SingleTrendCommand extends BaseTrendCommand {
     const chartFile = filePath + ".png";
 
     return new Promise((resolve, reject) => {
-      this.onFileExistence(chartFile, resolve);
+      onFileExistence(chartFile, resolve);
     }).then(result => {
       if (result) {
         const file = new Discord.MessageAttachment(chartFile);
@@ -90,32 +89,9 @@ export default class SingleTrendCommand extends BaseTrendCommand {
           }
         };
 
-        // TODO if
-        // TODO add comment around only supporting mode
-
-        // TODO use embed vs not?
         return { files: [file] };
       }
       return "uh oh boss";
     });
-  }
-
-  onFileExistence(filePath, callback) {
-    var count = 0;
-    const limit = 5;
-    var exists = false;
-    function intervalExists() {
-      count++;
-      exists = fs.existsSync(filePath);
-      if (exists) {
-        clearInterval(this);
-        callback(exists);
-      }
-      if (count == limit) {
-        clearInterval(this);
-        callback(exists);
-      }
-    }
-    setInterval(intervalExists, 1000);
   }
 }

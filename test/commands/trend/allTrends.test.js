@@ -84,7 +84,7 @@ describe("command properties", () => {
   });
 
   it("has a modes option", () => {
-    const commandOptions = command.commandOptions();
+    const commandOptions = command.commandOptions(InteractionMode.CLI);
 
     expect(commandOptions).toEqual(
       expect.stringContaining(

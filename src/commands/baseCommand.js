@@ -10,7 +10,7 @@ export default class BaseCommand {
   /**
    * @returns a String explaining the options for this command
    */
-  commandOptions() {
+  commandOptions(interactionMode) {
     return null;
   }
 }
