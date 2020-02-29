@@ -1,4 +1,4 @@
-import AllTrendsCommand from "../../../src/commands/trends/alltrends";
+import AllTrendsCommand from "../../../src/commands/trends/allTrends";
 import { InteractionMode } from "../../../src/commands/interactionModes";
 import { expectFileExists, expectFileMissing } from "../../util/fileExpect";
 import { removeDirectory } from "../../util/testUtils";
