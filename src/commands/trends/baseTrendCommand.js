@@ -3,6 +3,8 @@ import { TrendChart } from "../../chart/trendChart";
 import { dataByGameMode, supportedGameModes } from "../../stats/statsAPI";
 import BaseCommand from "../baseCommand";
 import { InteractionMode } from "../interactionModes";
+import { getLocalOutputDirectory } from "../../config/env";
+import { defaultDiscordChartMode } from "../commandDefaults";
 
 /**
  * Basic template for a class that can generate trend data
@@ -19,7 +21,7 @@ export default class BaseTrendCommand extends BaseCommand {
       case InteractionMode.DISCORD:
         return this.discordCommandOptions();
       default:
-        throw new Error(`${commandOptions.mode} is not supported`);
+        throw new Error(`${interactionMode} is not supported`);
     }
   }
 
@@ -125,5 +127,24 @@ export default class BaseTrendCommand extends BaseCommand {
     }
 
     return null;
+  }
+
+  determineGameMode(requestedModes) {
+    if (!requestedModes) {
+      return defaultDiscordChartMode();
+    }
+
+    // find the first non invalid one
+    for (requested of requestedModes) {
+      if (supportedGameModes.includes(requested)) {
+        return requested;
+      }
+    }
+
+    return defaultDiscordChartMode();
+  }
+
+  getDiscordOutputPath() {
+    return getLocalOutputDirectory() + "discord/";
   }
 }
