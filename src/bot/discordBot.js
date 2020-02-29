@@ -3,6 +3,7 @@ var logger = require("winston");
 
 import { execute } from "../commands/executor";
 import { InteractionMode } from "../commands/interactionModes";
+import { parseArguments } from "../args/argParser";
 
 require("dotenv").config();
 
@@ -30,8 +31,7 @@ client.on("message", message => {
     var messageParts = content.split(" ");
     var cmd = messageParts[1];
     const cmdArgs = messageParts.splice(2);
-
-    // TODO argparse
+    const parsed = parseArguments(cmdArgs);
 
     switch (cmd) {
       // !ping
@@ -53,7 +53,8 @@ client.on("message", message => {
       default:
         execute(cmd, {
           mode: InteractionMode.DISCORD,
-          args: cmdArgs
+          args: parsed.args,
+          options: parsed.options
         }).then(response => {
           message.channel.send(response);
         });

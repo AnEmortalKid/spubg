@@ -8,6 +8,8 @@ import {
   supportedGameModes
 } from "../../../src/stats/statsAPI";
 
+import { defaultDiscordChartMode } from "../../../src/commands/commandDefaults";
+
 const mockLifetimeTrend = jest.fn();
 
 jest.mock("../../../src/stats/statsAPI", () => {
@@ -16,6 +18,16 @@ jest.mock("../../../src/stats/statsAPI", () => {
     ...original,
     supportedGameModes: ["game-mode-one", "game-mode-two"],
     getSeasonAndLifetimeTrend: () => mockLifetimeTrend()
+  };
+});
+
+jest.mock("../../../src/commands/commandDefaults", () => {
+  const original = require.requireActual(
+    "../../../src/commands/commandDefaults"
+  );
+  return {
+    ...original,
+    defaultDiscordChartMode: () => "game-mode-one"
   };
 });
 
@@ -179,6 +191,34 @@ describe("cliMode", () => {
 
     for (const expectedName of expectedMissing) {
       expectFileMissing("temp/", "charts/", "trend/", expectedName);
+    }
+  });
+});
+
+describe("discordMode", () => {
+  it("executes for the default mode", async () => {
+    mockLifetimeTrend.mockReturnValue(seasonAndLifetimeData);
+
+    const cmdOptions = {
+      mode: InteractionMode.DISCORD,
+      args: ["kd_playerOne"],
+      options: {}
+    };
+
+    await new Promise(r => {
+      command.execute(cmdOptions);
+      // wait a little bit to ensure files are done writing
+      setTimeout(r, 50);
+    });
+
+    // pattern playerName-attribute-mode
+    const expectedNames = [
+      "kd_playerOne-KD-game-mode-one.png",
+      "kd_playerOne-KD-game-mode-one.svg"
+    ];
+
+    for (const expectedName of expectedNames) {
+      expectFileExists("temp/", "discord/", expectedName);
     }
   });
 });

@@ -54,12 +54,8 @@ export default class SingleTrendCommand extends BaseTrendCommand {
   }
 
   async discordExecute(playerName, options) {
-    // since we can only send one embed, return a message indicating only one mode is supported
-
     const trendData = await getSeasonAndLifetimeTrend(playerName);
-
-    // TODO only handle 1 mode if options provides 2 many
-    var gameMode = "squad-fpp";
+    var gameMode = this.determineGameMode(options);
 
     const chart = this.createTrendChart(
       playerName,
@@ -68,14 +64,13 @@ export default class SingleTrendCommand extends BaseTrendCommand {
       this._trendOption
     );
 
-    // TODO add game mode
     const chartName =
       playerName + "-" + this._trendOption.filePrefix + "-" + gameMode;
 
-    chart.createAndWriteTo(chartName, "out/discord/");
+    chart.createAndWriteTo(chartName, this.getDiscordOutputPath());
 
     // use the png file path
-    const filePath = "out/discord/" + chartName;
+    const filePath = this.getDiscordOutputPath() + chartName;
     const chartFile = filePath + ".png";
 
     return new Promise((resolve, reject) => {

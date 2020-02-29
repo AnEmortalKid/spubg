@@ -129,14 +129,21 @@ export default class BaseTrendCommand extends BaseCommand {
     return null;
   }
 
-  determineGameMode(requestedModes) {
-    if (!requestedModes) {
+  determineGameMode(options) {
+    console.log(options)
+    if (!options || !options.modes) {
       return defaultDiscordChartMode();
     }
 
+    const requestedModes = options.modes;
+    console.log('requested')
+    console.log(requestedModes)
+
     // find the first non invalid one
-    for (requested of requestedModes) {
+    for (const requested of requestedModes) {
+      console.log(requested)
       if (supportedGameModes.includes(requested)) {
+        console.log('included')
         return requested;
       }
     }
