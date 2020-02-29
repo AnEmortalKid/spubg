@@ -1,5 +1,7 @@
 # spubg
 
+[![Build Status](https://travis-ci.org/AnEmortalKid/spubg.svg?branch=master)](https://travis-ci.org/AnEmortalKid/spubg)
+
 Statistic based utility for PUBG powered by the [PUBG API](https://documentation.pubg.com/en/introduction.html)
 
 ## Motivation
