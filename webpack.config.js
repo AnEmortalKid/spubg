@@ -8,7 +8,8 @@ module.exports = {
   entry: {
     "spubg": "./src/index.js",
     "spubg.bin": "./bin/spubg.bin.js",
-    "bot": "./src/bot/discordBot.js"
+    "bot": "./src/bot/discordBot.js",
+    "testlet": "./src/testlet.js"
   },
 
   mode: "development",
