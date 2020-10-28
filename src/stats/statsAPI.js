@@ -54,6 +54,8 @@ export function gatherStats(seasonData) {
     // longest kill
     statsForMode.longestKill = statEntry.longestKill;
 
+    statsForMode.roundMostKills = statEntry.roundMostKills;
+
     // TODO next cool stat
     seasonStat[gameModeId] = statsForMode;
   });
@@ -187,4 +189,13 @@ export async function getSeasonAndLifetimeTrend(playerName) {
 
   const lifetimeInfo = gatherStats(lifetime);
   return { seasonal: seasonalStats, lifetime: lifetimeInfo };
+}
+
+export async function getLifetimeTrend(PlayerName)
+{
+  const playerId = await players().findId(playerName);
+  const lifetime = await getClient().lifetimeStats(playerId);
+
+  const lifetimeInfo = gatherStats(lifetime);
+  return lifetimeInfo;
 }

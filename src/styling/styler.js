@@ -31,12 +31,15 @@ export function styleGameMode(gameMode) {
 }
 
 const seasonNames = {
-  "division.bro.official.pc-2018-01": "Survival Season 1",
-  "division.bro.official.pc-2018-02": "Survival Season 2",
-  "division.bro.official.pc-2018-03": "Survival Season 3",
-  "division.bro.official.pc-2018-04": "Survival Season 4",
-  "division.bro.official.pc-2018-05": "Survival Season 5",
-  "division.bro.official.pc-2018-06": "Survival Season 6"
+  "division.bro.official.pc-2018-01": "S1",
+  "division.bro.official.pc-2018-02": "S2",
+  "division.bro.official.pc-2018-03": "S3",
+  "division.bro.official.pc-2018-04": "S4",
+  "division.bro.official.pc-2018-05": "S5",
+  "division.bro.official.pc-2018-06": "S6",
+  "division.bro.official.pc-2018-07": "S7",
+  "division.bro.official.pc-2018-08": "S8",
+  "division.bro.official.pc-2018-09": "S9"
 };
 
 /**

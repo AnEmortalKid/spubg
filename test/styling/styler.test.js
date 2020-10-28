@@ -12,7 +12,8 @@ describe("styleSeasonId", () => {
     ["division.bro.official.pc-2018-03", "Survival Season 3"],
     ["division.bro.official.pc-2018-04", "Survival Season 4"],
     ["division.bro.official.pc-2018-05", "Survival Season 5"],
-    ["division.bro.official.pc-2018-06", "Survival Season 6"]
+    ["division.bro.official.pc-2018-06", "Survival Season 6"],
+    ["division.bro.official.pc-2018-07", "Survival Season 7"]
   ])("returns a nice season name for %s", (seasonId, expected) => {
     const pretty = styleSeasonId(seasonId);
     expect(pretty).toBe(expected);
