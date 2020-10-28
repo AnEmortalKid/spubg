@@ -81,6 +81,30 @@ class Client {
         console.log(error);
       });
   }
+
+  async matches(playerId) {
+    return this.axiosClient
+      .get(`/players/${playerId}`)
+      .then(function(response) {
+        const innerObject = response.data;
+        return innerObject.data;
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
+
+  async match(matchId) {
+    return this.axiosClient
+      .get(`/matches/${matchId}`)
+      .then(function(response) {
+        const innerObject = response.data;
+        return innerObject;
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
 }
 
 /**
