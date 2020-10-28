@@ -191,8 +191,7 @@ export async function getSeasonAndLifetimeTrend(playerName) {
   return { seasonal: seasonalStats, lifetime: lifetimeInfo };
 }
 
-export async function getLifetimeTrend(PlayerName)
-{
+export async function getLifetimeTrend(PlayerName) {
   const playerId = await players().findId(playerName);
   const lifetime = await getClient().lifetimeStats(playerId);
 
